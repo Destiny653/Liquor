@@ -1,0 +1,88 @@
+.container {
+    height: 80vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    background-image: url('https://cdn.pixabay.com/photo/2017/10/09/19/29/eat-2834549_1280.jpg');
+    background-size: 100%;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+   }
+   .container::after {
+      position: relative;
+      content: '';
+      z-index: 1;
+      background-color: black;
+      width: 100%;
+   }
+
+.button{
+    background-color:rgba(60, 138, 29, 0.979);
+    border: none;
+    width: 280px;
+    color: #fff;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-top: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+ }
+ .form-control {
+   padding: auto 16px;
+ }
+ .signCard{
+    width: 400px;
+    color: #fff;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-top: 40px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 1px solid rgba(60, 138, 29, 0.979);
+ }
+ .profileImage{
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+    margin-bottom: 40px;
+    background-color:rgba(60, 138, 29, 0.979);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(60, 138, 29, 0.979);
+ }
+
+
+ /* 
+ ===========================================
+ @media all and (max-width:700px)
+ ===========================================
+  */
+
+  @media all and (max-width:700px){
+   .container{
+     padding: 15px;
+     box-sizing: border-box;
+   }
+   .signCard{
+     width: 100%;
+     padding: 15px;
+     box-sizing: border-box;
+   }
+   .sign-form{
+      width: 100%;
+   }
+   .button{
+      width: 100%;
+   }
+  }
