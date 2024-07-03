@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 
 //get a product by id
 export async function GET(req, { params }) {
-    const { id } = params
+    const { id } = params;
 
     try {
         await connectDB();

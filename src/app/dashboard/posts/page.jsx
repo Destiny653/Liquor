@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import './posts.css';
-
+import { FaStar } from "react-icons/fa";
 
 export default function Page() {
 
@@ -94,7 +94,7 @@ export default function Page() {
                             <h1 className='post-detail-t text-xl font-semibold'>{posts[mainindex]?.title}</h1>
                             <p className=' post-pg'>{posts[mainindex]?.description}Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                             <div className='flex justify-center items-center gap-6'>
-                              <Link href={`/update/${_id}`}>
+                              <Link href={`/dashboard/posts/update/${posts[mainindex]?._id}`}>
                                 <button className=' post-btn bg-black text-white rounded-md'>Edit</button>
                               </Link>
                                 <button onClick={() => { deletePost(posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-red-600  text-white rounded-md'>Delete</button>

@@ -27,7 +27,7 @@ export const POST = async (req)=>{
     
     await connectDB();
 
-    const {title, content, price, img} = await req.json();
+    const {title, content, price, rate, img} = await req.json();
 
     
     // Configuration
@@ -47,6 +47,7 @@ export const POST = async (req)=>{
             title,
             content,
             price,
+            rate,
             img: uploadResult?.secure_url
         });
         console.log('post succesful')

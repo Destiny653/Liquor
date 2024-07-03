@@ -13,6 +13,10 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
+    rate: {
+        type: Number,
+        default: 0,
+    },
     img: {
         type: String,
         required:true

@@ -39,8 +39,8 @@ export default function Navbar() {
             path: '/login'
         },
         {
-            title: 'Register',
-            path: '/register'
+            title: 'Sign Up',
+            path: '/signup'
         }
     ]
     const navstyle = {

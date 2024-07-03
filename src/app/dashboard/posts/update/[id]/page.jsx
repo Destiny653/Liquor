@@ -2,16 +2,20 @@
 import React from 'react'
 
 
-const getProductId= async (id)=> {
+const getProductId = async (id)=> {
 
   try{
-    const res = await fetch(`api/posts/${id}`)
+    const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
+      cache: "no-store",
+    })
 
+    console.log(res);
+    
     if(!res.ok){
       throw new Error('Failed to fetch data')
     }
 
-    return res.json();
+    return await res.json();
 
   }catch(error){
     console.log(error);
@@ -22,7 +26,8 @@ const getProductId= async (id)=> {
  
  export default async function Page({params}) {
     const {id} = params;
-    const {product} = await getProductId(id);
+    const product = await getProductId(id);
+    console.log(product);
     const {title, content, price, img} = product;
     
    return (

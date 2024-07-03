@@ -9,6 +9,7 @@ export default function Page() {
     const [content, setContent] = useState('');
     const [price, setPrice] = useState('')
     const [img, setImg] = useState('');
+    const [rate, setRate] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,6 +17,7 @@ export default function Page() {
         setContent('');
         setPrice('')
         setImg('');
+        setRate('');
         const reader = new FileReader();
         reader.readAsDataURL(img);
         reader.onload = async () => {
@@ -29,7 +31,7 @@ export default function Page() {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ title, content, price, img: base64Image })
+                    body: JSON.stringify({ title, content, rate, price, img: base64Image })
                 })
                 if (res.ok) {
                     alert('Post created successfully!')
@@ -75,7 +77,13 @@ export default function Page() {
                         <span>
                             Price:
                         </span>
-                        <input className=' text-black  py-2 px-3' type='number' value={price} required onChange={(e) => setPrice(e.target.value)} />
+                        <input className=' text-black  py-2 px-3' type='text' value={price} required onChange={(e) => setPrice(e.target.value)} />
+                    </label>
+                    <label className='flex flex-col' htmlFor="rate">
+                        <span>
+                            Rate:
+                        </span>
+                        <input className=' text-black  py-2 px-3' type='number' value={rate} required onChange={(e) => setRate(e.target.value)} />
                     </label>
                     <label className='flex flex-col' htmlFor="img">
                         <span>

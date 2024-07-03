@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import './check.css'
 
 export default function Page() {
@@ -94,7 +94,7 @@ return (
                     <textarea className='border px-6' name="textarea" id="textarea" cols="4" rows="4" placeholder='Notes about your order, e.g. special notes for delivery'></textarea>
                 </label>
             </form>
-            {/* <section className=' table-section w-2/4  box-border p-3 '>
+            <section className=' table-section w-2/4  box-border p-3 '>
                     <table className='border w-full box-border p-7 mb-3'>
                         <caption className='roboto text-2xl text-left  font-medium mb-3 '>Your order</caption>
                         <thead>
@@ -104,24 +104,17 @@ return (
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                cartItems?.map(item => {
-
-                                    totalPrice += item.price * item.quantity
-
-                                    return (
-                                        <tr key={item.id}>
-                                            <td>{item.title}</td>
-                                            <td>${item.price}</td>
+                           
+                                        <tr>
+                                            <td>null</td>
+                                            <td>$0.00</td>
                                         </tr>
-                                    )
-                                })
-                            }
+                       
                         </tbody>
                         <tfoot className='text font-medium'>
                             <tr>
                                 <td>Subtotal</td>
-                                <td>${totalPrice}</td>
+                                <td>$0.00</td>
                             </tr>
                             <tr>
                                 <td>Shipping</td>
@@ -133,7 +126,7 @@ return (
                             </tr>
                             <tr>
                                 <td>Total</td>
-                                <td>${ totalPrice+ 70}</td>
+                                <td>$70</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -152,7 +145,7 @@ return (
                         </label>
                         <button className=' text-lg font-medium  roboto py-2 rounded-xl bg-lime-500'>Place order</button>
                     </div>
-                </section> */}
+                </section>
         </div>
     </>
 )
