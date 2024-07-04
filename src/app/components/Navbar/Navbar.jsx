@@ -1,5 +1,5 @@
-'use client';
-import React, { useState } from 'react';
+// 'use client';
+import React from 'react';
 import './Navbar.css'
 import Link from 'next/link';
 
@@ -56,12 +56,23 @@ export default function Navbar() {
     };
 
 
-    const [mouseUp, setMouseUp] = useState(false)
 
     return (
         <div>
-            <nav  className={`${mouseUp == true && "true"}`}>
-                <ul style={navstyle}>
+            <nav>
+                <section className="bg-black py-2 flex items-center justify-center" >
+                    <h3 className=" text-white text-sm">Join Our Bottled & Boxed Club: Free Shipping on Orders $99+</h3>
+                </section>
+                <section className="nav-search-p">
+                    <div className="font-bold text-2xl nav-logo ">LOGO</div>
+                    <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" />
+                    <section className="flex justify-center items-center gap-2">
+                        <div className="nav-user-img"></div>
+                        <h2>Hello User</h2>
+                    </section>
+                </section>
+
+                <ul className="nav-item-p">
                     {
                         nav.map((item, index) => {
                             return (

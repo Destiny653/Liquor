@@ -51,37 +51,37 @@ export default function Page() {
 
 
     return (
-        <div className='relative'>
+        <div>
             <div className='register-bg flex justify-center items-center box-border py-11'>
                 <div className={`sub-p flex justify-evenly gap-8 items-center bg-white box-border p-9 overflow-hidden rounded-3xl `} >
                     <div className='register-img w-full overflow-hidden'>
-                        <Image className='h-full w-full' src='https://th.bing.com/th/id/OIP.WQQyJ18HcoBE92znqYGrgQAAAA?rs=1&pid=ImgDetMain' alt='food image' width={400} height={400} />
+                        <Image className='h-full w-full' src='/images/royal.jpg' alt='whisky bottle demo' width={500} height={500} />
                     </div>
                     <div className='w-2/4 form-part '>
-                        <h2 className={` text-3xl relative header`}>Register</h2>
+                        <h2 className={` text-3xl header`}>Sign Up</h2>
                         <form onSubmit={handleSubmit}>
                             <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="name" className=' pb-1'>
+                                <label htmlFor="name" className='singup-label pb-1'>
                                     Name
                                 </label>
-                                <input type="text" value={name} name='text' placeholder='Enter name...' className=' form-control py-3 rounded-3xl px-4 border' onChange={e => setName(e.target.value)} required />
+                                <input type="text" value={name} name='text' placeholder='Enter name...' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setName(e.target.value)} required />
                             </div>
                             <div className=' mb-3 flex flex-col'>
-                                <label htmlFor="email" className=' pb-1'>
+                                <label htmlFor="email" className='singup-label pb-1'>
                                     Email
                                 </label>
-                                <input type="email" value={email} name='email' placeholder='Enter email...' className=' form-control py-3 rounded-3xl px-4 border' onChange={e => setEmail(e.target.value)} required />
+                                <input type="email" value={email} name='email' placeholder='Enter email...' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setEmail(e.target.value)} required />
                             </div>
                             <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="password" className=' pb-1'>
+                                <label htmlFor="password" className='singup-label pb-1'>
                                     Password
                                 </label>
-                                <input type="password" value={password} name='password' placeholder='*******' className=' form-control py-3 rounded-3xl px-4 border' onChange={e => setPassword(e.target.value)} required />
+                                <input type="password" value={password} name='password' placeholder='*******' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setPassword(e.target.value)} required />
                             </div>
-                            <button type='submit' className='btn btn-success w-80 bg-orange-500 '>Sign Up</button>
+                            <button type='submit' className='btn btn-success w-80 bg-[rgba(255, 174, 0, 0.904)] '>Sign Up</button>
                         </form>
-                        <p className=' mb-2 mt-1'>Already have an account</p>
-                        <button className='btn  btn-default border bg-slate-200 '>
+                        <p className='singup-label mb-2 mt-1'>Already have an account?</p>
+                        <button className='btn  btn-default'>
                             <Link href='/login'>Login</Link>
                         </button>
                     </div>
