@@ -5,7 +5,10 @@
     transition: all 0.1s linear;
     z-index: 1;
 }
-
+.singup-title{
+    margin-bottom: 10px;
+    text-shadow: 1.5px 2.4px 1px rgb(161, 129, 24);
+}
 .singup-label {
     color: rgb(36, 44, 17);
     box-shadow: 5px -0px 2px 0.09px rgb(161, 129, 24);

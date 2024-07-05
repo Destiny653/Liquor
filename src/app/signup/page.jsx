@@ -58,7 +58,7 @@ export default function Page() {
                         <Image className='h-full w-full' src='/images/royal.jpg' alt='whisky bottle demo' width={500} height={500} />
                     </div>
                     <div className='w-2/4 form-part '>
-                        <h2 className={` text-3xl header`}>Sign Up</h2>
+                        <h2 className={` text-3xl header singup-title `}>Sign Up</h2>
                         <form onSubmit={handleSubmit}>
                             <div className=' mb-6 flex flex-col'>
                                 <label htmlFor="name" className='singup-label pb-1'>

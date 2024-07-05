@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import "./create.css";
 import Image from 'next/image';
+import Menu from '@/app/components/menu/Menu';
 
 export default function Page() {
 
@@ -58,48 +59,46 @@ export default function Page() {
 
 
     return (
-        <div className=' post-gen-p box-border flex items-center justify-center'>
-            <div className='post-content-p flex p-8 rounded-3xl'>
-                <form className=' flex flex-col gap-3 w-fit h-fit box-border px-4 py-4 ' onSubmit={handleSubmit}>
-                    <label className='flex flex-col' htmlFor="title">
-                        <span>
-                            Title:
-                        </span>
-                        <input className='text-black  py-2 px-3' type="text" value={title} required onChange={(e) => setTitle(e.target.value)} />
-                    </label>
-                    <label className='flex flex-col' htmlFor="content">
-                        <span>
-                            Content:
-                        </span>
-                        <input className='text-black py-2 px-3' type="text" value={content} required onChange={(e) => setContent(e.target.value)} />
-                    </label>
-                    <label className='flex flex-col' htmlFor="price">
-                        <span>
-                            Price:
-                        </span>
-                        <input className=' text-black  py-2 px-3' type='text' value={price} required onChange={(e) => setPrice(e.target.value)} />
-                    </label>
-                    <label className='flex flex-col' htmlFor="rate">
-                        <span>
-                            Rate:
-                        </span>
-                        <input className=' text-black  py-2 px-3' type='number' value={rate} required onChange={(e) => setRate(e.target.value)} />
-                    </label>
-                    <label className='flex flex-col' htmlFor="img">
-                        <span>
-                            Image:
-                        </span>
-                        <input
-                            type='file'
-                            name='file'
-                            accept='image/png, imapge/jpg, image/jpeg'
-                            onChange={(e) => setImg(e.target.files[0])}
-                            required
-                        />
-                    </label>
-                    <button className=' bg-black py-2 rounded-2xl text-white' type='submit'>Upload Product</button>
-                </form>
-                <div className=' box-border rounded-xl'>
+        <div className='post-gen-p'>
+            <Menu />
+            <div className='post-content-p'>
+                    <form className='create-form flex flex-col gap-2 box-border px-4 py-4 ' onSubmit={handleSubmit}>
+                        <label className='flex flex-col' htmlFor="title">
+                            <span>
+                                Title:
+                            </span>
+                            <input className=' create-input text-black  py-2 px-3' type="text" value={title} required onChange={(e) => setTitle(e.target.value)} />
+                        </label>
+                        <label className='flex flex-col' htmlFor="content">
+                            <span>
+                                Description:
+                            </span>
+                            <textarea className='create-input text-black py-2 px-3' type="text" rows="3" value={content} required onChange={(e) => setContent(e.target.value)} />
+                        </label>
+                        <label className='flex flex-col' htmlFor="price">
+                            <span>
+                                Price:
+                            </span>
+                            <input className='create-input  text-black  py-2 px-3' type='text' value={price} required onChange={(e) => setPrice(e.target.value)} />
+                        </label>
+                        <label className='flex flex-col' htmlFor="rate">
+                            <span>
+                                Rate:
+                            </span>
+                            <input className='create-input  text-black  py-2 px-3' type='number' value={rate} required onChange={(e) => setRate(e.target.value)} />
+                        </label>
+                        <label className='flex flex-col' htmlFor="img">
+                            <input
+                                type='file'
+                                name='file'
+                                accept='image/png, imapge/jpg, image/jpeg'
+                                onChange={(e) => setImg(e.target.files[0])}
+                                required
+                            />
+                        </label>
+                        <button className='create-btn py-2 rounded-2xl text-white' type='submit'>Upload Product</button>
+                    </form>
+                <div className=' create-img-box box-border rounded-xl'>
                     <SelectedImg />
                 </div>
 
