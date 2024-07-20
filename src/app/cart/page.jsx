@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './cart.css';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,7 +7,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function Page() {
 
-    const { cartItems, handleAddToCart, emptyCart } = useContext(CartContext)
+    // const { cartItems, handleAddToCart, emptyCart } = useContext(CartContext)
     const [newCart, setNewCart] = useState([])
     let totalPrice = 0
 
