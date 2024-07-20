@@ -13,11 +13,11 @@ export default function Page() {
 
     // const [ignored, forceUpdate] = useReducer(x => x + 1, 0 )
 
-    for (let i = 0; i < cartItems?.length; i++) {
-        const cart = cartItems[i]?.price;
-        console.log(cart);
+    // for (let i = 0; i < cartItems?.length; i++) {
+    //     const cart = cartItems[i]?.price;
+    //     console.log(cart);
 
-    }
+    // }
 
 
     useEffect(() => {
