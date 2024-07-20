@@ -6,7 +6,7 @@ import emailjs from '@emailjs/browser';
 import './contact.css';
 
 
-const Page = () => {
+const Contact = () => {
 
     const form = useRef()
     const [name, setName] = useState('')
@@ -46,18 +46,19 @@ const Page = () => {
     return (
         <>
             <div className={`container-small`} >
-                <form className={`form-small`} ref={form} onSubmit={handleEmail} action='' method='post'>
+                <form className={`form-small relative`} ref={form} onSubmit={handleEmail} action='' method='post'>
+                <h1 className='border-[#16124e] relative left-[50%] pb-[10px] text-[24px] font-[500]'>Talk with us</h1>
                     <label className={`lebel-small`}>
-                        <input className={`input-small`} value={name} type="text" name='name'  placeholder="Name" />
+                        <input className={`input-small`} value={name} type="text" name='name'  placeholder="Name" onChange={e=>setName(e.target.value)} />
                     </label>
                         <label className={`lebel-small w-full`}>
-                            <input className={`input-small w-full`} value={email} type="email" name='email'  placeholder="ex = name@gmail.com" />
+                            <input className={`input-small w-full`} value={email} type="email" name='email'  placeholder="ex = name@gmail.com" onChange={e=>setEmail(e.target.value)}/>
                         </label>
                         <label className={`lebel-small w-full`}>
-                            <input className={`input-small`} value={phone} type="tel" name='phone'  placeholder='Phone number' />
+                            <input className={`input-small`} value={phone} type="tel" name='phone'  placeholder='Phone number' onChange={e=>setPhone(e.target.value)}/>
                         </label>
                     <label className={`lebel-small`}>
-                        <textarea className={`input-samll`} value={text} name="message" id="textArea"  cols="6" rows="4" placeholder='Your message'></textarea>
+                        <textarea className={`input-samll px-4 border border-[#16124e] text-[15px]`} value={text} name="message" id="textArea"  cols="6" rows="4" placeholder='Your message' onChange={e=>setText(e.target.value)}></textarea>
                     </label>
                     <button className={`button-small`}>Send</button>
                 </form>
@@ -66,4 +67,4 @@ const Page = () => {
     )
 }
 
-export default Page
+export default Contact

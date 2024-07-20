@@ -1,3 +1,93 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* @font-face {
+    font-family: 'urbanistitalic';
+    src: url('urbanist-italic-variablefont_wght-webfont.woff2') format('woff2'),
+         url('urbanist-italic-variablefont_wght-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'urbanistregular';
+    src: url('urbanist-variablefont_wght-webfont.woff2') format('woff2'),
+         url('urbanist-variablefont_wght-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'quicksandlight';
+    src: url('quicksand-variablefont_wght-webfont.woff2') format('woff2'),
+         url('quicksand-variablefont_wght-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal; */
+
+/* } */
+
+.imgTransform{
+    transition: all 5s ease;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 46%;
+    bottom: 10%;
+}
+
+.indicator {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background-color: #fffefe;
+    transition: backgound-color 0.5s;
+}
+.active {
+    background-color: rgb(161, 129, 24);
+     box-shadow:inset 0px 0px 1px 2.5px #fff;
+}
+.details{
+    position: absolute;
+    top: 30%;
+    left: 1%;
+    color: #fff;
+    vertical-align: middle;
+    box-sizing: border-box;
+    padding: 0;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.chatBtn{
+    padding: 8px 10px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+}
+
+.btnActive {
+    background-color: rgb(18, 22, 80);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}

@@ -1,9 +1,19 @@
-// 'use client';
-import React from 'react';
-import './Navbar.css'
+'use client';
+import React, { useEffect, useState } from 'react';
+import './Navbar.css';
 import Link from 'next/link';
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
+
+    useEffect(() => {
+
+        AOS.init({
+            duration: 500,
+        });
+    }), []
 
     const nav = [
         {
@@ -13,10 +23,6 @@ export default function Navbar() {
         {
             title: 'About',
             path: '/about'
-        },
-        {
-            title: 'Contact',
-            path: '/contact'
         },
         {
             title: 'Shop',
@@ -55,6 +61,31 @@ export default function Navbar() {
         fontSize: '18px'
     };
 
+    const [option, setOption] = useState('');
+    const navigation = useRouter()
+
+    if (option) {
+        navigation.push(`/dashboard/posts`)
+        setOption('')
+    }
+
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+
+    const handleScroll = () => {
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > lastScrollY){
+            setIsVisible(false);
+        }else{
+            setIsVisible(true);
+        }
+        setLastScrollY(currentScrollY);
+    }
+
+    useEffect(()=>{
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    },[lastScrollY]);
 
 
     return (
@@ -72,26 +103,34 @@ export default function Navbar() {
                     </section>
                 </section>
 
-                <ul className="nav-item-p">
+                <ul style={{position: 'fixed', top: '0', width: '100%', zIndex: '10' ,transition: 'transform 0.3s ease', transform: isVisible?'translateY(0)': 'translateY(-100%)'}}
+                className="nav-item-p"
+                    data-aos-offset="500"
+                    data-aos-duration="100"
+                    data-aos="fade-down"
+                >
                     {
                         nav.map((item, index) => {
                             return (
                                 <li key={index}>
-                                    <a href={item.path}>{item.title}</a>
+                                    <Link href={item.path}>{item.title}</Link>
                                 </li>
                             )
                         })
                     }
-                    <li className='dashboard-p'>
-                        Dashboard
-                        <ul className='dashboard-ch'>
-                            <Link href='/dashboard/posts/create'>
-                                <li>Upload Product</li>
-                            </Link>
-                            <Link href='/dashboard/posts'>
-                                <li>Products</li>
-                            </Link>
-                        </ul>
+
+                    <li className='dashHoveI'>Dashboard
+                        <div className='dashHover box-border'>
+                            <select className='selectItem create-input w-full outline-none text-black  py-2 px-3' value={option} required onChange={(e) => setOption(e.target.value)}>
+                                <option value="">Select option</option>
+                                <option value="balton">Balton</option>
+                                <option value="buffalo">Buffalo</option>
+                                <option value="pappy">Pappy</option>
+                                <option value="penelope">Penelope</option>
+                                <option value="weller">Weller</option>
+                                <option value="yamazaki">Yamazaki</option>
+                            </select>
+                        </div>
                     </li>
                 </ul>
             </nav>

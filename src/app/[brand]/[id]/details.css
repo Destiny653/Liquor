@@ -1,0 +1,47 @@
+.detail-scroll,
+.detail-img-con {
+    /* height: 400px; */
+    background: #fff;
+}
+
+.detail-img-con {
+    /* width: 40%; */
+}
+.detail-scroll {
+    /* width: 12%; */
+    border-radius: 9px;
+}
+/* .detail-scroll::-webkit-scrollbar{
+    width: 3px;
+} */
+.detail-p {
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    align-items: center;
+    gap: 15%;
+    padding: 30px;
+    width: 100%;
+    /* border: 1px solid gray; */
+}
+
+/* 
+====================================
+@media all and (max-width:600px)
+====================================
+ */
+
+ @media all and (max-width:600px){
+    .detail-p{
+       display: flex;
+       flex-direction: column;
+       box-sizing: border-box;
+       padding: auto 5px;
+    }
+    .detail1 {
+         width: 100%;
+     }
+    .detail2{
+         width: 100%;
+     }
+ }

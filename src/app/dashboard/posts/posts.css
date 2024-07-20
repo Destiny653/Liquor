@@ -17,6 +17,9 @@
 }
 .post-detail{
     width: 40%;
+    box-shadow:0px 0px 5px rgb(161, 129, 24);
+    box-sizing: border-box;
+    padding: 5px 0 10px 10px;
 }
 .post-items {
     display: grid;

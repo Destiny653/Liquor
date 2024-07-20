@@ -51,7 +51,7 @@ export default function Page() {
                 <section className='post-sub-container'>
                     <ul className='post-sub-child'>
                         <div className='post-opt flex gap-4'>
-                            <h1 className='text-xl text-orange-500'>All Posts</h1>
+                            <h1 className='text-xl text-[#850303]'>All Posts</h1>
                             <button className=' bg-black  text-white py-2 px-12'>
                                 <Link href='/dashboard/posts/create'>Add</Link>
                             </button>
@@ -67,7 +67,7 @@ export default function Page() {
                                             </div>
                                             <div className='flex flex-col'>
                                                 <h1 className='text  font-semibold  text-base'>{post?.title}</h1>
-                                                <p className='post-pg'>{post.description}Excepturi obcaecati vitae lorem </p>
+                                                <p className='post-pg'>{post.content}</p>
                                                 <h1>
                                                     <FaStar color='gold' className='inline' />
                                                     <FaStar color='gold' className='inline' />
@@ -85,19 +85,20 @@ export default function Page() {
                         </div>
                     </ul>
 
-                    <div className='post-detail fixed right-0'>
+                    <div className='post-detail fixed bottom-[6px] right-0'>
                         <div className='w-full nunitoextralight_italic flex flex-col gap-2'>
-                            <h1 className='text-xl text-orange-500'>Preview</h1>
+                            <h1 className='text-xl text-[#850303]'>Preview</h1>
                             <div className='box-border flex justify-center'>
                                 <Image src={posts && posts[mainindex]?.img} alt='item image' width={300} height={300} />
                             </div>
                             <h1 className='post-detail-t text-xl font-semibold'>{posts[mainindex]?.title}</h1>
-                            <p className=' post-pg'>{posts[mainindex]?.description}Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <h2 className='font-semibold '>${posts[mainindex]?.price}</h2>
+                            <p className=' post-pg'>{posts[mainindex]?.content}</p>
                             <div className='flex justify-center items-center gap-6'>
                               <Link href={`/dashboard/posts/update/${posts[mainindex]?._id}`}>
                                 <button className=' post-btn bg-black  text-white '>Edit</button>
                               </Link>
-                                <button onClick={() => { deletePost(posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-red-600  text-white'>Delete</button>
+                                <button onClick={() => { deletePost(posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-[#850303] text-white'>Delete</button>
                             </div>
                         </div>
                     </div>

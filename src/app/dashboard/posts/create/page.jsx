@@ -11,13 +11,14 @@ export default function Page() {
     const [price, setPrice] = useState('')
     const [img, setImg] = useState('');
     const [rate, setRate] = useState('');
+    const [option, setOption] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setTitle('')
         setContent('');
         setPrice('')
-        setImg('');
+        setImg(null);
         setRate('');
         const reader = new FileReader();
         reader.readAsDataURL(img);
@@ -27,7 +28,7 @@ export default function Page() {
             console.log('Base64 reprresentation:', base64Image);
 
             try {
-                const res = await fetch('/api/posts', {
+                const res = await fetch(`/api/posts`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -57,14 +58,42 @@ export default function Page() {
         }
     }
 
+    const _option = () => {
+        if (!option) {
+            return (
+                <div className='optionParent flex flex-col items-center justify-center fixed top-0 z-[5]'>
+                    <div className='flex flex-col gap-2 z-10 '>
+                        <label className='text-2xl text-[#7e6f1d]'>
+                            Select your product type:
+                        </label>
+                        <select className='create-input text-black  py-2 px-3' value={option} required onChange={(e) => setOption(e.target.value)}>
+                            <option value="">Select option</option>
+                            <option value="balton">Balton</option>
+                            <option value="buffalo">Buffalo</option>
+                            <option value="pappy">Pappy</option>
+                            <option value="penelope">Penelope</option>
+                            <option value="weller">Weller</option>
+                            <option value="yamazaki">Yamazaki</option>
+                        </select>
+                    </div>
+                </div>
+            )
+        }
+    }
+
 
     return (
-        <div className='post-gen-p'>
-            <Menu />
-            <div className='post-content-p'>
+        <div>
+            {_option()}
+            <div className='post-gen-p'>
+
+                <Menu />
+                <div className='post-content-p'>
                     <form className='create-form flex flex-col gap-2 box-border px-4 py-4 ' onSubmit={handleSubmit}>
-                        <label className='flex flex-col' htmlFor="title">
-                            <span>
+                        <h1 className='text-2xl font-medium'>Uploading product for: {option}</h1>
+                        <button onClick={() => setOption('')} className='px-[15px] py-[4px] text-white bg-[#831313] w-fit'>Change Option</button>
+                        <label className='cre-title-p flex flex-col' htmlFor="title">
+                            <span className="cre-title">
                                 Title:
                             </span>
                             <input className=' create-input text-black  py-2 px-3' type="text" value={title} required onChange={(e) => setTitle(e.target.value)} />
@@ -91,18 +120,24 @@ export default function Page() {
                             <input
                                 type='file'
                                 name='file'
-                                accept='image/png, imapge/jpg, image/jpeg'
+                                accept='image/*'
                                 onChange={(e) => setImg(e.target.files[0])}
                                 required
                             />
                         </label>
                         <button className='create-btn py-2 rounded-2xl text-white' type='submit'>Upload Product</button>
                     </form>
-                <div className=' create-img-box box-border rounded-xl'>
-                    <SelectedImg />
-                </div>
+                    <div className=' create-img-box box-border rounded-xl'>
+                        <div>
 
+                            <SelectedImg />
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
+
         </div>
     )
 }

@@ -1,0 +1,83 @@
+.shopItemP{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
+    box-sizing: border-box;
+    padding-bottom: 30px;
+    box-sizing: border-box;
+}
+.shopParent {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    box-sizing: border-box;
+    padding: 3% 2%;
+}
+.shopParent label{
+    display: flex;
+    gap: 3%;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+.shopParent ul {
+    display: flex;
+    /* gap: 20px; */
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+}
+
+.shopParent ul li:nth-child(1){
+    /* color: rgb(161, 129, 24); */
+    color: #7e0404;
+    font-weight: 500;
+    padding-left: 5px;
+}
+.shopParent ul li:nth-child(2){
+    position: absolute;
+    right: 7%;
+}
+.shopChild1{
+    width: 20%;
+    border: 1px solid gray;
+    box-sizing: border-box;
+    padding: 1%;
+    height: fit-content;
+}
+
+.shopChild2{
+    width: 80%;
+}
+.shopItem{
+    display: flex;
+    flex-direction: column;
+    justify-content: first baseline;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(128, 128, 128, 0.192);
+    box-sizing: border-box;
+    padding: 10px;
+}
+.shopItemTitle{
+}
+.shopItemContent{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.shopBtn{
+    width: 100%;
+    height: 50px;
+    border: 1px solid rgba(128, 128, 128, 0.192);
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.shopBtn:hover{
+    background-color: rgb(128, 22, 22);
+    color: #fff;
+}
