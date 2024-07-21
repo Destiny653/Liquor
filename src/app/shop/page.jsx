@@ -13,7 +13,7 @@ export default function Page() {
     const [data, setData] = useState();
     const [options, setOptions] = useState('All Brands')
     const [brand, setBrand] = useState([])
-    let choice = ['balton', 'weller', 'buffalo', 'pappy', 'penelope', 'yamazaki', 'posts']
+    let choice = ['balton', 'weller', 'buffalo', 'pappy', 'penelope', 'yamazaki', 'All Brands']
   
     useEffect(() => {
     

@@ -131,7 +131,6 @@ export default function Navbar() {
                 <section className="nav-search-p">
                     <div className="font-bold text-2xl nav-logo ">LOGO</div>
                     <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e)=>setQuery(e.target.value)} />
-                    <button onClick={handleSearch} className="nav-search-btn">Search</button>
                     <section className="flex justify-center items-center gap-2">
                         <div className="nav-user-img"></div>
                         <h2>Hello User</h2>

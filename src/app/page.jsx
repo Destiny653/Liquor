@@ -1,12 +1,15 @@
 'use client'
 import Image from "next/image";
 import Hero from "./components/Hero/Hero";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AOS from 'aos';
 import Contact from "./contact/page";
 import { AiFillMessage } from "react-icons/ai";
+import { SearchContext } from "../../context/SearchContext";
 
 export default function Home() {
+
+  const {setMessage} = useContext(SearchContext)
 
   useEffect(() => {
     AOS.init();
@@ -14,6 +17,7 @@ export default function Home() {
 
 
   const [effect, setEffect] = useState(false)
+  setMessage(effect)
 
   const hero = [
     {
