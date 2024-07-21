@@ -48,7 +48,7 @@ export default function Page() {
 
     return (
         <>
-                <section className='post-sub-container'>
+                <section className='post-sub-container relative'>
                     <ul className='post-sub-child'>
                         <div className='post-opt flex gap-4'>
                             <h1 className='text-xl text-[#850303]'>All Posts</h1>
@@ -85,7 +85,7 @@ export default function Page() {
                         </div>
                     </ul>
 
-                    <div className='post-detail fixed bottom-[6px] right-0'>
+                    <div className='post-detail sticky top-[10%] right-0'>
                         <div className='w-full nunitoextralight_italic flex flex-col gap-2'>
                             <h1 className='text-xl text-[#850303]'>Preview</h1>
                             <div className='box-border flex justify-center'>

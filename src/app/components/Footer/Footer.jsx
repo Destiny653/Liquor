@@ -10,27 +10,27 @@ export default function Footer() {
       <div className='footIcon-p'>
                 <ul className='footIconCon'>
                     <li>
-                        <Image src="/images/icon1.jpg" alt="icon" width={40} height={40} />
+                        <Image className='footImg' src="/images/icon1.jpg" alt="icon" width={40} height={40} />
                         <h1>Family Owned</h1>
                     </li>
                     <li>
-                        <Image src="/images/icon2.jpg" alt="icon" width={40} height={40} />
+                        <Image className='footImg' src="/images/icon2.jpg" alt="icon" width={40} height={40} />
                         <h1>Fast Shipping</h1>
                     </li>
                     <li>
-                        <Image src="/images/icon3.jpg" alt="icon" width={40} height={40} />
+                        <Image className='footImg' src="/images/icon3.jpg" alt="icon" width={40} height={40} />
                         <h1>#1 Supplier Of Top Shelf <br/> Liquor</h1>
                     </li>
                     <li>
-                        <Image src="/images/icon4.jpg" alt="icon" width={40} height={40} />
+                        <Image className='footImg' src="/images/icon4.jpg" alt="icon" width={40} height={40} />
                         <h1>Shipping Insurance To Arrive <br/> Safely</h1>
                     </li>
                     <li>
-                        <Image src="/images/icon5.jpg" alt="icon" width={40} height={40} />
+                        <Image className='footImg' src="/images/icon5.jpg" alt="icon" width={40} height={40} />
                         <h1>Subscribe & Save</h1>
                     </li>
                     <li>
-                        <Image src="/images/icon6.jpg" alt="icon" width={40} height={40} />
+                        <Image className='footImg' src="/images/icon6.jpg" alt="icon" width={40} height={40} />
                         <h1>Earn Points For Every Dollar <br/> Spent</h1>
                     </li>
                 </ul>

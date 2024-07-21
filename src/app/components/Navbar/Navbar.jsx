@@ -1,12 +1,15 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './Navbar.css';
 import Link from 'next/link';
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useRouter } from 'next/navigation';
+import { SearchContext } from '../../../../context/SearchContext';
 
 export default function Navbar() {
+
+    const {setSearchVal, setSearchInp} = useContext(SearchContext)
 
     useEffect(() => {
 
@@ -87,6 +90,37 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     },[lastScrollY]);
 
+    const [query, setQuery] = useState('');
+    const handleSearch = (e) => {
+        e.preventDefault();
+    };
+    setSearchInp(query)
+    console.log(query);
+    const fetchFromAPIs = async (title) => {
+    const apis = [
+         `/api/posts`
+      ];
+    
+      const fetchPromises = apis.map(api => fetch(api).then(res => res.json()));
+    
+      const results = await Promise.all(fetchPromises);
+      console.log(results);
+    
+      // Flatten the array of results and filter based on the title
+      const filteredResults = results.flat().filter(product =>
+        product.title.toLowerCase().includes(title.toLowerCase())
+      );
+      console.log(filteredResults);
+    
+      return filteredResults;
+    };
+    
+    useEffect(() => {
+        fetchFromAPIs(query).then(results => setSearchVal(results));
+    }, [query]); // Trigger the fetchFromAPIs function when the query changes
+
+    
+
 
     return (
         <div>
@@ -96,7 +130,8 @@ export default function Navbar() {
                 </section>
                 <section className="nav-search-p">
                     <div className="font-bold text-2xl nav-logo ">LOGO</div>
-                    <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" />
+                    <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e)=>setQuery(e.target.value)} />
+                    <button onClick={handleSearch} className="nav-search-btn">Search</button>
                     <section className="flex justify-center items-center gap-2">
                         <div className="nav-user-img"></div>
                         <h2>Hello User</h2>

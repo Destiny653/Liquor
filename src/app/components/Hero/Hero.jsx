@@ -33,7 +33,7 @@ export default function Hero() {
             }
         }
         getData()
-    }, [data])
+    }, [])
 
     console.log(data);
     const brand = 'posts'

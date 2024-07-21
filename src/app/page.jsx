@@ -86,7 +86,7 @@ export default function Home() {
       {
         effect && <Contact />  // conditionally render the contact page when effect is true.
       }
-      <div onClick={() => effect === false ? setEffect(true) : setEffect(false)} className={`${effect ? 'btnActive' : ''} fixed right-[20px] bottom-[25px] bg-[#8d7405] cursor-pointer text-white chatBtn`}> <AiFillMessage className="inline msgBtn" size={25} /> Chat with us</div>
+      <div onClick={() => effect === false ? setEffect(true) : setEffect(false)} className={`${effect ? 'btnActive' : ''} fixed right-[20px] bottom-[25px] bg-[#500d0d] cursor-pointer text-white chatBtn`}> <AiFillMessage className="inline msgBtn" size={25} /> Chat with us</div>
     </div>
   );
 }
