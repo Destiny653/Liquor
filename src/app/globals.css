@@ -77,17 +77,3 @@
     justify-content: center;
     align-items: center;
 }
-.chatBtn{
-    padding: 8px 10px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
-}
-
-.btnActive {
-    background-color: rgb(18, 22, 80);
-    overflow: hidden;
-    transition: all 0.3s ease;
-}

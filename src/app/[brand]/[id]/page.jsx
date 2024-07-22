@@ -1,7 +1,6 @@
 'use client'
 import Image from 'next/image';
 import React from 'react';
-import './details.css';
 import { FaStar } from 'react-icons/fa';
 import Menu from '@/app/components/menu/Menu';
 
@@ -25,7 +24,7 @@ export default async function Page({params}) {
       <div className='w-full flex'>
                 <div className='detail-p  w-full box-border'>
                     <section className='detail1 detail-img-con  box-border rounded-2xl overflow-hidden'>
-                        <Image className='' src={data.img} alt={data.title} width={400} height={400} />
+                        <Image className='' src={data.img} alt={data.title} width={300} height={300} />
                     </section>
                     <section className='detail2 relative ml-4 flex flex-col gap-2 '>
                         <h1 className='text-3xl font-bold nunitoextralight_italic '>{data.title}</h1>

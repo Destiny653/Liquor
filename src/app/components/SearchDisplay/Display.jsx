@@ -11,7 +11,6 @@ export default function Display() {
     console.log(searchVal);
 
     if (!searchInp) return null;
-
     return (
         <div className='displayP z-20'>
             <p>Results</p>

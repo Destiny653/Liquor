@@ -4,10 +4,12 @@ import "./shop.css"
 import Image from 'next/image';
 import Link from 'next/link';
 import { SearchContext } from '../../../context/SearchContext';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
 
-    const { searchVal, searchInp } = useContext(SearchContext)
+    const { searchVal, searchInp, handlePro } = useContext(SearchContext)
+    const navigation = useRouter()
     console.log(searchInp);
     console.log(searchVal);
     const [data, setData] = useState();
@@ -87,9 +89,7 @@ export default function Page() {
         }
         return getItemsForPage(currentPage)?.map((post) => (
             <div key={post.id} className='border shopItem'>
-                <Link href={`/${brand}/${post._id}`}>
-                    <Image src={post.img} alt={post.title} width={300} height={300} />
-                </Link>
+                    <Image src={post.img} alt={post.title} width={300} height={300} onClick={()=>{handlePro(post); navigation.push('/details')}} />
                 <h1 className='shopItemTitle font-semibold'>{post.title}</h1>
                 <p className='shopItemContent'>{post.content}</p>
                 <h2 className=' font-medium'>${post.price}</h2>

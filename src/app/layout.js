@@ -5,6 +5,7 @@ import AuthProvider from "../../context/AuthContext";
 import Footer from "./components/Footer/Footer";
 import SearchProvider from "../../context/SearchContext";
 import Display from "./components/SearchDisplay/Display";
+import MsgBtn from "./components/MsgBtn/MsgBtn";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
             <Navbar />
             <Display/>
             {children}
+            <MsgBtn/>
             <Footer />
           </SearchProvider>
         </AuthProvider>

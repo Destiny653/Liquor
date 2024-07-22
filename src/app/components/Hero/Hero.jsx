@@ -1,14 +1,17 @@
 'use client'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./hero.css"
 import { FaStar } from 'react-icons/fa';
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Link from 'next/link';
+import { SearchContext } from '../../../../context/SearchContext';
+import { useRouter } from 'next/navigation';
 
 export default function Hero() {
     const [data, setData] = useState([])
+    const {handlePro} = useContext(SearchContext)
+    const navigation = useRouter()
 
 
     useEffect(() => {
@@ -132,9 +135,7 @@ export default function Hero() {
                         data?.slice(4, 9).map((item, index) => (
                             <li key={index} className=' borde border-[#c4b217]'>
                                 <div className='heroBestSellersImg-p box-border overflow-hidden '>
-                                    <Link href={`/${brand}/${item._id}`}>
-                                        <Image className='heroListImg3 align-top h-[230px]' src={item.img} alt={item.title} width={300} height={300} />
-                                    </Link>
+                                        <Image className='heroListImg3 align-top h-[230px]'onClick={()=>{handlePro(item); navigation.push('/details')}} src={item.img} alt={item.title} width={300} height={300} />
                                 </div>
                                 <section className='flex flex-col h-[200px] justify-center items-center gap-1'>
                                     <h3 className='heroList3-title'>{item.title}</h3>

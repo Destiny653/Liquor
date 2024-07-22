@@ -1,23 +1,17 @@
 'use client'
 import Image from "next/image";
 import Hero from "./components/Hero/Hero";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AOS from 'aos';
-import Contact from "./contact/page";
-import { AiFillMessage } from "react-icons/ai";
-import { SearchContext } from "../../context/SearchContext";
+ 
 
 export default function Home() {
 
-  const {setMessage} = useContext(SearchContext)
 
   useEffect(() => {
     AOS.init();
   }, [])
-
-
-  const [effect, setEffect] = useState(false)
-  setMessage(effect)
+ 
 
   const hero = [
     {
@@ -87,10 +81,6 @@ export default function Home() {
         </div>
       </div>
       <Hero />
-      {
-        effect && <Contact />  // conditionally render the contact page when effect is true.
-      }
-      <div onClick={() => effect === false ? setEffect(true) : setEffect(false)} className={`${effect ? 'btnActive' : ''} fixed right-[20px] bottom-[25px] bg-[#500d0d] cursor-pointer text-white chatBtn`}> <AiFillMessage className="inline msgBtn" size={25} /> Chat with us</div>
     </div>
   );
 }
