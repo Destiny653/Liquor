@@ -20,6 +20,10 @@ const baltonSchema = new Schema({
     img: {
         type: String,
         required:true
+    },
+    productType: {
+        type: String,
+        default: 'balton'
     }
 },{timestamps:true});
 

@@ -6,18 +6,20 @@ import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 import './signup.css';
 import Image from 'next/image';
+import { SearchContext } from '../../../context/SearchContext';
 
 export default function Page() {
 
     const navigation = useRouter()
+    const {setSignIn} = useContext(SearchContext)
 
-    const [name, setName] = useState('')
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setSignIn(email)
         //create an instance of Notyf
         const notyf = new Notyf({
             duration: 3000,
@@ -26,28 +28,30 @@ export default function Page() {
                 y: 'top'
             }
         });
-
+ 
         try {
-            const res = await fetch('/api/auth/signup', {
+            const res = await fetch('/api/signup', {
                 method: 'POST',
+                body: JSON.stringify({ username, email, password }),
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name, email, password })
-            })
-            if (res.status === 201) {
-                navigation.push("/login?success=Account has been created");
-                notyf.success('Account has been created')
-            } else if (res.status === 404) {
-                notyf.error('User already exists')
-            } else {
-                notyf.error('Please fill out the form')
+                }
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                notyf.error('Error:'+ errorData.message);
+                return;
             }
-        } catch (error) {
+
+            const data = await res.json();
+            notyf.success('Registration successful!');
+            navigation.push('/login');
+        }catch(error){
+            notyf.error('Registration failed!'+ error.message);
             console.log(error);
         }
     };
-
 
 
     return (
@@ -61,10 +65,10 @@ export default function Page() {
                         <h2 className={` text-3xl header singup-title `}>Sign Up</h2>
                         <form onSubmit={handleSubmit}>
                             <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="name" className='singup-label pb-1'>
+                                <label htmlFor="username" className='singup-label pb-1'>
                                     Name
                                 </label>
-                                <input type="text" value={name} name='text' placeholder='Enter name...' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setName(e.target.value)} required />
+                                <input type="text" value={username} name='text' placeholder='Enter username...' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setUsername(e.target.value)} required />
                             </div>
                             <div className=' mb-3 flex flex-col'>
                                 <label htmlFor="email" className='singup-label pb-1'>

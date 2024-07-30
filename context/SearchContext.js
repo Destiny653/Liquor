@@ -6,6 +6,7 @@ export default function SearchProvider({children}) {
     const [searchVal, setSearchVal] = useState('');
     const [searchInp, setSearchInp] = useState('');
     const [detailPro, setDetailPro] = useState([]);
+    const [signIn, setSignIn] = useState('');
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0 )
 
 
@@ -25,7 +26,7 @@ export default function SearchProvider({children}) {
     },[searchInp, searchVal])
 
   return (
-      <SearchContext.Provider value={{searchVal, detailPro, searchInp, handlePro, setSearchVal, setSearchInp, setDetailPro}}>
+      <SearchContext.Provider value={{searchVal, detailPro, searchInp, signIn, setSignIn, handlePro, setSearchVal, setSearchInp, setDetailPro}}>
         {children}
       </SearchContext.Provider>
   )

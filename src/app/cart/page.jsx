@@ -1,15 +1,18 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './cart.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaRegTrashAlt } from "react-icons/fa";
+import { CartContext } from '../../../context/CartContext';
 
 export default function Page() {
 
-    // const { cartItems, handleAddToCart, emptyCart } = useContext(CartContext)
+    const { cartItems, handleAddToCart, emptyCart } = useContext(CartContext)
+    const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     const [newCart, setNewCart] = useState([])
-    let totalPrice = 0
+    let totalPrice = 0;
+    let totalPriceFix;
 
     // const [ignored, forceUpdate] = useReducer(x => x + 1, 0 )
 
@@ -49,7 +52,7 @@ export default function Page() {
 
     return (
         <>
-            {isClient && <div className='cart-parent flex w-full justify-center gap-7 m-10 ml-0 box-border px-1 '>
+            {isClient && <div className='cart-parent flex w-full justify-center gap-7 m-10 ml-0 box-border px-1 relative'>
                 <table className='w-3/4 cart-table table1 '>
                     <thead>
                         <tr>
@@ -66,29 +69,32 @@ export default function Page() {
                             cartItems?.map((item, index) => {
 
                                 let position = newCart.findIndex((value) => value._id === item.product_id);
-                                let info = newCart[position]
-                                let Add = item.quantity
+                                let itemInCart = newCart[position]
+                                let qtyInCart = item.quantity
+                                console.log(item.price);
+                                let price = itemInCart?.price
+                                console.log(price);
 
-                                totalPrice += item.price * item.quantity
+                                totalPrice += itemInCart?.price * qtyInCart
 
-                                console.log(totalPrice);
+
                                 return (
                                     <tr key={index}>
                                         <td>
-                                            <Image className=' size-24 rounded-full cart-img ' src={info?.img} alt='product' height={400} width={400} />
+                                            <Image className=' size-24 rounded-full cart-img ' src={itemInCart?.img} alt='product' height={400} width={400} />
                                         </td>
-                                        <td className='cart-title-name'>{info?.title.slice(0, 15)}</td>
-                                        <td>{info?.price}</td>
+                                        <td className='cart-title-name'>{itemInCart?.title.slice(0, 15)}</td>
+                                        <td>{formatter.format(price)}</td>
                                         <td>
-                                            <div className='border bg-lime-600 w-fit  hover:bg-orange-500 box-border px-2 py-1 text-white'>
-                                                <button className=' bg-inherit'>- </button>
-                                                <span className='  px-3 py-1 rounded-full'>{Add}</span>
-                                                <button className=' bg-inherit' >+</button>
+                                            <div className='border text-black w-fit  hover:bg-[#610f0f] hover:text-white box-border px-2 py-1'>
+                                                <button className=' bg-inherit' onClick={() => { handleAddToCart(itemInCart, qtyInCart); }}>- </button>
+                                                <span className='  px-3 py-1 rounded-full'>{qtyInCart}</span>
+                                                <button className=' bg-inherit' onClick={() => { handleAddToCart(itemInCart); }} >+</button>
                                             </div>
                                         </td>
-                                        <td>{info?.price * Add}</td>
+                                        <td>{(formatter.format(price * qtyInCart))}</td>
                                         <td>
-                                            <button ><FaRegTrashAlt className='text-red-600' size={30} /></button>
+                                            <button onClick={() => handleAddToCart(itemInCart, qtyInCart, index)} ><FaRegTrashAlt className='text-red-600' size={30} /></button>
                                         </td>
                                     </tr>
                                 )
@@ -98,13 +104,13 @@ export default function Page() {
                         }
                     </tbody>
                     <Link href='/cart'>
-                        <button className=' bg-orange-400 rounded-xl px-4 py-2 mt-3 active:bg-lime-500 text-white'>Empty Cart</button>
+                        <button className=' bg-[#b40f0f] rounded-xl px-4 py-2 mt-3 active:bg-[#610f0f] text-white' onClick={() => emptyCart()}>Reset Cart</button>
                     </Link>
                 </table>
 
 
-                <div className='w-1/5 cart-sum box-border mr-4 '>
-                    <table className='w-full h-96 border m-0 box-border p-5 '>
+                <div className='w-1/5 cart-sum box-border mr-4'>
+                    <table className='w-full h-96 border m-0 box-border p-5 sticky left-0 top-[10vh]'>
                         <thead>
                             <tr>
                                 <th scope='col' colSpan={2}>CART TOTAL</th>
@@ -113,7 +119,7 @@ export default function Page() {
                         <tbody>
                             <tr>
                                 <td>Subtotal</td>
-                                <td>${totalPrice}</td>
+                                <td>{formatter.format(totalPrice)}</td>
                             </tr>
                             <tr>
                                 <td>Shipping</td>
@@ -125,11 +131,11 @@ export default function Page() {
                             </tr>
                             <tr>
                                 <td>Total</td>
-                                <td>${totalPrice + 70}</td>
+                                <td>{formatter.format(totalPrice + 70)}</td>
                             </tr>
                         </tbody>
                         <Link href='/checkout'>
-                            <button className=' border mt-4 rounded-lg px-4 py-3  w-full self-center bg-lime-600 text-white'>
+                            <button className=' border mt-4 rounded-lg px-4 py-3  w-full self-center bg-[#610f0f] text-white'>
                                 Checkout
                             </button>
                         </Link>

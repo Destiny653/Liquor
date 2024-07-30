@@ -6,6 +6,7 @@ import Footer from "./components/Footer/Footer";
 import SearchProvider from "../../context/SearchContext";
 import Display from "./components/SearchDisplay/Display";
 import MsgBtn from "./components/MsgBtn/MsgBtn";
+import { CartProvider } from "../../context/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +21,13 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <AuthProvider>
           <SearchProvider>
-            <Navbar />
-            <Display/>
-            {children}
-            <MsgBtn/>
-            <Footer />
+            <CartProvider>
+              <Navbar />
+              <Display />
+              {children}
+              <MsgBtn />
+              <Footer />
+            </CartProvider>
           </SearchProvider>
         </AuthProvider>
       </body>

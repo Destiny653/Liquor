@@ -20,6 +20,10 @@ const yamazakiSchema = new Schema({
     img: {
         type: String,
         required:true
+    },
+    productType: {
+        type: String,
+        default: 'yamazaki'
     }
 },{timestamps:true});
 

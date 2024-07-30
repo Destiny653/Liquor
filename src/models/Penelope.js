@@ -20,6 +20,10 @@ const penelopeSchema = new Schema({
     img: {
         type: String,
         required:true
+    },
+    productType: {
+        type: String,
+        default: 'penelope'
     }
 },{timestamps:true});
 

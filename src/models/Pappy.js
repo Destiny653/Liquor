@@ -20,6 +20,10 @@ const pappySchema = new Schema({
     img: {
         type: String,
         required:true
+    },
+    productType: {
+        type: String,
+        default: 'pappy'
     }
 },{timestamps:true});
 

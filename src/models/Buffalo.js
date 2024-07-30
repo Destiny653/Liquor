@@ -20,6 +20,10 @@ const buffaloSchema = new Schema({
     img: {
         type: String,
         required:true
+    },
+    productType: {
+        type: String,
+        default: 'buffalo'
     }
 },{timestamps:true});
 

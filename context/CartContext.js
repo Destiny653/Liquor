@@ -1,0 +1,52 @@
+'use client'
+import { createContext, useEffect, useReducer, useState } from "react";
+
+export const CartContext = createContext(null);
+
+export const CartProvider = ({ children }) => {
+    const [cartItems, setCartItems] = useState([])
+
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0)
+    const handleAddToCart = (currentItem, qty, index) => {
+        forceUpdate()
+        let cart = cartItems ?? [];
+        let productID = currentItem?._id;
+        let price = currentItem.price;
+        let title = currentItem.title;
+        let position = cart.findIndex(value => value.product_id === productID);
+        let quantity = qty ? cartItems[position]?.quantity - 1 : (position < 0 ? 1 : cartItems[position].quantity + 1)
+
+        if (index) {
+            cart.splice(position, 1)
+        } else {
+            if (quantity <= 0) {
+                cart.splice(position, 1)
+            } else if (position < 0) {
+                cart.push({ product_id: productID, price: price, title: title, quantity: 1 })
+            } else {
+                cart[position].quantity = quantity
+            }
+        }
+        setCartItems(cart)
+        localStorage.setItem('cartItems', JSON.stringify(cart));
+        //add item to cart or update quantity
+
+    }
+
+    const emptyCart = () => {
+        localStorage.removeItem('cartItems');
+    }
+
+    useEffect(() => {
+        setCartItems(JSON.parse(localStorage.getItem('cartItems')))
+        forceUpdate(cartItems)
+    }, [])
+
+
+
+    return (
+        <CartContext.Provider value={{ cartItems, handleAddToCart, emptyCart }}>
+            {children}
+        </CartContext.Provider>
+    )
+};

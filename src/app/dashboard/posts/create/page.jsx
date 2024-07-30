@@ -9,8 +9,8 @@ export default function Page() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [price, setPrice] = useState('')
-    const [img, setImg] = useState('');
-    const [rate, setRate] = useState('');
+    const [img, setImg] = useState(null);
+    const [rate, setRate] = useState(null);
     const [option, setOption] = useState('');
 
     const handleSubmit = async (e) => {

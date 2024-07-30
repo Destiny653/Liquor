@@ -1,66 +1,76 @@
 import Order from "@/models/Order";
+import User from "@/models/User";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
-import { v2 as cloudinary } from 'cloudinary';
 
+const { default: Balton } = require("@/models/Balton");
+const { default: Buffalo } = require("@/models/Buffalo");
+const { default: Pappy } = require("@/models/Pappy");
+const { default: Penelope } = require("@/models/Penelope");
+const { default: Weller } = require("@/models/Weller");
+const { default: Yamazaki } = require("@/models/Yamazaki");
 
-//get all posts from the database
+const productModels = {
+    Weller,
+    Balton,
+    Penelope,
+    Yamazaki,
+    Pappy,
+    Buffalo
+};
 
-export const GET = async () => {
+export const POST = async (req, res) => {
+    await connectDB();
+    const { email, cartItems } = await req.json();
+
     try {
-        // connect to database
-        await connectDB();
+        const user = await User.findById(email);
+        if (!user) {
+            return NextResponse.json({ success: false, message: 'User mot found' }, { status: 404 });
+        };
 
-        // find all the psts in the database
-        const posts = await Order.find().sort({ createdAt: -1})
-        console.log(posts);
+        let totalPrice = 0;
+        const orderProducts = await Promise.all(cartItems.map(async (item) => {
+            const productModel = productModels[item.productType];
+            if (!productModel) {
+                throw new Error(`Product type ${item.productType} not found`);
+            };
 
-        //return the posts as a json when successful
-        return new NextResponse(JSON.stringify(posts), { status: 200 });
+            const product = await productModel.findById(item.productId);
+            if (!product) {
+                throw new Error(`Product ${item.productId} not found`);
+            };
+            totalPrice += product.price * item.quantity;
+            return {
+                productId: item.productId,
+                productType: item.productType,
+                quantity: item.quantity,
+                price: product.price,
+                orderPrice: item.quantity * item.price
+            };
+        }));
+
+        const order = new Order({
+            user: email,
+            products: orderProducts,
+            totalPrice: totalPrice
+        });
+        await order.save();
+        user.orders.push(order._id);
+        await user.save();
+        return NextResponse.json({ success: true, message: 'Order placed successfully', order }, { status: 200 });
     } catch (error) {
-        console.log(error);
-
-        // if there is an error, return a 500 status code
-        return new NextResponse('Database Error', { status: 500 });
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }
 
-
-export const POST = async (req) => {
-
-    const { title, img, content, price, useremail, firstname, lastname } = await req.json();
-    //Configuring Cloudinary
-    cloudinary.config({
-        cloud_name: process.env.CLOUD_NAME,
-        api_key: process.env.API_KEY,
-        api_secret: process.env.API_SECRET
-    });
-    
-    const uploadResult = await cloudinary.uploader.upload(img, {
-        public_id: title
-    }).catch((error) => console.log(error));
-    console.log('after:', uploadResult?.secure_url);
-
-    // Connect to mongo database
+export const GET = async(req, res)=>{
     await connectDB();
+    const { email } = req.query;
     try {
-        const post = new Order({
-            title,
-            description,
-            img: uploadResult?.secure_url,
-            content,
-            firstname,
-            lastname,
-            useremail,
-            price
-        });
-
-        await post.save();
-        return new NextResponse(JSON.stringify(post), { status: 201 });
+        const orders = await Order.find({user: email}).populate('products.productId');
+        return NextResponse.json({ success: true, orders }, { status: 200 });
     } catch (error) {
-        console.log(error);
-
-        // if there is an error, return a 500 status code
-        return new NextResponse('Database Error', { status: 500 });
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }

@@ -1,14 +1,15 @@
-.chatBtn{
+.btnActive{
     padding: 8px 10px;
     border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     width: fit-content;
+    background-color: #500d0d;
 }
 
-.activeMsg {
-    background-color: rgb(18, 22, 80);
+.btnActive .activeMsg {
+    background-color:#0d1450;
     overflow: hidden;
     transition: all 0.3s ease;
 }

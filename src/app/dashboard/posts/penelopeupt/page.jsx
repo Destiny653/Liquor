@@ -5,7 +5,7 @@ export default async function Page({params}) {
 const getProductId = async (id)=> {
 
   try{
-    const res = await fetch(`http://localhost:3000/api/penelope/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/penelopes/${id}`, {
       cache: "no-store",
     })
 

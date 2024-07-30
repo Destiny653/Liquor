@@ -13,6 +13,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    orders: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Order'
+    }],
     role:{
         type: String,
         required: false,

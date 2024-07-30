@@ -25,12 +25,7 @@ export default function UpdateForm({id, title, content, price, img, rate}) {
         setSelectImg('');
         setNewImg('');
         setNewRate('');
-        const reader = new FileReader();
-        reader.readAsDataURL(!selectImg ? newImg : selectImg);
-        reader.onload = async () => {
-            const base64Image = reader.result;
-            console.log(newImg);
-            console.log('Base64 reprresentation:', base64Image);
+ 
 
             try {
                 const res = await fetch(`/api/posts/${id}`, {
@@ -38,7 +33,7 @@ export default function UpdateForm({id, title, content, price, img, rate}) {
                     headers: {
                         'content-type': 'application/json'
                     },
-                    body: JSON.stringify({ title:newTitle, content:newContent, price:newPrice, rate:newRate, img:base64Image })
+                    body: JSON.stringify({ title:newTitle, content:newContent, price:newPrice, rate:newRate, img:newImg })
                 })
                 if (res.ok) {
                     alert('Post created successfully!')
@@ -50,7 +45,6 @@ export default function UpdateForm({id, title, content, price, img, rate}) {
             } catch (error) {
                 console.error(error);
             }
-        }
     }
     console.log(newImg);
     console.log(selectImg);  
@@ -60,7 +54,7 @@ export default function UpdateForm({id, title, content, price, img, rate}) {
         if(selectImg) {
             return (
                 <div className='update-newImg-p box-border overflow-hidden w-full h-full rounded-xl'>
-                    <Image className=' update-newImg m-auto h-full' src={URL.createObjectURL(selectImg)} width={300} height={300} />
+                    {/* <Image className=' update-newImg m-auto h-full' src={URL.createObjectURL(selectImg)} width={300} height={300} /> */}
                 </div>
             )
         } else {

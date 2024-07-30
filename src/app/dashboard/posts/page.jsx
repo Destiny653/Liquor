@@ -8,7 +8,9 @@ import { FaStar } from "react-icons/fa";
 export default function Page() {
 
     const [mainindex, setMainindex] = useState(0)
-    const [posts, setPosts] = useState([])
+    const [posts, setPosts] = useState([]);
+    const formatter = new Intl.NumberFormat('en-US',{style: 'currency', currency:'USD'});
+
 
 
    
@@ -49,6 +51,24 @@ export default function Page() {
     return (
         <>
                 <section className='post-sub-container relative'>
+
+                    <div className='post-detail sticky top-[10vh] right-0'>
+                        <div className='w-full nunitoextralight_italic flex flex-col gap-2'>
+                            <h1 className='text-xl text-[#850303]'>Preview</h1>
+                            <div className='box-border flex justify-center'>
+                                <Image src={posts && posts[mainindex]?.img} alt='item image' width={300} height={300} />
+                            </div>
+                            <h1 className='post-detail-t text-xl font-semibold'>{posts[mainindex]?.title}</h1>
+                            <h2 className='font-semibold '>{formatter.format(posts[mainindex]?.price)}</h2>
+                            <p className=' post-pg'>{posts[mainindex]?.content}</p>
+                            <div className='flex justify-center items-center gap-6'>
+                              <Link href={`/dashboard/posts/update/${posts[mainindex]?._id}`}>
+                                <button className=' post-btn bg-black  text-white '>Edit</button>
+                              </Link>
+                                <button onClick={() => { deletePost(posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-[#850303] text-white'>Delete</button>
+                            </div>
+                        </div>
+                    </div>
                     <ul className='post-sub-child'>
                         <div className='post-opt flex gap-4'>
                             <h1 className='text-xl text-[#850303]'>All Posts</h1>
@@ -74,7 +94,7 @@ export default function Page() {
                                                     <FaStar color='gold' className='inline' />
                                                     <FaStar color='gold' className='inline' />
                                                 </h1>
-                                                <span className='nunitoextralight_italic font-semibold'>${post.price}</span>
+                                                <span className='nunitoextralight_italic font-semibold'>{formatter.format(post.price)}</span>
                                                 <div className='flex items-center gap-2'>
                                                 </div>
                                             </div>
@@ -84,24 +104,6 @@ export default function Page() {
                             }
                         </div>
                     </ul>
-
-                    <div className='post-detail sticky top-[10%] right-0'>
-                        <div className='w-full nunitoextralight_italic flex flex-col gap-2'>
-                            <h1 className='text-xl text-[#850303]'>Preview</h1>
-                            <div className='box-border flex justify-center'>
-                                <Image src={posts && posts[mainindex]?.img} alt='item image' width={300} height={300} />
-                            </div>
-                            <h1 className='post-detail-t text-xl font-semibold'>{posts[mainindex]?.title}</h1>
-                            <h2 className='font-semibold '>${posts[mainindex]?.price}</h2>
-                            <p className=' post-pg'>{posts[mainindex]?.content}</p>
-                            <div className='flex justify-center items-center gap-6'>
-                              <Link href={`/dashboard/posts/update/${posts[mainindex]?._id}`}>
-                                <button className=' post-btn bg-black  text-white '>Edit</button>
-                              </Link>
-                                <button onClick={() => { deletePost(posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-[#850303] text-white'>Delete</button>
-                            </div>
-                        </div>
-                    </div>
                 </section>
         </>
     )

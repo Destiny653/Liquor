@@ -5,17 +5,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SearchContext } from '../../../context/SearchContext';
 import { useRouter } from 'next/navigation';
+import { CartContext } from '../../../context/CartContext';
 
 export default function Page() {
 
-    const { searchVal, searchInp, handlePro } = useContext(SearchContext)
-    const navigation = useRouter()
+    const { searchVal, searchInp, handlePro } = useContext(SearchContext);
+    const {handleAddToCart} = useContext(CartContext);
+    const navigation = useRouter();
     console.log(searchInp);
     console.log(searchVal);
     const [data, setData] = useState();
-    const [options, setOptions] = useState('All Brands')
+    const [options, setOptions] = useState('All Brands');
     const [brand, setBrand] = useState([])
-    let choice = ['balton', 'weller', 'buffalo', 'pappy', 'penelope', 'yamazaki', 'All Brands']
+    let choice = ['balton', 'weller', 'buffalo', 'pappy', 'penelope', 'yamazaki', 'All Brands'];
+    const formatter = new Intl.NumberFormat('en-US',{style: 'currency', currency:'USD'});
+
   
     useEffect(() => {
     
@@ -92,8 +96,8 @@ export default function Page() {
                     <Image src={post.img} alt={post.title} width={300} height={300} onClick={()=>{handlePro(post); navigation.push('/details')}} />
                 <h1 className='shopItemTitle font-semibold'>{post.title}</h1>
                 <p className='shopItemContent'>{post.content}</p>
-                <h2 className=' font-medium'>${post.price}</h2>
-                <button className='shopBtn'>Add to Cart</button>
+                <h2 className=' font-medium'>{formatter.format(post.price)}</h2>
+                <button className='shopBtn' onClick={()=>handleAddToCart(post)}>Add to Cart</button>
             </div>
         ));
     };
@@ -126,7 +130,7 @@ export default function Page() {
 
     return (
         <div className='shopParent relative'>
-            <div className='shopChild1 sticky left-0 top-[6%]'>
+            <div className='shopChild1 sticky left-0 top-[10vh]'>
                 <section className='brand'>
                     <h1 className=' font-[500] text-2xl text-[red]'>Brand</h1>
                     <label htmlFor="radio">

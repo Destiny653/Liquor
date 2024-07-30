@@ -7,11 +7,17 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { SearchContext } from '../../../../context/SearchContext';
 import { useRouter } from 'next/navigation';
+import { CartContext } from '../../../../context/CartContext';
 
+
+ 
 export default function Hero() {
     const [data, setData] = useState([])
     const {handlePro} = useContext(SearchContext)
-    const navigation = useRouter()
+    const {handleAddToCart} = useContext(CartContext)
+    const navigation = useRouter();
+    const formatter = new Intl.NumberFormat('en-US',{style: 'currency', currency:'USD'});
+
 
 
     useEffect(() => {
@@ -140,7 +146,7 @@ export default function Hero() {
                                 <section className='flex flex-col h-[200px] justify-center items-center gap-1'>
                                     <h3 className='heroList3-title'>{item.title}</h3>
                                     <p className='text-center h-[200px] '>{item.content}</p>
-                                    <p>From ${item.price}</p>
+                                    <p>From {formatter.format(item.price)}</p>
                                     <div className='mb-4'>
                                         <FaStar color='gold' className='inline' />
                                         <FaStar color='gold' className='inline' />
@@ -148,7 +154,7 @@ export default function Hero() {
                                         <FaStar color='gold' className='inline' />
                                         <FaStar color='gold' className='inline' />
                                     </div>
-                                    <button className='heroBtnCart'>ADD TO CART</button>
+                                    <button className='heroBtnCart' onClick={()=>handleAddToCart(item)}>ADD TO CART</button>
                                 </section>
                             </li>
                         ))
