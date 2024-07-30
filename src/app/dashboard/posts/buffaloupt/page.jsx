@@ -26,7 +26,7 @@ const getProductId = async (id)=> {
     console.log(product);
     const {title, content, price, img, rate} = product;
 
-    if(product){
+    if(id){
       return (
         <div>
           <UpdateForm id={id} title={title} content={content} price={price} img={img} rate={rate} />
