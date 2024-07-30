@@ -12,6 +12,7 @@ export default function Page() {
     const [img, setImg] = useState(null);
     const [rate, setRate] = useState(null);
     const [option, setOption] = useState('');
+    console.log(option);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,7 +29,7 @@ export default function Page() {
             console.log('Base64 reprresentation:', base64Image);
 
             try {
-                const res = await fetch(`/api/posts`, {
+                const res = await fetch(`/api/post`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -68,12 +69,12 @@ export default function Page() {
                         </label>
                         <select className='create-input text-black  py-2 px-3' value={option} required onChange={(e) => setOption(e.target.value)}>
                             <option value="">Select option</option>
-                            <option value="balton">Balton</option>
-                            <option value="buffalo">Buffalo</option>
-                            <option value="pappy">Pappy</option>
-                            <option value="penelope">Penelope</option>
-                            <option value="weller">Weller</option>
-                            <option value="yamazaki">Yamazaki</option>
+                            <option value="baltons">Balton</option>
+                            <option value="buffalos">Buffalo</option>
+                            <option value="pappies">Pappy</option>
+                            <option value="penelopes">Penelope</option>
+                            <option value="wellers">Weller</option>
+                            <option value="yamazakis">Yamazaki</option>
                         </select>
                     </div>
                 </div>

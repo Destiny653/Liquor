@@ -19,7 +19,7 @@ export async function GET(req, { params }) {
 //update a product
 export async function PUT(req, { params }) {
     const { id } = params
-    const { title, content, price, img } = await req.json();
+    const { title, content, price, img, rate } = await req.json();
 
     //cloudinary configuration
     cloudinary.config({
@@ -35,6 +35,7 @@ export async function PUT(req, { params }) {
         await connectDB();
         await Weller.findByIdAndUpdate(id, {
             title,
+            rate,
             content,
             price,
             img: uploadResult?.secure_url

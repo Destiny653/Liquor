@@ -1,5 +1,5 @@
 import connectDB from "@/utils/db";
-import Buffalo from "@/models/Post";
+import Buffalo from "@/models/Buffalo";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from 'cloudinary';
 
@@ -19,7 +19,7 @@ export async function GET(req, { params }) {
 //update a product
 export async function PUT(req, { params }) {
     const { id } = params
-    const { title, content, price, img } = await req.json();
+    const { title, content, price, img, rate } = await req.json();
 
     //cloudinary configuration
     cloudinary.config({
@@ -37,6 +37,7 @@ export async function PUT(req, { params }) {
             title,
             content,
             price,
+            rate,
             img: uploadResult?.secure_url
         });
         return new NextResponse({ message: 'Product Updated' }, { status: 200 });

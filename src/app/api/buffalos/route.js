@@ -1,4 +1,4 @@
-import Buffalo from "@/models/Balton";
+import Buffalo from "@/models/Buffalo";
 import connectDB from "@/utils/db";
 import {v2 as cloudinary} from "cloudinary"
 import { NextResponse } from 'next/server';

@@ -5,7 +5,7 @@ export default async function Page({params}) {
 const getProductId = async (id)=> {
 
   try{
-    const res = await fetch(`http://localhost:3000/api/pappys/${id}`)
+    const res = await fetch(`http://localhost:3000/api/pappies/${id}`)
 
     console.log(res);
     

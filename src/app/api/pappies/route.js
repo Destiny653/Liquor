@@ -1,4 +1,4 @@
-import Pappy from "@/models/Balton";
+import Pappy from "@/models/Pappy";
 import connectDB from "@/utils/db";
 import {v2 as cloudinary} from "cloudinary"
 import { NextResponse } from 'next/server';

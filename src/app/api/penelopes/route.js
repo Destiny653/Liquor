@@ -1,4 +1,4 @@
-import Penelope from "@/models/Balton";
+import Penelope from "@/models/Penelope";
 import connectDB from "@/utils/db";
 import {v2 as cloudinary} from "cloudinary"
 import { NextResponse } from 'next/server';
