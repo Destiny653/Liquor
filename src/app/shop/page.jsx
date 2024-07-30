@@ -17,7 +17,7 @@ export default function Page() {
     const [data, setData] = useState();
     const [options, setOptions] = useState('All Brands');
     const [brand, setBrand] = useState([])
-    let choice = ['balton', 'weller', 'buffalo', 'pappy', 'penelope', 'yamazaki', 'All Brands'];
+    let choice = ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'];
     const formatter = new Intl.NumberFormat('en-US',{style: 'currency', currency:'USD'});
 
   
@@ -25,33 +25,33 @@ export default function Page() {
     
     const getData = async (title) => {
         switch (options) {
-            case 'balton':
-                setBrand('/api/balton');
+            case 'baltons':
+                setBrand(['/api/baltons']);
                 break;
-            case 'weller':
-                setBrand('/apo/weller');
+            case 'wellers':
+                setBrand(['/apo/wellers']);
                 break;
-            case 'buffalo':
-                setBrand('/api/buffalo');
+            case 'buffalos':
+                setBrand(['/api/buffalos']);
                 break;
-            case 'pappy':
-                setBrand('/api/pappy');
+            case 'pappies':
+                setBrand(['/api/pappies']);
                 break;
-            case 'penelope':
-                setBrand('/api/penelope');
+            case 'penelopes':
+                setBrand(['/api/penelopes']);
                 break;
-            case 'yamazaki':
-                setBrand('/api/yamazaki');
+            case 'yamazakis':
+                setBrand(['/api/yamazakis']);
                 break;
             default:
                 setBrand([
                     '/api/posts',
-                    '/api/balton',
-                    '/api/weller',
-                    '/api/buffalo',
-                    '/api/pappy',
-                    '/api/penelope',
-                    '/api/yamazaki',
+                    '/api/baltons',
+                    '/api/wellers',
+                    '/api/buffalos',
+                    '/api/pappies',
+                    '/api/penelopes',
+                    '/api/yamazakis',
                 ]);
             }
         
@@ -134,27 +134,27 @@ export default function Page() {
                 <section className='brand'>
                     <h1 className=' font-[500] text-2xl text-[red]'>Brand</h1>
                     <label htmlFor="radio">
-                        <input type="radio" name="brand" value={'balton'} onChange={() => setOptions(choice[0])} />
+                        <input type="radio" name="brand" value={'baltons'} onChange={() => setOptions(choice[0])} />
                         <span>Balton</span>
                     </label>
                     <label htmlFor="radio">
-                        <input type="radio" name="brand" value={'weller'} onChange={() => setOptions(choice[1])} />
+                        <input type="radio" name="brand" value={'wellers'} onChange={() => setOptions(choice[1])} />
                         <span>Weller</span>
                     </label>
                     <label htmlFor="radio">
-                        <input type="radio" name="brand" value={'buffalo'} onChange={() => setOptions(choice[2])} />
+                        <input type="radio" name="brand" value={'buffalos'} onChange={() => setOptions(choice[2])} />
                         <span>Buffalo</span>
                     </label>
                     <label htmlFor="radio">
-                        <input type="radio" name="brand" value={'pappy'} onChange={() => setOptions(choice[3])} />
+                        <input type="radio" name="brand" value={'pappies'} onChange={() => setOptions(choice[3])} />
                         <span>Pappy</span>
                     </label>
                     <label htmlFor="radio">
-                        <input type="radio" name="brand" value={'penelope'} onChange={() => setOptions(choice[4])} />
+                        <input type="radio" name="brand" value={'penelopes'} onChange={() => setOptions(choice[4])} />
                         <span>Penelope</span>
                     </label>
                     <label htmlFor="radio">
-                        <input type="radio" name="brand" value={'yamazaki'} onChange={() => setOptions(choice[5])} />
+                        <input type="radio" name="brand" value={'yamazakis'} onChange={() => setOptions(choice[5])} />
                         <span>Yamazaki</span>
                     </label>
                     <label htmlFor="radio">
