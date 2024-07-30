@@ -27,11 +27,18 @@ const getProductId = async (id)=> {
     const product = await getProductId(id);
     console.log(product);
     const {title, content, price, img, rate} = product;
-    
-   return (
-     <div>
-       <UpdateForm id={id} title={title} content={content} price={price} img={img} rate={rate} />
-     </div>
-   )
+
+    if(product){
+      return (
+        <div>
+          <UpdateForm id={id} title={title} content={content} price={price} img={img} rate={rate} />
+        </div>
+      )
+    }
+    return(
+    <div>
+      Product not found.
+    </div>
+    )
  }
  
