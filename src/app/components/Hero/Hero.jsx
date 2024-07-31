@@ -143,9 +143,9 @@ export default function Hero() {
                                 <div className='heroBestSellersImg-p box-border overflow-hidden '>
                                         <Image className='heroListImg3 align-top h-[230px]'onClick={()=>{handlePro(item); navigation.push('/details')}} src={item.img} alt={item.title} width={300} height={300} />
                                 </div>
-                                <section className='flex flex-col h-[200px] justify-center items-center gap-1'>
+                                <section className='flex flex-col h-[230px] justify-center items-center gap-1'>
                                     <h3 className='heroList3-title'>{item.title}</h3>
-                                    <p className='text-center h-[200px] '>{item.content}</p>
+                                    <p className='text-center h-[70px] '>{item.content}</p>
                                     <p>From {formatter.format(item.price)}</p>
                                     <div className='mb-4'>
                                         <FaStar color='gold' className='inline' />
