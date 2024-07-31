@@ -29,7 +29,7 @@ export default function Hero() {
         const getData = async () => {
 
             try {
-                const res = await fetch(`http://localhost:3000/api/posts`)
+                const res = await fetch(`/api/posts`)
 
                 if (!res.ok) {
                     console.log('failed to fetch data');
