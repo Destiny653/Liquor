@@ -1,6 +1,6 @@
 .displayP{
     position: absolute;
-    top: 10vh;
+    top: 80%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 5px;
