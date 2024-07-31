@@ -10,6 +10,8 @@ import GoogleProvider from "next-auth/providers/google"
     }),
     // ...add more providers here
   ],
+  secret:process.env.NEXTAUTH_SECRET,
+  url:process.env.NEXTAUTH_URL
 })
 
 export  {handler as GET, handler as POST}
