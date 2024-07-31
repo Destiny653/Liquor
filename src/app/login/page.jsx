@@ -22,7 +22,7 @@ const Page = () => {
     if (session) {
         return (
             <>
-                <div className='container' style={mode == 'light' ? { color: 'black' } : { color: 'white' }}>
+                <div className='container'>
                     {" "}
                     <div className='profileImage'>
                         <Image src={session.user.image} alt='user image' className='image' fill={true} />
