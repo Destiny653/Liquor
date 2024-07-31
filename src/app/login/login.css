@@ -1,17 +1,16 @@
-.container {
+.authContainer {
    height: 80vh;
    align-items: center;
    justify-content: center;
    display: flex;
    flex-direction: column;
-   background-size: 100%;
    width: 100%;
    margin: 0;
    box-sizing: border-box;
    overflow: hidden;
 }
 
-.container::after {
+.authContainer::after {
    position: relative;
    content: '';
    z-index: 1;
@@ -109,7 +108,7 @@
   */
 
 @media all and (max-width:700px) {
-   .container {
+   .authContainer {
       padding: 15px;
       box-sizing: border-box;
    }

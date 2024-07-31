@@ -22,13 +22,13 @@ const Page = () => {
     if (session) {
         return (
             <>
-                <div className='container'>
+                <div className='authContainer'>
                     {" "}
                     <div className='profileImage'>
-                        <Image src={session.user.image} alt='user image' className='image' fill={true} />
+                        <Image src={session.user.image} alt='user image' className='image'  width={2000} height={2000} />
                     </div>
-                    <h1 className='text-white '>Signed in as {session.user.email}</h1> <br /> {" "}
-                    <button className='button' onClick={() => signOut("google")}>Sign out</button>{" "}
+                    <h1 className='text-black '>Signed in as {session.user.email}</h1> <br /> {" "}
+                    <button className='signin-btn' onClick={() => signOut("google")}>Sign out</button>{" "}
                 </div>
             </>
         )
@@ -69,7 +69,7 @@ const Page = () => {
     return (
         <>
 
-                <div className='container'>
+                <div className='authContainer'>
                     <div className='signCard'  >
                         <form className='sign-form' onSubmit={handleSubmit}>
                             <div className=' mb-3 flex flex-col'>

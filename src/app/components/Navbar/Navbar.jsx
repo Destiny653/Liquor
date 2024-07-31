@@ -6,10 +6,15 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useRouter } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function Navbar() {
 
     const {setSearchVal, setSearchInp} = useContext(SearchContext)
+    const { data: session } = useSession()
+    console.log(session);
+
 
     useEffect(() => {
 
@@ -132,8 +137,10 @@ export default function Navbar() {
                     <div className="font-bold text-2xl nav-logo ">LOGO</div>
                     <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e)=>setQuery(e.target.value)} />
                     <section className="flex justify-center items-center gap-2">
-                        <div className="nav-user-img"></div>
-                        <h2>Hello User</h2>
+                        <div className="nav-user-img">
+                            <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
+                        </div>
+                        <h2>{session?.user.name}</h2>
                     </section>
                 </section>
 
