@@ -8,10 +8,11 @@ import { useRouter } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import Display from '../SearchDisplay/Display';
 
 export default function Navbar() {
 
-    const {setSearchVal, setSearchInp} = useContext(SearchContext)
+    const { setSearchVal, setSearchInp } = useContext(SearchContext)
     const { data: session } = useSession()
     console.log(session);
 
@@ -82,18 +83,18 @@ export default function Navbar() {
 
     const handleScroll = () => {
         const currentScrollY = window.scrollY;
-        if (currentScrollY > lastScrollY){
+        if (currentScrollY > lastScrollY) {
             setIsVisible(false);
-        }else{
+        } else {
             setIsVisible(true);
         }
         setLastScrollY(currentScrollY);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    },[lastScrollY]);
+    }, [lastScrollY]);
 
     const [query, setQuery] = useState('');
     const handleSearch = (e) => {
@@ -102,29 +103,29 @@ export default function Navbar() {
     setSearchInp(query)
     console.log(query);
     const fetchFromAPIs = async (title) => {
-    const apis = [
-         `/api/posts`
-      ];
-    
-      const fetchPromises = apis.map(api => fetch(api).then(res => res.json()));
-    
-      const results = await Promise.all(fetchPromises);
-      console.log(results);
-    
-      // Flatten the array of results and filter based on the title
-      const filteredResults = results.flat().filter(product =>
-        product.title.toLowerCase().includes(title.toLowerCase())
-      );
-      console.log(filteredResults);
-    
-      return filteredResults;
+        const apis = [
+            `/api/posts`
+        ];
+
+        const fetchPromises = apis.map(api => fetch(api).then(res => res.json()));
+
+        const results = await Promise.all(fetchPromises);
+        console.log(results);
+
+        // Flatten the array of results and filter based on the title
+        const filteredResults = results.flat().filter(product =>
+            product.title.toLowerCase().includes(title.toLowerCase())
+        );
+        console.log(filteredResults);
+
+        return filteredResults;
     };
-    
+
     useEffect(() => {
         fetchFromAPIs(query).then(results => setSearchVal(results));
     }, [query]); // Trigger the fetchFromAPIs function when the query changes
 
-    
+
 
 
     return (
@@ -135,7 +136,10 @@ export default function Navbar() {
                 </section>
                 <section className="nav-search-p">
                     <div className="font-bold text-2xl nav-logo ">LOGO</div>
-                    <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e)=>setQuery(e.target.value)} />
+                    <label className='relative flex justify-center w-[60%]'>
+                        <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
+                        <Display />
+                    </label>
                     <section className="flex justify-center items-center gap-2">
                         <div className="nav-user-img">
                             <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
@@ -144,8 +148,8 @@ export default function Navbar() {
                     </section>
                 </section>
 
-                <ul style={{position: 'fixed', top: '0', width: '100%', zIndex: '10' ,transition: 'transform 0.3s ease', transform: isVisible?'translateY(0)': 'translateY(-100%)'}}
-                className="nav-item-p"
+                <ul style={{ position: 'fixed', top: '0', width: '100%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}
+                    className="nav-item-p"
                     data-aos-offset="500"
                     data-aos-duration="100"
                     data-aos="fade-down"

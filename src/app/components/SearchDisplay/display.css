@@ -1,28 +1,21 @@
 .displayP{
     position: absolute;
-    top: 15vh;
-    left: 1%;
-    /* height: 40vh; */
-    max-height: 40vh;
-    width: 10%;
-    background: #34053a;
-    color: #fff;
-    overflow-y: scroll;
+    top: 10vh;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 5px;
+    background: #750a0a;
     box-sizing: border-box;
-    padding: 0.2%;
-    box-shadow:inset 0px 0px 4px #000 ;
-    text-align: center;
+    padding: 1% 1% 0 1%;
+    max-width:  100%;
 }
-.displayP ul{
-    width: 100%;
-}
+ 
 .displayT{
     font-size: 11px;
-    text-transform: capitalize;
-    text-transform: uppercase;
+    text-transform: lowercase;
+    text-align: center;
+    color: #ffffff;
 }
-/* hide webkit scrollY */
 .displayP::-webkit-scrollbar{
-    /* display: none; */
     width: 2px;
 }

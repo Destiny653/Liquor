@@ -13,14 +13,14 @@ export default function Display() {
     if (!searchInp) return null;
     return (
         <div className='displayP z-20'>
-            <p>Results</p>
+            {/* <p>Results</p> */}
             {
                 !searchVal.length == 0 ? searchVal?.map((item) => {
                     return (
                         <ul className='' key={item._id}>
-                            <li>
+                            <li key={item._id}>
                                 <Link href={`/shop`}>
-                                    <Image className='w-full' src={item.img} alt={item.title} width={300} height={300} />
+                                    <Image className='w-[100px] h-[80px] text-xs lowercase text-[#646464] align-bottom' src={item.img} alt={item.title} width={500} height={500} />
                                 </Link>
                             </li>
                             <li className='displayT'>{item.title}</li>

@@ -10,7 +10,7 @@ import { CartContext } from '../../../context/CartContext';
 export default function Page() {
 
     const { searchVal, searchInp, handlePro } = useContext(SearchContext);
-    const {handleAddToCart} = useContext(CartContext);
+    const { handleAddToCart } = useContext(CartContext);
     const navigation = useRouter();
     console.log(searchInp);
     console.log(searchVal);
@@ -18,56 +18,56 @@ export default function Page() {
     const [options, setOptions] = useState('All Brands');
     const [brand, setBrand] = useState([])
     let choice = ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'];
-    const formatter = new Intl.NumberFormat('en-US',{style: 'currency', currency:'USD'});
+    const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
-  
+
     useEffect(() => {
-    
-    const getData = async (title) => {
-        switch (options) {
-            case 'baltons':
-                setBrand(['/api/baltons']);
-                break;
-            case 'wellers':
-                setBrand(['/apo/wellers']);
-                break;
-            case 'buffalos':
-                setBrand(['/api/buffalos']);
-                break;
-            case 'pappies':
-                setBrand(['/api/pappies']);
-                break;
-            case 'penelopes':
-                setBrand(['/api/penelopes']);
-                break;
-            case 'yamazakis':
-                setBrand(['/api/yamazakis']);
-                break;
-            default:
-                setBrand([
-                    '/api/posts',
-                    '/api/baltons',
-                    '/api/wellers',
-                    '/api/buffalos',
-                    '/api/pappies',
-                    '/api/penelopes',
-                    '/api/yamazakis',
-                ]);
+
+        const getData = async (title) => {
+            switch (options) {
+                case 'baltons':
+                    setBrand(['/api/baltons']);
+                    break;
+                case 'wellers':
+                    setBrand(['/apo/wellers']);
+                    break;
+                case 'buffalos':
+                    setBrand(['/api/buffalos']);
+                    break;
+                case 'pappies':
+                    setBrand(['/api/pappies']);
+                    break;
+                case 'penelopes':
+                    setBrand(['/api/penelopes']);
+                    break;
+                case 'yamazakis':
+                    setBrand(['/api/yamazakis']);
+                    break;
+                default:
+                    setBrand([
+                        '/api/posts',
+                        '/api/baltons',
+                        '/api/wellers',
+                        '/api/buffalos',
+                        '/api/pappies',
+                        '/api/penelopes',
+                        '/api/yamazakis',
+                    ]);
             }
-        
-            
+
+
             const fetchPromises = brand.map(api => fetch(api).then(res => res.json()));
-        const results = await Promise.all(fetchPromises);
-        console.log(results);
-        const filteredResults = results.flat().filter(product =>
-            product.title?.toLowerCase().includes(title?.toLowerCase())
-        );
-        console.log(filteredResults);
-        return filteredResults;
-    }
-    
-    
-        getData(searchInp).then(results => setData(()=>results));
+            const results = await Promise.all(fetchPromises);
+            console.log(results);
+            const filteredResults = results.flat().filter(product =>
+                product.title?.toLowerCase().includes(title?.toLowerCase())
+            );
+            console.log(filteredResults);
+            return filteredResults;
+        }
+
+
+        getData(searchInp).then(results => setData(() => results));
     }, [data, searchInp, searchVal])
 
 
@@ -93,11 +93,11 @@ export default function Page() {
         }
         return getItemsForPage(currentPage)?.map((post) => (
             <div key={post.id} className='border shopItem'>
-                    <Image src={post.img} alt={post.title} width={300} height={300} onClick={()=>{handlePro(post); navigation.push('/details')}} />
+                <Image src={post.img} alt={post.title} width={300} height={300} onClick={() => { handlePro(post); navigation.push('/details') }} />
                 <h1 className='shopItemTitle font-semibold'>{post.title}</h1>
                 <p className='shopItemContent'>{post.content}</p>
                 <h2 className=' font-medium'>{formatter.format(post.price)}</h2>
-                <button className='shopBtn' onClick={()=>handleAddToCart(post)}>Add to Cart</button>
+                <button className='shopBtn' onClick={() => handleAddToCart(post)}>Add to Cart</button>
             </div>
         ));
     };
@@ -134,6 +134,10 @@ export default function Page() {
                 <section className='brand'>
                     <h1 className=' font-[500] text-2xl text-[red]'>Brand</h1>
                     <label htmlFor="radio">
+                        <input type="radio" name="brand" value={'regular'} onChange={() => setOptions(choice[6])} />
+                        <span>All</span>
+                    </label>
+                    <label htmlFor="radio">
                         <input type="radio" name="brand" value={'baltons'} onChange={() => setOptions(choice[0])} />
                         <span>Balton</span>
                     </label>
@@ -156,10 +160,6 @@ export default function Page() {
                     <label htmlFor="radio">
                         <input type="radio" name="brand" value={'yamazakis'} onChange={() => setOptions(choice[5])} />
                         <span>Yamazaki</span>
-                    </label>
-                    <label htmlFor="radio">
-                        <input type="radio" name="brand" value={'regular'} onChange={() => setOptions(choice[6])} />
-                        <span>regular</span>
                     </label>
                 </section>
                 <section className='shopFilter'>
