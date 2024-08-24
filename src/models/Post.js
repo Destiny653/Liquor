@@ -20,6 +20,10 @@ const postSchema = new Schema({
     img: {
         type: String,
         required:true
+    },
+    productModel: {
+        type: String,
+        default: 'post'
     }
 },{timestamps:true});
 

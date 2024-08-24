@@ -14,9 +14,10 @@ const orderSchema = new Schema({
         {
             productId: {
                 type: Schema.Types.ObjectId,
+                refPath: 'productModel',
                 required: true
             },
-            productType: {
+            productModel: {
                 type: String,
                 required: true
             },

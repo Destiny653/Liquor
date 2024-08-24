@@ -13,6 +13,7 @@ export const CartProvider = ({ children }) => {
         let productID = currentItem?._id;
         let price = currentItem.price;
         let title = currentItem.title;
+        let productModel = currentItem.productModel;
         let position = cart.findIndex(value => value.product_id === productID);
         let quantity = qty ? cartItems[position]?.quantity - 1 : (position < 0 ? 1 : cartItems[position].quantity + 1)
 
@@ -22,7 +23,7 @@ export const CartProvider = ({ children }) => {
             if (quantity <= 0) {
                 cart.splice(position, 1)
             } else if (position < 0) {
-                cart.push({ product_id: productID, price: price, title: title, quantity: 1 })
+                cart.push({ product_id: productID, price: price, title: title, productModel: productModel, quantity: 1 })
             } else {
                 cart[position].quantity = quantity
             }

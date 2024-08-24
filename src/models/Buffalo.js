@@ -21,7 +21,7 @@ const buffaloSchema = new Schema({
         type: String,
         required:true
     },
-    productType: {
+    productModel: {
         type: String,
         default: 'buffalo'
     }

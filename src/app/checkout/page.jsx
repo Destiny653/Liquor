@@ -3,12 +3,17 @@ import React, { useContext, useState } from 'react'
 import './check.css'
 import { CartContext } from '../../../context/CartContext'
 import { SearchContext } from '../../../context/SearchContext'
+import { useSession } from 'next-auth/react'
 
 export default function Page() {
     const [firstname, setFirstname] = useState('')
     const [lastname, setLastname] = useState('')
     const [useremail, setUseremail] = useState('')
-    const {signIn} = useContext(SearchContext)
+    const [userRes, setUserRes] = useState('')
+    // const {signIn} = useContext(SearchContext)
+    // console.log(signIn);
+    const {data:session} = useSession()
+    console.log(session);
  
     const { cartItems } = useContext(CartContext)
     console.log(cartItems);
@@ -16,19 +21,27 @@ export default function Page() {
 
     let totalPrice = 0;
     let totalPriceFix;
+    // get email from local storage
+    let email = localStorage.getItem('email')
+    console.log(email);
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        alert('hello')
 
         try {
+        
             const res = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email:signIn , cartItems })
+                body: JSON.stringify({ email , cartItems })
             })
             const data = await res.json();
+            console.log(data);
+            
             if (data.success) {
                 alert('Successfully checkout!', data.order)
             } else {
@@ -39,6 +52,7 @@ export default function Page() {
         }
     }
 
+    
 
     return (
         <>
@@ -102,7 +116,7 @@ export default function Page() {
                         <span>Additional information</span>
                         <textarea className='border px-6' name="textarea" id="textarea" cols="4" rows="4" placeholder='Notes about your order, e.g. special notes for delivery'></textarea>
                     </label>
-                    <button className=' text-lg text-white font-medium  roboto py-2 rounded-xl bg-[#610f0f]' type='submit'>Place order</button>
+                    <button className=' text-lg text-white font-medium  roboto py-2 rounded-xl bg-[#610f0f]' type='submit' >Place order</button>
                 </form>
                 <section className=' table-section w-2/4  box-border p-3 '>
                     <table className='border w-full box-border p-7 mb-3'>

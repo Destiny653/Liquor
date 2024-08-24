@@ -29,7 +29,7 @@ export default function Page() {
             console.log('Base64 reprresentation:', base64Image);
 
             try {
-                const res = await fetch(`/api/post`, {
+                const res = await fetch(`/api/posts`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -70,6 +70,8 @@ export default function Page() {
 
                                 let position = newCart.findIndex((value) => value._id === item.product_id);
                                 let itemInCart = newCart[position]
+                                console.log(itemInCart);
+                                
                                 let qtyInCart = item.quantity
                                 console.log(item.price);
                                 let price = itemInCart?.price

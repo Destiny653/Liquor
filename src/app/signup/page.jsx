@@ -19,7 +19,7 @@ export default function Page() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setSignIn(email)
+
         //create an instance of Notyf
         const notyf = new Notyf({
             duration: 3000,
@@ -51,7 +51,28 @@ export default function Page() {
             notyf.error('Registration failed!'+ error.message);
             console.log(error);
         }
-    };
+        
+        
+        if(email){
+        // validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            notyf.error('Invalid email address');
+            return;
+        }
+        //set email to local storage
+        localStorage.setItem('email', email);
+
+        // validate password
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            notyf.error('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+            return;
+        }
+        
+        
+    }
+};
 
 
     return (

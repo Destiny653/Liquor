@@ -21,7 +21,7 @@ const pappySchema = new Schema({
         type: String,
         required:true
     },
-    productType: {
+    productModel: {
         type: String,
         default: 'pappy'
     }
