@@ -29,7 +29,7 @@ export default function Page() {
                     setBrand(['/api/baltons']);
                     break;
                 case 'wellers':
-                    setBrand(['/apo/wellers']);
+                    setBrand(['/api/wellers']);
                     break;
                 case 'buffalos':
                     setBrand(['/api/buffalos']);

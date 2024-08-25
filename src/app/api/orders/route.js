@@ -34,31 +34,31 @@ export const POST = async (req, res) => {
 
         let product = null;
         switch (productModel) {
-            case 'weller':
+            case 'Weller':
                 product = await Weller.findById(product_id);
                 console.log(product);
                 break;
-            case 'balton':
+            case 'Balton':
                 product = await Balton.findById(product_id)
                 console.log(product);
                 break;
-            case 'penelope':
+            case 'Penelope':
                 product = await Penelope.findById(product_id)
                 console.log(product);
                 break;
-            case 'yamazaki':
+            case 'Yamazaki':
                 product = await Yamazaki.findById(product_id)
                 console.log(product);
                 break;
-            case 'pappy':
+            case 'Pappy':
                 product = await Pappy.findById(product_id)
                 console.log(product);
                 break;
-            case 'buffalo':
+            case 'Buffalo':
                 product = await Buffalo.findById(product_id)
                 console.log(product);
                 break;
-            case 'post':
+            case 'Post':
                 product = await Post.findById(product_id)
                 console.log(product);
                 break;
@@ -103,26 +103,26 @@ export const POST = async (req, res) => {
             let product;
 
             switch (item.productModel) {
-                case 'post':
+                case 'Post':
                     product = await Post.findById(item.productId).exec();
                     console.log(product);
                     break;
-                case 'weller':
+                case 'Weller':
                     product = await Weller.findById(item.productId).exec();
                     break;
-                case 'balton':
+                case 'Balton':
                     product = await Balton.findById(item.productId).exec();
                     break;
-                case 'penelope':
+                case 'Penelope':
                     product = await Penelope.findById(item.productId).exec();
                     break;
-                case 'yamazaki':
+                case 'Yamazaki':
                     product = await Yamazaki.findById(item.productId).exec();
                     break;
-                case 'pappy':
+                case 'Pappy':
                     product = await Pappy.findById(item.productId).exec();
                     break;
-                case 'buffalo':
+                case 'Buffalo':
                     product = await Buffalo.findById(item.productId).exec();
                     break;
                     default:
@@ -145,7 +145,7 @@ export const POST = async (req, res) => {
 
         const newOrder = new Order({
             user: user._doc._id.toHexString(),
-            email: user._doc.email,
+            // email: user._doc.email,
             products: verifiedItems,
             totalPrice: totalPrice,
             orderDate: new Date(),
@@ -201,13 +201,20 @@ export const POST = async (req, res) => {
     // }
 }
 
+
 export const GET = async (req, res) => {
-    await connectDB();
-    try {
-        const populatedOrder = await Order.findById(newOrder._id).populate('items.product').exec();
-        return NextResponse.json({ success: true, populatedOrder }, { status: 200 });
-    } catch (error) {
-        console.log(error);
-        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    //  get and populate order with user and product
+    await connectDB()
+    try{
+        const order = await Order.find().populate({path:'user', populate:{path: 'order'}}).populate({path:'products.productId'}).exec();
+        console.log(order);
+        
+        if(!order){
+            return NextResponse.json({ success: false, message: 'Order not found' }, { status: 404 });
+        }
+        return NextResponse.json({ success: true, order }, { status: 200 });
+    }catch(err){
+        console.error(err);
+        return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 }); 
     }
 }

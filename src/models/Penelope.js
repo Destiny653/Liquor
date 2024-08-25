@@ -23,7 +23,7 @@ const penelopeSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'penelope'
+        default: 'Penelope'
     }
 },{timestamps:true});
 

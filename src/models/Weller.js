@@ -23,7 +23,7 @@ const wellerSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'weller'
+        default: 'Weller'
     }
 },{timestamps:true});
 

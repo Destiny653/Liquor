@@ -23,7 +23,7 @@ const yamazakiSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'yamazaki'
+        default: 'Yamazaki'
     }
 },{timestamps:true});
 

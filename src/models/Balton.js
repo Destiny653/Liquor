@@ -23,7 +23,7 @@ const baltonSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'balton'
+        default: 'Balton'
     }
 },{timestamps:true});
 

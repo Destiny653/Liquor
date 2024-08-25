@@ -23,7 +23,7 @@ const buffaloSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'buffalo'
+        default: 'Buffalo'
     }
 },{timestamps:true});
 

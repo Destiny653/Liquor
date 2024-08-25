@@ -23,7 +23,7 @@ const postSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'post'
+        default: 'Post'
     }
 },{timestamps:true});
 

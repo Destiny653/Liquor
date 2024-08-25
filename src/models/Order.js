@@ -6,33 +6,21 @@ const orderSchema = new Schema({
         ref: "User",
         required: true
     },
-    email: {
-        type: String,
-        required: true
-    },
     products: [
         {
-            productId: {
-                type: Schema.Types.ObjectId,
-                refPath: 'productModel',
-                required: true
-            },
             productModel: {
                 type: String,
+                required: true
+            },
+            productId: {
+                type: Schema.Types.ObjectId,
+                refPath: "products.productModel",
                 required: true
             },
             quantity: {
                 type: Number,
                 required: true
-            },
-            price: {
-                type: Number,
-                required: true
-            },
-            orderPrice: {
-                type: Number,
-                required: true
-            }
+            } 
         }
     ],
     totalPrice: {

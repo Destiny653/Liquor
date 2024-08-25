@@ -29,3 +29,18 @@ import { NextResponse } from "next/server";
             return  NextResponse.json({ success: false, message: 'Internal server error'}, {status: 500});
         }
 };
+
+export const GET  = async(req, res)=>{
+    await connectDB()
+    try {
+        const users = await User.find();
+        console.log(users);
+        
+        if (!users) {
+            return  NextResponse.json({ success: false, message: 'No users found'}, {status: 404});
+        }
+        return  NextResponse.json({ success: true, users }, {status: 200});
+    } catch (error) {
+        return  NextResponse.json({ success: false, message: 'Internal server error'}, {status: 500});
+    }
+}

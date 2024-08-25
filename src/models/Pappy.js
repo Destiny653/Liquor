@@ -23,7 +23,7 @@ const pappySchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'pappy'
+        default: 'Pappy'
     }
 },{timestamps:true});
 
