@@ -30,7 +30,7 @@ export const POST = async (req, res) => {
     async function verifyProductId(product_id, productModel) {
         console.log(productModel);
         console.log(product_id);
-        
+
 
         let product = null;
         switch (productModel) {
@@ -68,7 +68,7 @@ export const POST = async (req, res) => {
         return product;
 
         console.log(product);
-        
+
     }
     async function verifyAndPopulateOrderItems(cartItems) {
         const verifiedCartItems = [];
@@ -77,8 +77,8 @@ export const POST = async (req, res) => {
             console.log(verificationResult);
             console.log(verificationResult._doc._id.toHexString());
             console.log(product_id, productModel);
-            
-            
+
+
             if (verificationResult) {
                 verifiedCartItems.push({
                     productId: verificationResult._doc._id.toHexString(),
@@ -99,7 +99,7 @@ export const POST = async (req, res) => {
         let totalPrice = 0;
         for (const item of verifiedItems) {
             console.log(item);
-            
+
             let product;
 
             switch (item.productModel) {
@@ -125,8 +125,8 @@ export const POST = async (req, res) => {
                 case 'Buffalo':
                     product = await Buffalo.findById(item.productId).exec();
                     break;
-                    default:
-                        throw new Error(`Product type ${item.productModel} not found.`);
+                default:
+                    throw new Error(`Product type ${item.productModel} not found.`);
             }
             // Check if the product exists in the database and calculate the total price for this item.
             if (product) {
@@ -151,70 +151,89 @@ export const POST = async (req, res) => {
             orderDate: new Date(),
             status: 'pending'
         })
+        console.log("new order id here:" + newOrder._id);
 
-        await newOrder.save();
+        const userId = user._doc._id.toHexString();
+        console.log(userId);
+
+        const orderIds = verifiedItems.map(item => item.productId)
+        console.log(orderIds);
+
+
+        const userIdInOrder = await Order.findOne({ user: userId })
+        console.log("userIdInOrder:" + userIdInOrder?.user);
+        const returnItems = await Order.findOne({ user: userId, 'products.productId': { $all: orderIds } })
+        console.log("returnItems:" + returnItems);
+
+        try {
+            const userId = user._doc._id.toHexString();
+            const orderIds = verifiedItems.map(item => item.productId)
+            console.log('extracted ids:' + orderIds);
+            const verifiedOrders = await Order.find({ user: userId, 'products.productId': { $all: orderIds } })
+            console.log(verifiedOrders);
+            const verifiedOrders2 = await Order.find({ user: userId, 'products.productId': { $in: orderIds } })
+            console.log(verifiedOrders2);
+            if (!userIdInOrder) {
+                await newOrder.save();
+            } else if (verifiedOrders) {
+                await Order.updateOne({ user: userId }, { $inc: { "products.$[product].quantity": 1 } }, { arrayFilters: [{ "product.productId": { $in: orderIds } }] })
+            } else if (verifiedOrders2) {
+                await Order.updateOne({ user: userId }, { $inc: { "products.$[product].quantity": 1 } }, { arrayFilters: [{ "product.productId": { $in: orderIds } }] })
+            } else {
+                // filter verifiedItem.productId !== returnId
+                const newItems = verifiedItems.find(item => item.productId !== returnItems.products.productId)
+                console.log("There items are not in cart:" + newItems);
+
+                // This will add the items that are not found in the users order after the check of newItems
+                await Order.updateOne({ user: userId }, { $push: { products: newItems } })
+                console.log('Order is added')
+            }
+
+            //  updating user orders
+
+            console.log('extracted ids:' + orderIds);
+            const verifiedOrdersInUser = await User.find({ _id: userId, 'order.productId': { $all: orderIds } })
+            console.log('verifiedOrdersInUser:' + verifiedOrdersInUser);
+            const verifiedOrdersInUser2 = await User.find({ _id: userId, 'order.productId': { $in: orderIds } })
+            console.log('verifiedOrdersInUser2:' + verifiedOrdersInUser2);
+            if (verifiedOrdersInUser) {
+                await User.findByIdAndUpdate(userId, { $set: { orders: verifiedItems } })
+            } else if (verifiedOrdersInUser2) {
+                const returnItems = await Order.findOne({ user: userId, 'products.productId': { $all: orderIds } })
+                // filter verifiedItem.productId !== returnId
+                const newItems = verifiedItems.find(item => item.productId !== returnItems.productId)
+                await User.findByIdAndUpdate(userId, { $push: { orders: newItems } })
+            } else {
+                await User.findByIdAndUpdate(userId, { $push: { orders: verifiedItems } })
+            }
+
+            console.log('Order created successfully');
+            return NextResponse.json({ success: true, message: 'Order created successfully', orderId: newOrder._id.toString() });
+        } catch (error) {
+            console.error(error);
+            return NextResponse.json({ success: false, message: 'Error creating order', error: error.message });
+        }
+     
+
     }
-
     createOrder(user._id, cartItems)
 
-
-    // const { email, cartItems } = await req.json();
-    // try {
-    //     const user = await User.findById(email);
-    //     if (!user) {
-    //         return NextResponse.json({ success: false, message: 'User mot found' }, { status: 404 });
-    //     };
-
-    //     let totalPrice = 0;
-    //     const ordercartItems = await Promise.all(cartItems.map(async (item) => {
-    //         const productModel = productModels[item.productType];
-    //         if (!productModel) {
-    //             throw new Error(`Product type ${item.productType} not found`);
-    //         };
-
-    //         const product = await productModel.findById(toObjectId(item.product_id));
-    //         if (!product) {
-    //             throw new Error(`Product ${item.product_id} not found`);
-    //         };
-    //         totalPrice += product.price * item.quantity;
-    //         return {
-    //             product_id: toObjectId(item.product_id),
-    //             productType: item.productType,
-    //             quantity: item.quantity,
-    //             price: product.price,
-    //             orderPrice: item.quantity * item.price
-    //         };
-    //     }));
-
-    //     const order = new Order({
-    //         user: email,
-    //         cartItems: ordercartItems,
-    //         totalPrice: totalPrice
-    //     });
-    //     await order.save();
-    //     user.orders.push(toObjectId(order._id));
-    //     await user.save();
-    //     return NextResponse.json({ success: true, message: 'Order placed successfully', order }, { status: 200 });
-    // } catch (error) {
-    //     console.log(error);
-    //     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
-    // }
 }
 
 
 export const GET = async (req, res) => {
     //  get and populate order with user and product
     await connectDB()
-    try{
-        const order = await Order.find().populate({path:'user', populate:{path: 'order'}}).populate({path:'products.productId'}).exec();
+    try {
+        const order = await Order.find().populate({ path: 'user', populate: { path: 'orders' } }).populate({ path: 'products.productId' }).exec();
         console.log(order);
-        
-        if(!order){
+
+        if (!order) {
             return NextResponse.json({ success: false, message: 'Order not found' }, { status: 404 });
         }
         return NextResponse.json({ success: true, order }, { status: 200 });
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 }); 
+        return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
     }
 }

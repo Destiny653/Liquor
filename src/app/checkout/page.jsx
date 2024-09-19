@@ -1,58 +1,67 @@
-'use client'
-import React, { useContext, useState } from 'react'
-import './check.css'
-import { CartContext } from '../../../context/CartContext'
-import { SearchContext } from '../../../context/SearchContext'
-import { useSession } from 'next-auth/react'
+'use client';
+import React, { useContext, useEffect, useState } from 'react';
+import './check.css';
+import { CartContext } from '../../../context/CartContext';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import StripeCheckout from '../components/CheckoutForm/CheckoutForm';
 
-export default function Page() {
+export default function Checkout({ amount }) {
     const [firstname, setFirstname] = useState('')
     const [lastname, setLastname] = useState('')
     const [useremail, setUseremail] = useState('')
     const [userRes, setUserRes] = useState('')
+    const navigation = useRouter();
+
     // const {signIn} = useContext(SearchContext)
     // console.log(signIn);
-    const {data:session} = useSession()
+    const { data: session } = useSession()
     console.log(session);
- 
+
     const { cartItems } = useContext(CartContext)
     console.log(cartItems);
+
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
     let totalPrice = 0;
     let totalPriceFix;
     // get email from local storage
-    let email = localStorage.getItem('email')
-    console.log(email);
-    
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         alert('hello')
+        const email = localStorage.getItem('email')
+
+        if (!email) {
+            alert('Please login or register to checkout')
+            navigation.push('/login')
+            return;
+        }
 
         try {
-        
+
             const res = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email , cartItems })
+                body: JSON.stringify({ email, cartItems })
             })
             const data = await res.json();
             console.log(data);
-            
+
             if (data.success) {
                 alert('Successfully checkout!', data.order)
             } else {
-                 alert('Error placing order', data.message)
+                alert('Error placing order', data.message)
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    
+
 
     return (
         <>
@@ -176,6 +185,7 @@ export default function Page() {
                             <span>Credit card</span>
                         </label>
                     </div>
+                    <StripeCheckout />
                 </section>
             </div>
         </>

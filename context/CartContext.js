@@ -11,9 +11,9 @@ export const CartProvider = ({ children }) => {
         forceUpdate()
         let cart = cartItems ?? [];
         let productID = currentItem?._id;
-        let price = currentItem.price;
-        let title = currentItem.title;
-        let productModel = currentItem.productModel;
+        let price = currentItem?.price;
+        let title = currentItem?.title;
+        let productModel = currentItem?.productModel;
         let position = cart.findIndex(value => value.product_id === productID);
         let quantity = qty ? cartItems[position]?.quantity - 1 : (position < 0 ? 1 : cartItems[position].quantity + 1)
 
