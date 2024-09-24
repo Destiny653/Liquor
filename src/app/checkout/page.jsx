@@ -5,6 +5,8 @@ import { CartContext } from '../../../context/CartContext';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import StripeCheckout from '../components/CheckoutForm/CheckoutForm';
+import { Notyf } from 'notyf';
+
 
 export default function Checkout({ amount }) {
     const [firstname, setFirstname] = useState('')
@@ -12,6 +14,7 @@ export default function Checkout({ amount }) {
     const [useremail, setUseremail] = useState('')
     const [userRes, setUserRes] = useState('')
     const navigation = useRouter();
+    const [loader, setLoader] = useState(false)
 
     // const {signIn} = useContext(SearchContext)
     // console.log(signIn);
@@ -30,8 +33,14 @@ export default function Checkout({ amount }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        alert('hello')
         const email = localStorage.getItem('email')
+        const notyf = new Notyf({
+            duration: 3000,
+            position: {
+                x: 'right',
+                y: 'top'
+            }
+        });
 
         if (!email) {
             alert('Please login or register to checkout')
@@ -49,17 +58,36 @@ export default function Checkout({ amount }) {
                 body: JSON.stringify({ email, cartItems })
             })
             const data = await res.json();
+            console.log(res)
+            if (!res.ok) {
+                setLoader(false)
+                notyf.error(`HTTP error! status: ${res.status}`)
+            }
             console.log(data);
 
             if (data.success) {
+                navigation.push('/order-success')
+                notyf.success
                 alert('Successfully checkout!', data.order)
             } else {
                 alert('Error placing order', data.message)
             }
+            setLoader(false)
         } catch (error) {
+            setLoader(false)
+            notyf.error(`Error placing order: ${error.message}`);
             console.error(error);
         }
     }
+    const Load = () => {
+        return (
+          <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+            <div className="loader-con">
+              <section className='loader-i'></section>
+            </div>
+          </div>
+        )
+      }
 
 
 
@@ -69,6 +97,10 @@ export default function Checkout({ amount }) {
             {/* checkout your card items */}
 
             <div className='section-con flex justify-center w-full gap-2 pt-6 box-border'>
+                {
+                    loader ? <Load/> : console.log('not loading')
+                    
+                }
                 <form onSubmit={handleSubmit} className=' form-section w-2/4 box-border p-5 pt-0 flex gap-3 flex-col'>
                     <h1 className='roboto text-2xl  font-medium '>Billing details</h1>
                     <fieldset className='flex input-name gap-4'>
@@ -125,7 +157,7 @@ export default function Checkout({ amount }) {
                         <span>Additional information</span>
                         <textarea className='border px-6' name="textarea" id="textarea" cols="4" rows="4" placeholder='Notes about your order, e.g. special notes for delivery'></textarea>
                     </label>
-                    <button className=' text-lg text-white font-medium  roboto py-2 rounded-xl bg-[#610f0f]' type='submit' >Place order</button>
+                    <button onClick={()=>{setLoader(true)}} className=' text-lg text-white font-medium  roboto py-2 rounded-xl bg-[#610f0f]' type='submit' >Place order</button>
                 </form>
                 <section className=' table-section w-2/4  box-border p-3 '>
                     <table className='border w-full box-border p-7 mb-3'>

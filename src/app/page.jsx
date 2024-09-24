@@ -3,7 +3,6 @@ import Image from "next/image";
 import Hero from "./components/Hero/Hero";
 import { useEffect, useState } from "react";
 import AOS from 'aos';
- 
 
 export default function Home() {
 
@@ -11,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     AOS.init();
   }, [])
- 
+
 
   const hero = [
     {
@@ -33,7 +32,7 @@ export default function Home() {
       short: "OFFICIAL BOURBON",
       image: "/images/banner4.jpg",
       btn: "Shop Now"
-      
+
     },
     {
       title: "Pappy Van Winkle",
@@ -46,6 +45,7 @@ export default function Home() {
   const interval = 8000
   const [currentIndex, setCurrentIndex] = useState(0)
   const [fade, setFade] = useState(true)
+  const [loading, setLoading] = useState(false)
 
 
   useEffect(() => {
@@ -59,12 +59,35 @@ export default function Home() {
 
     return () => clearInterval(timer);
 
-  }, [hero.length, interval])
+  }, [hero.length, interval, loading])
 
   console.log(currentIndex);
+  const Load = () => {
+    return (
+      <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+        <div className="loader-con">
+          <section className='loader-i'></section>
+        </div>
+      </div>
+    )
+  }
+  const Skeleton = () => {
+    return (
+      <div className='h-[100%] w-full z-10 bg-[#c6c5ec65]'>
+        <div className="">
+          <div className="skeleton-pg"></div>
+        </div>
+      </div>
+    )
+  }
+
 
   return (
     <div>
+      {
+        
+        loading ? <Load /> : console.log('no load')
+      }
       <div className=" mb-[60px] relative">
         <Image className={`w-full h-full imgTransform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
         <div className="details">
@@ -74,8 +97,8 @@ export default function Home() {
         </div>
         <div className="indicators" >
           {
-            hero.map((_,index)=>(
-              <div key={index} onClick={()=>setCurrentIndex(index)} className={`indicator ${index === currentIndex ? 'active' : ''}`}></div>
+            hero.map((_, index) => (
+              <div key={index} onClick={() => setCurrentIndex(index)} className={`indicator ${index === currentIndex ? 'active' : ''}`}></div>
             ))
           }
         </div>

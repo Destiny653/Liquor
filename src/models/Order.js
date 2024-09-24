@@ -17,6 +17,10 @@ const orderSchema = new Schema({
                 refPath: "products.productModel",
                 required: true
             },
+            price: {
+                type: Number,
+                required: true
+            },
             quantity: {
                 type: Number,
                 required: true

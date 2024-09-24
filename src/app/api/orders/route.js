@@ -2,7 +2,6 @@ import Order from "@/models/Order";
 import User from "@/models/User";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
-import { toObjectId } from "@/utils/hexId";
 
 const { default: Balton } = require("@/models/Balton");
 const { default: Buffalo } = require("@/models/Buffalo");
@@ -20,7 +19,7 @@ export const POST = async (req, res) => {
     console.log(cartItems);
 
     const user = await User.findOne({ email });
-    console.log(user);
+    console.log(JSON.stringify(user._id));
 
 
     if (!user) {
@@ -36,39 +35,36 @@ export const POST = async (req, res) => {
         switch (productModel) {
             case 'Weller':
                 product = await Weller.findById(product_id);
-                console.log(product);
+                console.log(JSON.stringify(product));
                 break;
             case 'Balton':
                 product = await Balton.findById(product_id)
-                console.log(product);
+                console.log(JSON.stringify(product));
                 break;
             case 'Penelope':
                 product = await Penelope.findById(product_id)
-                console.log(product);
+                console.log(JSON.stringify(product));
                 break;
             case 'Yamazaki':
                 product = await Yamazaki.findById(product_id)
-                console.log(product);
+                console.log(JSON.stringify(product));
                 break;
             case 'Pappy':
                 product = await Pappy.findById(product_id)
-                console.log(product);
+                console.log(JSON.stringify(product));
                 break;
             case 'Buffalo':
                 product = await Buffalo.findById(product_id)
-                console.log(product);
+                console.log(JSON.stringify(product));
                 break;
             case 'Post':
                 product = await Post.findById(product_id)
-                console.log(product);
+                console.log(JSON.stringify(product));
                 break;
             default:
                 return product ? { product, model: productModel } : null;
         }
         return product;
-
-        console.log(product);
-
     }
     async function verifyAndPopulateOrderItems(cartItems) {
         const verifiedCartItems = [];
@@ -105,7 +101,7 @@ export const POST = async (req, res) => {
             switch (item.productModel) {
                 case 'Post':
                     product = await Post.findById(item.productId).exec();
-                    console.log(product);
+                    console.log(JSON.stringify(product));
                     break;
                 case 'Weller':
                     product = await Weller.findById(item.productId).exec();
@@ -161,59 +157,65 @@ export const POST = async (req, res) => {
 
 
         const userIdInOrder = await Order.findOne({ user: userId })
-        console.log("userIdInOrder:" + userIdInOrder?.user);
-        const returnItems = await Order.findOne({ user: userId, 'products.productId': { $all: orderIds } })
-        console.log("returnItems:" + returnItems);
+        console.log("userIdInOrder:" + userIdInOrder);
+        const returnItems = await Order.findOne({ user: userId })
+        console.log("returnItems:" + JSON.stringify(returnItems));
 
         try {
             const userId = user._doc._id.toHexString();
+            // extracting order ids
             const orderIds = verifiedItems.map(item => item.productId)
-            console.log('extracted ids:' + orderIds);
             const verifiedOrders = await Order.find({ user: userId, 'products.productId': { $all: orderIds } })
-            console.log(verifiedOrders);
+            const qtyV = JSON.stringify(verifiedOrders)
             const verifiedOrders2 = await Order.find({ user: userId, 'products.productId': { $in: orderIds } })
-            console.log(verifiedOrders2);
+            const qtyV2 = JSON.stringify(verifiedOrders2)
+            console.log("verifiedOrders2:" +  qtyV);
             if (!userIdInOrder) {
                 await newOrder.save();
             } else if (verifiedOrders) {
-                await Order.updateOne({ user: userId }, { $inc: { "products.$[product].quantity": 1 } }, { arrayFilters: [{ "product.productId": { $in: orderIds } }] })
+                await Order.updateOne({ user: userId }, { $inc: { "products.$[product].quantity": qtyV } }, { arrayFilters: [{ "product.productId": { $in: orderIds } }] })
             } else if (verifiedOrders2) {
-                await Order.updateOne({ user: userId }, { $inc: { "products.$[product].quantity": 1 } }, { arrayFilters: [{ "product.productId": { $in: orderIds } }] })
-            } else {
-                // filter verifiedItem.productId !== returnId
-                const newItems = verifiedItems.find(item => item.productId !== returnItems.products.productId)
-                console.log("There items are not in cart:" + newItems);
-
-                // This will add the items that are not found in the users order after the check of newItems
-                await Order.updateOne({ user: userId }, { $push: { products: newItems } })
-                console.log('Order is added')
+                await Order.updateOne({ user: userId }, { $inc: { "products.$[product].quantity": qtyV2 } }, { arrayFilters: [{ "product.productId": { $in: orderIds } }] })
             }
+            // filter verifiedItem.productId !== returnId
+            const newItems = verifiedItems.filter(item => !userIdInOrder.products.some(orderItem => orderItem.productId.equals(item.productId)))
+            console.log("These items are not in cart:" + JSON.stringify(newItems));
+            // This will add the items that are not found in the users order after the check of newItems
+            await Order.updateOne({ user: userId }, { $push: { products: { $each: newItems } } })
+            console.log('Order is added')
 
+            const OrderPro = await Order.findOne({ user: userId })
+            const qtys = OrderPro.products.map(item => item.quantity)
+            const prs = OrderPro.products.map(item => item.price)
+            console.log("qtys:" + qtys);
+            console.log("prs:" + prs);
+            // convert qtys and prs to number and calculate total price
+            let totalPrice2 = qtys.reduce((acc, curr, idx) => acc + curr * prs[idx], 70)
+            let tPriceUpdate = totalPrice2.toFixed(2)
+            console.log("totalPrice2:" + tPriceUpdate);
+            await Order.updateOne({ user: userId }, { $set: { totalPrice: tPriceUpdate } })
             //  updating user orders
-
-            console.log('extracted ids:' + orderIds);
             const verifiedOrdersInUser = await User.find({ _id: userId, 'order.productId': { $all: orderIds } })
-            console.log('verifiedOrdersInUser:' + verifiedOrdersInUser);
             const verifiedOrdersInUser2 = await User.find({ _id: userId, 'order.productId': { $in: orderIds } })
-            console.log('verifiedOrdersInUser2:' + verifiedOrdersInUser2);
             if (verifiedOrdersInUser) {
                 await User.findByIdAndUpdate(userId, { $set: { orders: verifiedItems } })
             } else if (verifiedOrdersInUser2) {
-                const returnItems = await Order.findOne({ user: userId, 'products.productId': { $all: orderIds } })
-                // filter verifiedItem.productId !== returnId
-                const newItems = verifiedItems.find(item => item.productId !== returnItems.productId)
+                // const returnItems = await Order.findOne({ user: userId })
+                // const newItems = verifiedItems.find(item => item.productId !== returnItems.productId)
+                const newItems = verifiedItems.filter(item => !userIdInOrder.products.some(orderItem => orderItem.productId.equals(item.productId)))
+
                 await User.findByIdAndUpdate(userId, { $push: { orders: newItems } })
             } else {
                 await User.findByIdAndUpdate(userId, { $push: { orders: verifiedItems } })
             }
 
             console.log('Order created successfully');
-            return NextResponse.json({ success: true, message: 'Order created successfully', orderId: newOrder._id.toString() });
+            return res.status(200).json({ success: true, message: 'Order created successfully' });
         } catch (error) {
             console.error(error);
-            return NextResponse.json({ success: false, message: 'Error creating order', error: error.message });
+            return res.status(405).json({ success: false, message: 'Error creating order' });
         }
-     
+
 
     }
     createOrder(user._id, cartItems)

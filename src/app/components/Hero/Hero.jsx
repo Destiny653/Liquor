@@ -16,6 +16,7 @@ export default function Hero() {
     const {handlePro} = useContext(SearchContext)
     const {handleAddToCart} = useContext(CartContext)
     const navigation = useRouter();
+    const [loader, setLoader] = useState(false)
     const formatter = new Intl.NumberFormat('en-US',{style: 'currency', currency:'USD'});
 
 
@@ -46,6 +47,16 @@ export default function Hero() {
 
     console.log(data);
     const brand = 'posts'
+
+    const Skeleton = () => {
+        return (
+          <div className=' h-[100%] w-full z-10 bg-[#c6c5ec65]'>
+            <div className="h-full">
+              <div className="h-full skeleton-pg"></div>
+            </div>
+          </div>
+        )
+      }
 
     return (
         <div className=''>
@@ -114,10 +125,14 @@ export default function Hero() {
                 <div className='topRated-p w-full'>
                     <ul className='topRated heroGift'>
                         <li
+                            className='relative'
                             data-aos="fade-right"
                             data-aos-offset="100"
                             data-aos-duration="1500"
                             data-aos-easing="ease-in-sine">
+                                {
+                                    !loader ? <Skeleton/> : console.log('not loading')
+                                }
                             <Image className='heroSell-Img w-full' src="/images/bestsell1.jpg" width={300} height={300} />
                         </li>
                         <li
