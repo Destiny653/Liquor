@@ -59,18 +59,13 @@ export default function Checkout({ amount }) {
             })
             const data = await res.json();
             console.log(res)
-            if (!res.ok) {
+            console.log(data)
+            if (res.ok) { 
+                notyf.success('Order placed successfully')
                 setLoader(false)
-                notyf.error(`HTTP error! status: ${res.status}`)
-            }
-            console.log(data);
-
-            if (data.success) {
-                navigation.push('/order-success')
-                notyf.success
-                alert('Successfully checkout!', data.order)
             } else {
-                alert('Error placing order', data.message)
+                notyf.error(`HTTP error! status: ${res.status}`)
+                // throw new Error('Failed to create post')
             }
             setLoader(false)
         } catch (error) {

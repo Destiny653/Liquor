@@ -8,6 +8,8 @@ import "aos/dist/aos.css";
 import { SearchContext } from '../../../../context/SearchContext';
 import { useRouter } from 'next/navigation';
 import { CartContext } from '../../../../context/CartContext';
+import SkeletonR, { SkeletonArr } from '../Skeleton/Skeleton';
+import { Notyf } from 'notyf';
 
 
  
@@ -27,19 +29,32 @@ export default function Hero() {
             duration: 500,
         });
 
-        const getData = async () => {
+        const notyf = new Notyf({
+            duration: 4000,
+            position: {
+                x: 'right',
+                y: 'top'
+            }
+        });
 
+        const getData = async () => {
+            setLoader(true)
             try {
                 const res = await fetch(`/api/posts`)
+                console.log(res)
 
                 if (!res.ok) {
                     console.log('failed to fetch data');
+                    notyf.error('Something went wrong please refresh your browser');
+                    setLoader(false)
                 }
 
                 setData(await res.json())
+                setLoader(false)
 
             } catch (error) {
                 console.log(error);
+                setLoader(false)
             }
         }
         getData()
@@ -47,16 +62,6 @@ export default function Hero() {
 
     console.log(data);
     const brand = 'posts'
-
-    const Skeleton = () => {
-        return (
-          <div className=' h-[100%] w-full z-10 bg-[#c6c5ec65]'>
-            <div className="h-full">
-              <div className="h-full skeleton-pg"></div>
-            </div>
-          </div>
-        )
-      }
 
     return (
         <div className=''>
@@ -96,8 +101,11 @@ export default function Hero() {
             <section className='heroList2-p box-border'>
                 <h1 className='text-center hero-title'>SHOP BY SPIRIT</h1>
                 <div>
+                        {
+                    loader ? <SkeletonR/> :
                     <ul className='heroList2'>
                         {
+
                             data?.slice(1, 13).map((item, index) => (
                                 <div>
                                     <li
@@ -112,6 +120,7 @@ export default function Hero() {
                             ))
                         }
                     </ul>
+                        }
                 </div>
             </section>
             <div className='heroHighLight text-white text-center'>
@@ -130,9 +139,6 @@ export default function Hero() {
                             data-aos-offset="100"
                             data-aos-duration="1500"
                             data-aos-easing="ease-in-sine">
-                                {
-                                    !loader ? <Skeleton/> : console.log('not loading')
-                                }
                             <Image className='heroSell-Img w-full' src="/images/bestsell1.jpg" width={300} height={300} />
                         </li>
                         <li
@@ -151,6 +157,8 @@ export default function Hero() {
                     </ul>
                 </div>
                 <h1 className='hero-title'>RATED CONTENT</h1>
+                {
+                    loader ? <SkeletonArr/> :
                 <ul className='heroBestSellers'>
                     {
                         data?.slice(4, 9).map((item, index) => (
@@ -176,6 +184,7 @@ export default function Hero() {
 
                     }
                 </ul>
+                    }
             </div>
             <div className='heroGift-p'>
                 <ul className='heroGift'>

@@ -1,0 +1,112 @@
+.skeleton-r-p {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    place-items: center;
+    row-gap: 8%;
+    /* height: 60vh; */
+}
+
+.skeleton-arr-p{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    place-items: center;
+    gap: 20px;
+    box-sizing: border-box;
+    padding: 0 7%;
+    /* height: 10vh;  */
+}
+
+ .skeleton-r {
+    width: 160px;
+    height: 160px;
+    border-radius: 100%;
+    background: linear-gradient(to right, #272525c7, #414141);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0px 0px 1px #000;
+    animation: shimmer 1.5s infinite linear;
+}
+.skeleton-prg {
+    width: 150px;
+    height: 25px;
+    background: linear-gradient(to right, #272525c7, #414141);
+    box-shadow: 0px 0px 1px #000;
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite linear;
+}
+.skeleton-arr {
+    width: 270px;
+    height: 400px;
+    background: linear-gradient(to right, #272525c7, #414141);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0px 0px 1px #000;
+    animation: shimmer 1.5s infinite linear;
+}
+
+
+@keyframes shimmer {
+    0% {
+        background: linear-gradient(to right, #272525c7, #414141);
+    }
+
+    50% {
+        background: linear-gradient(to right, #414141fb, #201f1fcb);
+
+    }
+
+    100% {
+            background: linear-gradient(to right, #272525c7, #414141);
+
+    }
+}
+
+.skeleton-r::after {
+    content: '';
+    width: 160px;
+    height: 160px;
+    background: linear-gradient(to right, #41414121, #b8b4b41f);
+    box-shadow: inset -17px  0px 7px #4d4c4cd2;
+    position: absolute;
+    animation: trans 1s infinite ease-out;
+}
+
+.skeleton-prg::after {
+    content: '';
+    width: 150px;
+    height: 25px;
+    background: linear-gradient(to right, #41414121, #b8b4b41f);
+    box-shadow: inset -17px  0px 7px #4d4c4cd2;
+    position: absolute;
+    animation: trans 1s infinite ease-out;
+}
+
+.skeleton-arr::after {
+    content: '';
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(to right, #41414121, #b8b4b41f);
+    box-shadow: inset -17px  0px 7px #4d4c4cd2;
+    position: absolute;
+    animation: trans 1s infinite ease-out;
+}
+
+@keyframes trans {
+    0% {
+        transform: translateX(0px);
+        width: 0;
+    }
+
+    20% {
+        transform: translateX(0px);
+        width: 95%;
+    }
+
+    100% {
+        transform: translateX(100%);
+        width: 100%;
+    }
+}
+ 
