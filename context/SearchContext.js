@@ -13,28 +13,36 @@ export default function SearchProvider({children}) {
 
 
     const handlePro = (product)=>{
-      forceUpdate()  
-      setDetailPro(product);
+      if(typeof window !== "undefined"){
+        // forceUpdate()  
+        setDetailPro(product);
         localStorage.removeItem('detailPro');
         localStorage.setItem('detailPro', JSON.stringify(product));
+      }
     }
     const handleArr = (product)=>{
-      forceUpdate()  
-      setDetailArr(product);
+      if(typeof window !== "undefined"){
+        // forceUpdate()  
+        setDetailArr(product);
         localStorage.removeItem('detailArr');
         localStorage.setItem('detailArr', JSON.stringify(product));
+      }
     }
     console.log(detailArr);
     const handleSearch = (value)=>{
       // console.log(value);
-      setSearchInp(value);
+      if(typeof window !== "undefined"){
+        setSearchInp(value);
+      }
     }
     
     
     useEffect(()=>{
       // forceUpdate()
-      setDetailPro(JSON.parse(localStorage.getItem('detailPro')))
-      setDetailArr(JSON.parse(localStorage.getItem('detailArr')))
+      if(typeof window !== "undefined"){
+        setDetailPro(JSON.parse(localStorage.getItem('detailPro')))
+        setDetailArr(JSON.parse(localStorage.getItem('detailArr')))
+      }
       console.log(detailPro);
       console.log(detailArr);
     },[searchInp])
