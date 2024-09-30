@@ -81,7 +81,7 @@ export default function Hero() {
                     data-aos-easing="linear"
                     data-aos-duration="1500"
                 >
-                    <Image className='heroListImg' src="/images/Bundle_save.png" alt="hero intro" width={300} height={300} />
+                    <Image className='heroListImg' src="/images/new.png" alt="hero intro" width={300} height={300} />
                 </li>
                 <li className='h-[330px]'
                     data-aos="fade-up"
