@@ -1,8 +1,7 @@
 'use client'
 import Image from 'next/image'
 import React, { useContext, useEffect, useState } from 'react'
-import "./hero.css";
-import "../../details/details.css";
+import "./hero.css"; 
 import { FaStar } from 'react-icons/fa';
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -161,12 +160,12 @@ export default function Hero() {
                 <h1 className='hero-title'>RATED CONTENT</h1>
                 {
                     loader ? <SkeletonArr /> :
-                        <ul className='detail-arr'>
+                        <ul className='hero-arr'>
                             {
-                                data?.slice(4, 10).map((item, index) => (
-                                    <li key={index} className='detail-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
-                                        <Image className='detail-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
-                                        <h1 className='text-[14.5px] font-[600] detail-arr-title'>{item.title}</h1>
+                                data?.slice(4, 16).map((item, index) => (
+                                    <li key={index} className='hero-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
+                                        <Image className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                                        <h1 className='text-[14.5px] font-[600] hero-arr-title'>{item.title}</h1>
                                         <p className='text-[13px] text-center h-[52px]'>{item.content}</p>
                                         <h1>
                                             <FaStar color='gold' className='inline' />
@@ -176,7 +175,7 @@ export default function Hero() {
                                         </h1>
                                         <p>From </p>
                                         <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
-                                        <button className='px-9 py-2 bg-[#9b1d1d] text-white text-[12px] font-[600] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
+                                        <button className='hero-btn-arr px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
                                     </li>
                                 ))
 
