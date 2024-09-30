@@ -7,7 +7,7 @@ import AOS from 'aos';
 export default function Home() {
 
 
-  useEffect(() => {
+  useEffect(() => { 
     AOS.init();
   }, [])
 
