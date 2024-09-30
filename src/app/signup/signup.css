@@ -1,35 +1,32 @@
 .sub-p {
     width: 70%;
     height: 600px;
-    box-shadow: 0px 0px 5px 0.09px rgb(161, 129, 24);
+    /* box-shadow: 0px 0px 5px 0.09px rgb(161, 129, 24); */
+    border: 1px solid rgb(150, 12, 12);
+    background-color: #f7f7f7;
     transition: all 0.1s linear;
     z-index: 1;
 }
 .singup-title{
     margin-bottom: 10px;
     text-shadow: 1.5px 2.4px 1px rgb(161, 129, 24);
-}
-.singup-label {
-    color: rgb(36, 44, 17);
-    box-shadow: 5px -0px 2px 0.09px rgb(161, 129, 24);
-}
-
+} 
 .sub-p:hover {
-    box-shadow: 9px 6px 6px 0.09px rgb(161, 129, 24);
+    box-shadow: 9px 6px 6px 0.09px rgba(29, 29, 29, 0.185);
 }
 
 .register-img {
     width: 53%;
     max-height: min-content;
-    border-radius: 20px;
+    border-radius: 9px;
     height: 100%;
 }
 
 .btn {
     width: 100%;
-    padding: 15px;
-    border-radius: 24px;
-    background-color: rgb(173, 139, 25);
+    padding: 9px;
+    border-radius: 4px;
+    background-color: rgb(146, 24, 24);
     color: #fff;
 }
 

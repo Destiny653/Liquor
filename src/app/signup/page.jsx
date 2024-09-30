@@ -28,31 +28,7 @@ export default function Page() {
                 y: 'top'
             }
         });
- 
-        try {
-            const res = await fetch('/api/signup', {
-                method: 'POST',
-                body: JSON.stringify({ username, email, password }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
 
-            if (!res.ok) {
-                const errorData = await res.json();
-                notyf.error('Error:'+ errorData.message);
-                return;
-            }
-
-            const data = await res.json();
-            notyf.success('Registration successful!');
-            navigation.push('/login');
-        }catch(error){
-            notyf.error('Registration failed!'+ error.message);
-            console.log(error);
-        }
-        
-        
         if(email){
         // validate email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,6 +45,30 @@ export default function Page() {
             notyf.error('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
             return;
         }
+ 
+        try {
+            const res = await fetch('/api/signup', {
+                method: 'POST',
+                body: JSON.stringify({ username, email, password }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                notyf.error('Error:'+ errorData.message);
+                return;
+            }
+            const data = await res.json();
+            notyf.success('Registration successful!');
+            navigation.push('/login');
+        }catch(error){
+            notyf.error('Registration failed!'+ error.message);
+            console.log(error);
+        }
+        
+        
         
         
     }
@@ -78,35 +78,35 @@ export default function Page() {
     return (
         <div>
             <div className='register-bg flex justify-center items-center box-border py-11'>
-                <div className={`sub-p flex justify-evenly gap-8 items-center bg-white box-border p-9 overflow-hidden rounded-3xl `} >
+                <div className={`sub-p flex justify-evenly gap-8 items-center bg-white box-border p-5 overflow-hidden rounded-[8px] `} >
                     <div className='register-img w-full overflow-hidden'>
                         <Image className='h-full w-full' src='/images/royal.jpg' alt='whisky bottle demo' width={500} height={500} />
                     </div>
                     <div className='w-2/4 form-part '>
-                        <h2 className={` text-3xl header singup-title `}>Sign Up</h2>
+                        <h2 className={` text-3xl header singup-title font-[600]`}>Sign Up</h2>
                         <form onSubmit={handleSubmit}>
                             <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="username" className='singup-label pb-1'>
+                                <label htmlFor="username" className='pb-1 text-[14px] font-[600]'>
                                     Name
                                 </label>
-                                <input type="text" value={username} name='text' placeholder='Enter username...' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setUsername(e.target.value)} required />
+                                <input type="text" value={username} name='text' placeholder='Enter username...' className='outline-0 form-control py-[6px] rounded-[4px] px-4 border' onChange={e => setUsername(e.target.value)} required />
                             </div>
                             <div className=' mb-3 flex flex-col'>
-                                <label htmlFor="email" className='singup-label pb-1'>
+                                <label htmlFor="email" className='pb-1 text-[14px] font-[600]'>
                                     Email
                                 </label>
-                                <input type="email" value={email} name='email' placeholder='Enter email...' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setEmail(e.target.value)} required />
+                                <input type="email" value={email} name='email' placeholder='Enter email...' className='outline-0 form-control py-[6px] rounded-[4px] px-4 border' onChange={e => setEmail(e.target.value)} required />
                             </div>
                             <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="password" className='singup-label pb-1'>
+                                <label htmlFor="password" className='pb-1 text-[14px] font-[600]'>
                                     Password
                                 </label>
-                                <input type="password" value={password} name='password' placeholder='*******' className='outline-0 form-control py-3 rounded-3xl px-4 border' onChange={e => setPassword(e.target.value)} required />
+                                <input type="password" value={password} name='password' placeholder='*******' className='outline-0 form-control py-[6px] rounded-[4px] px-4 border' onChange={e => setPassword(e.target.value)} required />
                             </div>
-                            <button type='submit' className='btn btn-success w-80 bg-[rgba(255, 174, 0, 0.904)] '>Sign Up</button>
+                            <button type='submit' className='btn btn-success w-80 text-[15px]'>Sign Up</button>
                         </form>
-                        <p className='singup-label mb-2 mt-1'>Already have an account?</p>
-                        <button className='btn  btn-default'>
+                        <p className='text-[12px] text-[blue] cursor-pointer hover:underline mb-2 mt-1'>Already have an account?</p>
+                        <button className='btn  btn-default text-[15px]'>
                             <Link href='/login'>Login</Link>
                         </button>
                     </div>
