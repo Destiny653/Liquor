@@ -13,13 +13,13 @@ export default function SearchProvider({children}) {
 
 
     const handlePro = (product)=>{
-      // forceUpdate()  
+      forceUpdate()  
       setDetailPro(product);
         localStorage.removeItem('detailPro');
         localStorage.setItem('detailPro', JSON.stringify(product));
     }
     const handleArr = (product)=>{
-      // forceUpdate()  
+      forceUpdate()  
       setDetailArr(product);
         localStorage.removeItem('detailArr');
         localStorage.setItem('detailArr', JSON.stringify(product));
