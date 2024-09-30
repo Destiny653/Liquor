@@ -12,7 +12,7 @@ import Display from '../SearchDisplay/Display';
 
 export default function Navbar() {
 
-    const { setSearchVal, setSearchInp } = useContext(SearchContext)
+    const { setSearchVal, setSearchInp, handleSearch } = useContext(SearchContext)
     const { data: session } = useSession()
     console.log(session);
 
@@ -96,11 +96,9 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    const [query, setQuery] = useState('');
-    const handleSearch = (e) => {
-        e.preventDefault();
-    };
-    setSearchInp(query)
+    const [query, setQuery] = useState(''); 
+    // setSearchInp(query)
+    handleSearch(query)
     console.log(query);
     const fetchFromAPIs = async (title) => {
         const apis = [
@@ -136,7 +134,7 @@ export default function Navbar() {
                 </section>
                 <section className="nav-search-p">
                     <div className="font-bold text-2xl nav-logo ">LOGO</div>
-                    <label className='relative flex justify-center w-[60%]'>
+                    <label className='relative grid place-items-center w-[60%]'>
                         <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
                         <Display />
                     </label>

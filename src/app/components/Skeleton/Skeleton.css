@@ -2,111 +2,93 @@
     display: grid;
     grid-template-columns: repeat(5,1fr);
     place-items: center;
-    row-gap: 8%;
-    /* height: 60vh; */
+    row-gap: 8%; 
 }
 
 .skeleton-arr-p{
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(6,1fr);
     place-items: center;
-    gap: 20px;
+    gap: 5px;
     box-sizing: border-box;
-    padding: 0 7%;
-    /* height: 10vh;  */
+    /* padding: 0 7%;  */
 }
 
  .skeleton-r {
     width: 160px;
     height: 160px;
-    border-radius: 100%;
-    background: linear-gradient(to right, #272525c7, #414141);
+    border-radius: 100%; 
     position: relative;
     overflow: hidden;
-    box-shadow: 0px 0px 1px #000;
+    background-color: #d8d8d8e3; 
     animation: shimmer 1.5s infinite linear;
 }
 .skeleton-prg {
     width: 150px;
     height: 25px;
-    background: linear-gradient(to right, #272525c7, #414141);
-    box-shadow: 0px 0px 1px #000;
+    background-color: #d8d8d8e3; 
     position: relative;
     overflow: hidden;
     border-radius: 4px;
-    animation: shimmer 1.5s infinite linear;
+    animation: shimmer 1s infinite linear;
 }
 .skeleton-arr {
-    width: 270px;
-    height: 400px;
-    background: linear-gradient(to right, #272525c7, #414141);
+    width: 217px;
+    height: 370px;
+    border-radius: 6px; 
+    background-color: #d8d8d8e3; 
     position: relative;
-    overflow: hidden;
-    box-shadow: 0px 0px 1px #000;
-    animation: shimmer 1.5s infinite linear;
+    overflow: hidden; 
+    animation: shimmer 1s infinite linear;
 }
-
 
 @keyframes shimmer {
     0% {
-        background: linear-gradient(to right, #272525c7, #414141);
+        background-color: #ddd;
     }
 
     50% {
-        background: linear-gradient(to right, #414141fb, #201f1fcb);
-
+        background-color: #bbbbbb;
     }
 
     100% {
-            background: linear-gradient(to right, #272525c7, #414141);
-
+        background-color: #ddd;
     }
 }
 
 .skeleton-r::after {
     content: '';
     width: 160px;
-    height: 160px;
-    background: linear-gradient(to right, #41414121, #b8b4b41f);
-    box-shadow: inset -17px  0px 7px #4d4c4cd2;
+    height: 160px; 
+    /* box-shadow: 40px 0 0px #d6d6d67e; */
     position: absolute;
-    animation: trans 1s infinite ease-out;
+    animation: trans 1.3s infinite linear;
 }
 
 .skeleton-prg::after {
     content: '';
     width: 150px;
-    height: 25px;
-    background: linear-gradient(to right, #41414121, #b8b4b41f);
-    box-shadow: inset -17px  0px 7px #4d4c4cd2;
+    height: 25px;  
+    box-shadow:0 0 40px#f0f0f085;
     position: absolute;
-    animation: trans 1s infinite ease-out;
+    animation: trans 1.3s infinite linear;
 }
 
 .skeleton-arr::after {
     content: '';
     width: 400px;
-    height: 400px;
-    background: linear-gradient(to right, #41414121, #b8b4b41f);
-    box-shadow: inset -17px  0px 7px #4d4c4cd2;
+    height: 400px; 
+    box-shadow:0 0 100px #b6b6b685;
     position: absolute;
-    animation: trans 1s infinite ease-out;
+    animation: trans 1.3s infinite linear;
 }
 
 @keyframes trans {
     0% {
-        transform: translateX(0px);
-        width: 0;
+        transform: translateX(-100px); 
     }
-
-    20% {
-        transform: translateX(0px);
-        width: 95%;
-    }
-
     100% {
         transform: translateX(100%);
-        width: 100%;
     }
-}
+} 
  

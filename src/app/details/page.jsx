@@ -1,38 +1,68 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { SearchContext } from '../../../context/SearchContext';
 import { FaStar } from 'react-icons/fa';
 import './details.css';
 import Image from 'next/image';
+import { CartContext } from '../../../context/CartContext';
+import { useRouter } from 'next/navigation';
 
 
 export default function Page() {
-    const { detailPro } = useContext(SearchContext)
+    const { detailPro, detailArr, handlePro } = useContext(SearchContext)
+    const { handleAddToCart } = useContext(CartContext)
+    const navigation = useRouter();
     console.log(detailPro);
+    console.log(detailArr);
+    // useEffect( async()=>{
+
+    //     return;
+    // },[setData])
     return (
-        <>
-            <div className='w-full flex'>
-                <div className='detail-p  w-full box-border'>
-                    <section className='detail1 detail-img-con  box-border rounded-2xl overflow-hidden'>
-                        <Image className='' src={detailPro.img} alt={detailPro.title} width={400} height={400} />
+        <div className='flex gap-[50px] flex-col box-border py-[5%]'>
+            <div className='w-full flex items-center justify-center box-border'>
+                <div className='detail-p  w-full box-border pl-[40px] bg-[#a8a8a80c] border rounded-[10px]'>
+                    <section className='detail detail-img-con  box-border rounded-2xl overflow-hidden'>
+                        <Image className=' ' src={detailPro.img} alt={detailPro.title} width={400} height={400} />
                     </section>
-                    <section className='detail2 relative ml-4 flex flex-col gap-2 '>
+                    <section className='detail2 relative ml-4 flex flex-col gap-2 box-border p-[30px] '>
                         <h1 className='text-3xl font-bold nunitoextralight_italic '>{detailPro.title}</h1>
-                        <p className='nunitoextralight_italic text-base'>{detailPro.content}
-                        </p>
+                        <p className='nunitoextralight_italic text-[30px]'>{detailPro.content}</p>
                         <h1>
                             <FaStar color='gold' className='inline' />
                             <FaStar color='gold' className='inline' />
                             <FaStar color='gold' className='inline' />
                             <FaStar color='gold' className='inline' />
                         </h1>
-                        <h1 className='text-3xl text-orange-400 '>${detailPro.price}</h1>
+                        <h1 className='text-[20px] text-[gold] font-[600] '>${detailPro.price}</h1>
                         <div className='flex gap-5'>
-                            <button className='px-9 py-2 bg-[#74610d] text-white text-base nunitoextralight_italic' onClick={() => { handleAddToCart(data); setIndexval(data) }}>ADD TO CART</button>
+                            <button className='px-9 py-2 bg-[#9b1d1d] text-white text-[15px] font-[600] rounded-[4px] nunitoextralight_italic' onClick={() => { handleAddToCart(detailPro); }}>ADD TO CART</button>
                         </div>
                     </section>
                 </div>
             </div>
-        </>
+            <h1 className=' text-center text-[30px] font-[600]'>YOU MAY ALSO LIKE</h1>
+            <ul className='detail-arr'>
+                {
+                    detailArr.map((item, index) => {
+                        return (
+                            <li key={index} className='detail-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[10px]'>
+                                <Image className='detail-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={()=>{handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`)}} />
+                                <h1 className='text-[14.5px] font-[600] detail-arr-title'>{item.title}</h1>
+                                <p  className='text-[13px] text-center h-[40px]'>{item.content.slice(0,40)}</p>
+                                <h1>
+                                    <FaStar color='gold' className='inline' />
+                                    <FaStar color='gold' className='inline' />
+                                    <FaStar color='gold' className='inline' />
+                                    <FaStar color='gold' className='inline' />
+                                </h1>
+                                <h1 className='text-[15px] font-[600] text-[#f1ce07]'>${item.price}</h1>
+                                <button className='px-9 py-2 bg-[#9b1d1d] text-white text-[12px] font-[600] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
+        </div>
     )
 }

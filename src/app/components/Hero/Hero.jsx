@@ -1,7 +1,8 @@
 'use client'
 import Image from 'next/image'
 import React, { useContext, useEffect, useState } from 'react'
-import "./hero.css"
+import "./hero.css";
+import "../../details/details.css";
 import { FaStar } from 'react-icons/fa';
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -12,14 +13,14 @@ import SkeletonR, { SkeletonArr } from '../Skeleton/Skeleton';
 import { Notyf } from 'notyf';
 
 
- 
+
 export default function Hero() {
     const [data, setData] = useState([])
-    const {handlePro} = useContext(SearchContext)
-    const {handleAddToCart} = useContext(CartContext)
+    const { handlePro, handleArr } = useContext(SearchContext)
+    const { handleAddToCart } = useContext(CartContext)
     const navigation = useRouter();
     const [loader, setLoader] = useState(false)
-    const formatter = new Intl.NumberFormat('en-US',{style: 'currency', currency:'USD'});
+    const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
 
 
@@ -61,6 +62,7 @@ export default function Hero() {
     }, [])
 
     console.log(data);
+    handleArr(data)
     const brand = 'posts'
 
     return (
@@ -101,26 +103,26 @@ export default function Hero() {
             <section className='heroList2-p box-border'>
                 <h1 className='text-center hero-title'>SHOP BY SPIRIT</h1>
                 <div>
-                        {
-                    loader ? <SkeletonR/> :
-                    <ul className='heroList2'>
-                        {
+                    {
+                        loader ? <SkeletonR /> :
+                            <ul className='heroList2'>
+                                {
 
-                            data?.slice(1, 13).map((item, index) => (
-                                <div>
-                                    <li
-                                        data-aos="flip-left"
-                                        data-aos-offset="100"
-                                        data-aos-easing="ease-out-cubic"
-                                        data-aos-duration="1500" key={index}>
-                                        <Image className='heroListImg2' src={item.img} alt={item.title} width={300} height={300} />
-                                    </li>
-                                    <h3 className='heroList2-title text-center py-3'>{item.title}</h3>
-                                </div>
-                            ))
-                        }
-                    </ul>
-                        }
+                                    data?.slice(1, 13).map((item, index) => (
+                                        <div>
+                                            <li
+                                                data-aos="flip-left"
+                                                data-aos-offset="100"
+                                                data-aos-easing="ease-out-cubic"
+                                                data-aos-duration="1500" key={index}>
+                                                <Image className='heroListImg2' src={item.img} alt={item.title} width={300} height={300} />
+                                            </li>
+                                            <h3 className='heroList2-title text-center py-3'>{item.title}</h3>
+                                        </div>
+                                    ))
+                                }
+                            </ul>
+                    }
                 </div>
             </section>
             <div className='heroHighLight text-white text-center'>
@@ -158,33 +160,29 @@ export default function Hero() {
                 </div>
                 <h1 className='hero-title'>RATED CONTENT</h1>
                 {
-                    loader ? <SkeletonArr/> :
-                <ul className='heroBestSellers'>
-                    {
-                        data?.slice(4, 9).map((item, index) => (
-                            <li key={index} className=' borde border-[#c4b217]'>
-                                <div className='heroBestSellersImg-p box-border overflow-hidden '>
-                                        <Image className='heroListImg3 align-top h-[230px]'onClick={()=>{handlePro(item); navigation.push('/details')}} src={item.img} alt={item.title} width={300} height={300} />
-                                </div>
-                                <section className='flex flex-col h-[230px] justify-center items-center gap-1'>
-                                    <h3 className='heroList3-title'>{item.title}</h3>
-                                    <p className='text-center h-[70px] '>{item.content}</p>
-                                    <p>From {formatter.format(item.price)}</p>
-                                    <div className='mb-4'>
-                                        <FaStar color='gold' className='inline' />
-                                        <FaStar color='gold' className='inline' />
-                                        <FaStar color='gold' className='inline' />
-                                        <FaStar color='gold' className='inline' />
-                                        <FaStar color='gold' className='inline' />
-                                    </div>
-                                    <button className='heroBtnCart' onClick={()=>handleAddToCart(item)}>ADD TO CART</button>
-                                </section>
-                            </li>
-                        ))
+                    loader ? <SkeletonArr /> :
+                        <ul className='detail-arr'>
+                            {
+                                data?.slice(4, 10).map((item, index) => (
+                                    <li key={index} className='detail-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
+                                        <Image className='detail-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                                        <h1 className='text-[14.5px] font-[600] detail-arr-title'>{item.title}</h1>
+                                        <p className='text-[13px] text-center h-[52px]'>{item.content}</p>
+                                        <h1>
+                                            <FaStar color='gold' className='inline' />
+                                            <FaStar color='gold' className='inline' />
+                                            <FaStar color='gold' className='inline' />
+                                            <FaStar color='gold' className='inline' />
+                                        </h1>
+                                        <p>From </p>
+                                        <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
+                                        <button className='px-9 py-2 bg-[#9b1d1d] text-white text-[12px] font-[600] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
+                                    </li>
+                                ))
 
-                    }
-                </ul>
-                    }
+                            }
+                        </ul>
+                }
             </div>
             <div className='heroGift-p'>
                 <ul className='heroGift'>

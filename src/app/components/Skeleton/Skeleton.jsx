@@ -59,6 +59,10 @@ export function SkeletonArr(){
              <div className="skeleton-arr"></div>
              <div className="skeleton-arr"></div>
              <div className="skeleton-arr"></div>
+             <div className="skeleton-arr"></div>
+             <div className="skeleton-arr"></div>
+             <div className="skeleton-arr"></div>
+             <div className="skeleton-arr"></div>
         </section>
     )
 }
