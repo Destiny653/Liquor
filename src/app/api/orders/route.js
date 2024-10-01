@@ -69,7 +69,7 @@ export const POST = async (req, res) => {
         }
         async function verifyAndPopulateOrderItems(cartItems, subtotal) {
             const verifiedCartItems = [];
-            let hasError = false;
+            let dataError = null
             for (const { product_id, productModel, quantity } of cartItems) {
                 const verificationResult = await verifyProductId(product_id, productModel);
                 if (verificationResult) {
@@ -83,13 +83,19 @@ export const POST = async (req, res) => {
                         totalPrice: subtotal
                     });
                 } else {
-                    hasError = true;
+                    dataError = {
+                        id: product_id,
+                        model: productModel
+                    }
                     break;
                     throw new Error(`Product with ID ${product_id} not found in ${productModel} collection.`)
                 }
             }
 
-            return hasError ? null : verifiedCartItems;
+            return {
+                error: dataError,
+                data: verifiedCartItems,
+            }
         }
         async function calculateTotalPrice(verifiedItems) {
             let totalPrice = 0;
@@ -134,11 +140,13 @@ export const POST = async (req, res) => {
         }
 
         async function createOrder(customerId, cartItems) {
-            const verifiedItems = await verifyAndPopulateOrderItems(cartItems);
-            console.log(verifiedItems);
-            if (!verifiedItems) {
-                return NextResponse.json({ success: false, message: 'Failed to verify and populate order items.' }, { status: 404 });
+            const verify = await verifyAndPopulateOrderItems(cartItems);
+            console.log(verify);
+            if (verify.error) {
+                return NextResponse.json({ success: false, message: 'Failed to verify and populate order items.', data: verify.data }, { status: 404 });
             }
+
+            const verifiedItems = verify.data;
             let totalPrice = await calculateTotalPrice(verifiedItems);
             totalPrice = totalPrice.toFixed(2)
             console.log(totalPrice);
