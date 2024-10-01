@@ -143,7 +143,7 @@ export const POST = async (req, res) => {
             const verify = await verifyAndPopulateOrderItems(cartItems);
             console.log(verify);
             if (verify.error) {
-                return NextResponse.json({ success: false, message: 'Failed to verify and populate order items.', data: verify.data }, { status: 404 });
+                return NextResponse.json({ success: false, message: 'Failed to verify and populate order items.', data: verify.error }, { status: 404 });
             }
 
             const verifiedItems = verify.data;
