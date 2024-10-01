@@ -185,6 +185,7 @@ export const POST = async (req, res) => {
         //  return NextResponse.json({ success: true, message: 'Order created successfully' }, { status: 200 });
     } catch (error) {
         console.error(error);
+        console.error(error.message);
         return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
     }
 }

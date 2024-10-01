@@ -57,8 +57,8 @@ export default function Checkout({ amount }) {
                 },
                 body: JSON.stringify({ email, cartItems })
             })
-            const data = await res.json();
             console.log(res)
+            const data = await res.json();
             console.log(data)
             if (res.ok) { 
                 notyf.success('Order placed successfully')
@@ -71,7 +71,7 @@ export default function Checkout({ amount }) {
         } catch (error) {
             setLoader(false)
             notyf.error(`Error placing order: ${error.message}`);
-            console.error(error);
+            console.log(error);
         }
     }
     const Load = () => {
