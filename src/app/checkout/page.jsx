@@ -57,7 +57,7 @@ export default function Checkout({ amount }) {
                 },
                 body: JSON.stringify({ email, cartItems })
             })
-            console.log(res)
+            console.log(await res.text())
             const data = await res.json();
             console.log(data)
             if (res.ok) { 
