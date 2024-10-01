@@ -69,6 +69,7 @@ export const POST = async (req, res) => {
         }
         async function verifyAndPopulateOrderItems(cartItems, subtotal) {
             const verifiedCartItems = [];
+            let hasError = false;
             for (const { product_id, productModel, quantity } of cartItems) {
                 const verificationResult = await verifyProductId(product_id, productModel);
                 if (verificationResult) {
@@ -82,11 +83,13 @@ export const POST = async (req, res) => {
                         totalPrice: subtotal
                     });
                 } else {
+                    hasError = true;
+                    break;
                     throw new Error(`Product with ID ${product_id} not found in ${productModel} collection.`)
                 }
             }
 
-            return verifiedCartItems;
+            return hasError ? null : verifiedCartItems;
         }
         async function calculateTotalPrice(verifiedItems) {
             let totalPrice = 0;
@@ -133,6 +136,9 @@ export const POST = async (req, res) => {
         async function createOrder(customerId, cartItems) {
             const verifiedItems = await verifyAndPopulateOrderItems(cartItems);
             console.log(verifiedItems);
+            if (!verifiedItems) {
+                return NextResponse.json({ success: false, message: 'Failed to verify and populate order items.' }, { status: 404 });
+            }
             let totalPrice = await calculateTotalPrice(verifiedItems);
             totalPrice = totalPrice.toFixed(2)
             console.log(totalPrice);
