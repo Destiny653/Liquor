@@ -30,7 +30,7 @@
 /* } */
 
 .imgTransform {
-    transition: all 5s ease;
+    transition: all 5s ease; 
 }
 
 .fade-in {
@@ -143,3 +143,30 @@
         transform: translateX(80px);
     }
 }
+
+/* 
+===================================
+@media all and (max-width:391px){}
+===================================
+ */
+
+ @media all and (max-width:391px){
+    .imgTransform { 
+        height: 300px;
+    }
+    .hero-dis-p{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .indicators {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        left: 40%;
+        bottom: 10%;
+    }
+    
+ }

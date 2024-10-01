@@ -44,8 +44,7 @@ export default function Home() {
   ]
   const interval = 8000
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [fade, setFade] = useState(true)
-  const [loading, setLoading] = useState(false)
+  const [fade, setFade] = useState(true) 
 
 
   useEffect(() => {
@@ -59,36 +58,14 @@ export default function Home() {
 
     return () => clearInterval(timer);
 
-  }, [hero.length, interval, loading])
+  }, [hero.length, interval])
 
-  console.log(currentIndex);
-  const Load = () => {
-    return (
-      <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
-        <div className="loader-con">
-          <section className='loader-i'></section>
-        </div>
-      </div>
-    )
-  }
-  const Skeleton = () => {
-    return (
-      <div className='h-[100%] w-full z-10 bg-[#c6c5ec65]'>
-        <div className="">
-          <div className="skeleton-pg"></div>
-        </div>
-      </div>
-    )
-  }
+  console.log(currentIndex); 
 
 
   return (
-    <div>
-      {
-        
-        loading ? <Load /> : console.log('no load')
-      }
-      <div className=" mb-[60px] relative">
+    <div> 
+      <div className="hero-dis-p mb-[60px] relative">
         <Image className={`w-full h-full imgTransform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
         <div className="details">
           <h1 className="text-[27px]">{hero[currentIndex].title}</h1>

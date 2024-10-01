@@ -54,7 +54,7 @@ export default function Navbar() {
             path: '/login'
         },
         {
-            title: 'Sign Up',
+            title: 'Register',
             path: '/signup'
         }
     ]
@@ -96,7 +96,7 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    const [query, setQuery] = useState(''); 
+    const [query, setQuery] = useState('');
     // setSearchInp(query)
     handleSearch(query)
     console.log(query);
@@ -128,22 +128,34 @@ export default function Navbar() {
 
     return (
         <div>
-            <nav>
-                <section className="bg-black py-2 flex items-center justify-center" >
-                    <h3 className=" text-white text-sm">Join Our Bottled & Boxed Club: Free Shipping on Orders $99+</h3>
-                </section>
-                <section className="nav-search-p">
-                    <div className="font-bold text-2xl nav-logo ">LOGO</div>
-                    <label className='relative grid place-items-center w-[60%]'>
+            <nav className="bg-white">
+                <section id='first-nav' className="first-nav nav-search-p mt-[44px]">
+                    <div className="n-search-1 font-bold text-2xl nav-logo ">LOGO</div>
+                    <label className='n-search-2 relative grid place-items-center w-[60%]'>
                         <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
                         <Display />
                     </label>
-                    <section className="flex justify-center items-center gap-2">
+                    <section className="n-search-3 flex justify-center items-center gap-2">
                         <div className="nav-user-img">
                             <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
                         </div>
                         <h2>{session?.user.name}</h2>
                     </section>
+                </section>
+                <section id='second-nav' className=" nav-search-p mt-[49px]">
+                    <label className='n-search-2 relative grid place-items-center w-[100%]'>
+                        <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
+                        <Display />
+                    </label>
+                    <div className='second-nav-ch2 flex justify-between w-full'>
+                        <div className="n-search-1 font-bold text-2xl nav-logo ">LOGO</div>
+                        <section className="n-search-3 flex justify-center items-center gap-2">
+                            <div className="nav-user-img">
+                                <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
+                            </div>
+                            <h2>{session?.user.name}</h2>
+                        </section>
+                    </div>
                 </section>
 
                 <ul style={{ position: 'fixed', top: '0', width: '100%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}
@@ -155,7 +167,7 @@ export default function Navbar() {
                     {
                         nav.map((item, index) => {
                             return (
-                                <li key={index}>
+                                <li className='nav-child' key={index}>
                                     <Link href={item.path}>{item.title}</Link>
                                 </li>
                             )

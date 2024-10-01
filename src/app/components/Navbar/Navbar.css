@@ -10,6 +10,7 @@ Navbar
     align-items: center;
     padding: 0 20px;
     box-shadow: 1px 0px 10px #00000044;
+    /* overflow: scroll; */
  }
 .nav-user-img {
     height: 36px;
@@ -71,6 +72,8 @@ Navbar
   background-color: rgb(116, 10, 10);
   text-transform: uppercase;
   font-size: 14px;
+  width: 100%;
+  overflow-x: scroll;
   /* font-weight: 600; */
   color: #fff;
 }
@@ -94,3 +97,67 @@ Navbar
 .dashHoveI:hover .selectItem{
  display: block;
 }
+#second-nav{
+    display: none;
+}
+
+/* 
+===================================
+@media all and (max-width:391px){}
+===================================
+ */
+
+ @media all and (max-width:391px){
+    #first-nav{
+        display: none;
+    }
+    #second-nav{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .nav-search-p{
+        display: grid;
+        grid-template-columns: 30% 100% 70%;
+     }
+    .nav-search-bar{
+        width: 100%;
+        margin: 0;
+     }
+    .nav-user-img{
+        margin-bottom: 10px;
+     }
+    .dashboard-ch{
+        position: static;
+        display: none;
+     } 
+     .nav-search-p{ 
+        display: flex;
+        padding: 0 10px;
+        gap: 10px;
+     }
+     .second-nav-ch2{ 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+     }
+     .nav-item-p{
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    display: flex;
+    gap: 30px;
+}
+.nav-child{
+         scroll-snap-align: start;
+     }
+    /* .dashHoveI{
+        display: none;
+     }
+    .selectItem{
+        display: none;
+     }
+    .dashHover{
+        display: none;
+        position: static;
+     } */
+ }
