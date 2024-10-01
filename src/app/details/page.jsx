@@ -25,9 +25,9 @@ export default function Page() {
                     <section className='detail detail-img-con  box-border rounded-2xl overflow-hidden'>
                         <Image className=' ' src={detailPro.img} alt={detailPro.title} width={400} height={400} />
                     </section>
-                    <section className='detail2 relative ml-4 flex flex-col gap-2 box-border p-[30px] '>
+                    <section className='detail2 relative ml-4 flex flex-col justify-center items-center gap-2 box-border p-[30px] '>
                         <h1 className='text-3xl font-bold nunitoextralight_italic '>{detailPro.title}</h1>
-                        <p className='nunitoextralight_italic text-[30px]'>{detailPro.content}</p>
+                        <p className='nunitoextralight_italic text-[30px] text-center'>{detailPro.content}</p>
                         <h1>
                             <FaStar color='gold' className='inline' />
                             <FaStar color='gold' className='inline' />
@@ -36,7 +36,7 @@ export default function Page() {
                         </h1>
                         <h1 className='text-[20px] text-[gold] font-[600] '>${detailPro.price}</h1>
                         <div className='flex gap-5'>
-                            <button className='px-9 py-2 bg-[#9b1d1d] text-white text-[15px] font-[600] rounded-[4px] nunitoextralight_italic' onClick={() => { handleAddToCart(detailPro); }}>ADD TO CART</button>
+                            <button className='px-9 py-2 hover:bg-[#9b1d1d] hover:text-white text-[15px] border  transition-all font-[600] rounded-[4px] nunitoextralight_italic' onClick={() => { handleAddToCart(detailPro); }}>ADD TO CART</button>
                         </div>
                     </section>
                 </div>
@@ -57,7 +57,7 @@ export default function Page() {
                                     <FaStar color='gold' className='inline' />
                                 </h1>
                                 <h1 className='text-[15px] font-[600] text-[#f1ce07]'>${item.price}</h1>
-                                <button className='px-9 py-2 bg-[#9b1d1d] text-white text-[12px] font-[600] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
+                                <button className='detail-btn-arr px-9 py-2 hover:bg-[#9b1d1d] border hover:text-white text-[11px] font-[500]rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
                             </li>
                         )
                     })

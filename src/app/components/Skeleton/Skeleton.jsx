@@ -66,3 +66,17 @@ export function SkeletonArr(){
         </section>
     )
 }
+export function SkeletonArr2(){
+    return(
+        <>
+             <div className="skeleton-arr2"></div>
+             <div className="skeleton-arr2"></div>
+             <div className="skeleton-arr2"></div>
+             <div className="skeleton-arr2"></div>
+             <div className="skeleton-arr2"></div>
+             <div className="skeleton-arr2"></div>
+             <div className="skeleton-arr2"></div>
+             <div className="skeleton-arr2"></div> 
+        </>
+    )
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import SkeletonR, { SkeletonArr } from '../components/Skeleton/Skeleton'
+import SkeletonR, { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton'
 
 export default function page() {
   return (
@@ -9,6 +9,9 @@ export default function page() {
       </section>
       <section>
         <SkeletonArr />
+      </section>
+      <section>
+        <SkeletonArr2 />
       </section>
     </div>
   )

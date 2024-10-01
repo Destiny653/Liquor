@@ -60,10 +60,15 @@
     justify-content: center;
     width: fit-content;
     align-items: center;
-    gap: 15%;
+    gap: 1%;
     padding: 30px;
     width: 90%;
     /* border: 1px solid gray; */
+}
+.detail-btn-arr {
+    padding: 8px 40px;
+    border-radius: 30px;
+    transition: all 0.3s ease-in-out;
 }
 
 /* 

@@ -11,9 +11,30 @@
     place-items: center;
     gap: 5px;
     box-sizing: border-box;
+    width: 100%;
     /* padding: 0 7%;  */
 }
 
+.skeleton-arr {
+    width: 100%;
+    height: 370px;
+    border-radius: 6px; 
+    background-color: #d8d8d8e3; 
+    position: relative;
+    overflow: hidden; 
+    box-sizing: border-box;
+    padding: 0.5%;
+    animation: shimmer 1s infinite linear;
+}
+.skeleton-arr2 {
+    width: 100%;
+    height: 370px;
+    border-radius: 6px; 
+    background-color: #d8d8d8e3; 
+    position: relative;
+    overflow: hidden; 
+    animation: shimmer 1s infinite linear;
+}
  .skeleton-r {
     width: 160px;
     height: 160px;
@@ -30,15 +51,6 @@
     position: relative;
     overflow: hidden;
     border-radius: 4px;
-    animation: shimmer 1s infinite linear;
-}
-.skeleton-arr {
-    width: 217px;
-    height: 370px;
-    border-radius: 6px; 
-    background-color: #d8d8d8e3; 
-    position: relative;
-    overflow: hidden; 
     animation: shimmer 1s infinite linear;
 }
 
@@ -75,6 +87,14 @@
 }
 
 .skeleton-arr::after {
+    content: '';
+    width: 400px;
+    height: 400px; 
+    box-shadow:0 0 100px #b6b6b685;
+    position: absolute;
+    animation: trans 1.3s infinite linear;
+}
+.skeleton-arr2::after {
     content: '';
     width: 400px;
     height: 400px; 

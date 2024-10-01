@@ -1,12 +1,4 @@
-.shopItemP{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    justify-content: center;
-    box-sizing: border-box;
-    padding-bottom: 30px;
-    box-sizing: border-box;
-}
-.shopParent {
+ .shopParent {
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -48,24 +40,46 @@
 .shopChild2{
     width: 80%;
 }
-.shopItem{
-    display: flex;
-    flex-direction: column;
-    justify-content: first baseline;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    border: 1px solid rgba(128, 128, 128, 0.192);
-    box-sizing: border-box;
-    padding: 10px;
-}
-.shopItemContent{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-}
+.shop-arr{  
+    display: grid;
+     grid-template-columns: repeat(4,1fr);
+     place-items: center;
+     gap: 5px;
+     box-sizing: border-box;
+     width: 100%;
+     padding: 0.5%;
+ }
+ .shop-arr-i{
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+     scroll-snap-align: start;
+     gap: 4px;
+     border-radius: 1%;
+     cursor: pointer;
+     transition: transform 0.3s;
+     box-sizing: border-box;
+     padding: 9px 9px;
+ }
+ .shop-arr-img{
+     width: 100%;
+     height: 220px;
+     background-position: center;
+     background-size: cover;
+     border-radius: 1%;
+ }
+ .shop-arr-title{
+     text-transform: lowercase;
+ }
+ .shop-arr-title::first-letter{
+     text-transform: capitalize;
+ } 
+ .shop-btn-arr{
+     padding: 8px 40px;
+     border-radius: 30px;
+     transition: all 0.3s ease-in-out;
+ } 
 
 .shopBtn{
     width: 100%;

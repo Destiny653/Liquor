@@ -171,6 +171,7 @@
     place-items: center;
     gap: 5px;
     box-sizing: border-box;
+    padding: 0.5%;
 }
 .hero-arr-i{
     display: flex;
@@ -198,16 +199,7 @@
 .hero-arr-title::first-letter{
     text-transform: capitalize;
 }
-.hero-p {
-    display: flex;
-    justify-content: center;
-    width: fit-content;
-    align-items: center;
-    gap: 15%;
-    padding: 30px;
-    width: 90%;
-    /* border: 1px solid gray; */
-}
+ 
 .hero-btn-arr{
     padding: 8px 40px;
     border-radius: 30px;

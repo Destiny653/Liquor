@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { SearchContext } from '../../../context/SearchContext';
 import { useRouter } from 'next/navigation';
 import { CartContext } from '../../../context/CartContext';
+import { FaStar } from 'react-icons/fa';
+import { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton';
+import { SiTrueup } from 'react-icons/si';
 
 export default function Page() {
 
@@ -16,7 +19,8 @@ export default function Page() {
     console.log(searchVal);
     const [data, setData] = useState();
     const [options, setOptions] = useState('All Brands');
-    const [brand, setBrand] = useState([])
+    const [brand, setBrand] = useState([]);
+    const [loader, setLoader] =useState(true)
     let choice = ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'];
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -55,7 +59,6 @@ export default function Page() {
                     ]);
             }
 
-
             const fetchPromises = brand.map(api => fetch(api).then(res => res.json()));
             const results = await Promise.all(fetchPromises);
             console.log(results);
@@ -63,12 +66,12 @@ export default function Page() {
                 product.title?.toLowerCase().includes(title?.toLowerCase())
             );
             console.log(filteredResults);
+            setLoader(false)
             return filteredResults;
         }
 
-
         getData(searchInp).then(results => setData(() => results));
-    }, [data, searchInp, searchVal])
+    }, [data, searchInp, searchVal, loader])
 
 
     //getting items per page and displaying the current page with the prev and next option
@@ -91,14 +94,20 @@ export default function Page() {
         if (currentPage < 1 || currentPage > totalPages) {
             return "Invalid page number"
         }
-        return getItemsForPage(currentPage)?.map((post) => (
-            <div key={post.id} className='border shopItem'>
-                <Image src={post.img} alt={post.title} width={300} height={300} onClick={() => { handlePro(post); navigation.push('/details') }} />
-                <h1 className='shopItemTitle font-semibold'>{post.title}</h1>
-                <p className='shopItemContent'>{post.content}</p>
-                <h2 className=' font-medium'>{formatter.format(post.price)}</h2>
-                <button className='shopBtn' onClick={() => handleAddToCart(post)}>Add to Cart</button>
-            </div>
+        return getItemsForPage(currentPage)?.map((item, index) => (
+            <li key={index} className='shop-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
+            <Image className='shop-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+            <h1 className='text-[14.5px] font-[600] shop-arr-title'>{item.title}</h1>
+            <p className='text-[13px] text-center h-[52px]'>{item.content.slice(0,80)}</p>
+            <h1>
+                <FaStar color='gold' className='inline' />
+                <FaStar color='gold' className='inline' />
+                <FaStar color='gold' className='inline' />
+                <FaStar color='gold' className='inline' />
+            </h1> 
+            <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
+            <button className='shop-btn-arr px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
+        </li>
         ));
     };
 
@@ -124,10 +133,8 @@ export default function Page() {
 
 
 
-    const filtedPrice = data?.filter((product) => product.price >= minPrice && product.price <= maxPrice)
-    console.log(filtedPrice);
-
-
+    const filterdPrice = data?.filter((product) => product.price >= minPrice && product.price <= maxPrice)
+    console.log(filterdPrice); 
     return (
         <div className='shopParent relative'>
             <div className='shopChild1 sticky left-0 top-[10vh]'>
@@ -252,8 +259,8 @@ export default function Page() {
                     <section>
                     </section>
                 </div>
-                <div className='shopItemP'>
-                    {displayItems()}
+                <div className='shop-arr w-full'>
+                    {loader ? <SkeletonArr2/> : displayItems()}
                 </div>
                 <div className='pagination flex items-center justify-center gap-9'>
                     <button className='border px-8 py-1' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
