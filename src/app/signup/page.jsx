@@ -11,14 +11,16 @@ import { SearchContext } from '../../../context/SearchContext';
 export default function Page() {
 
     const navigation = useRouter()
-    const {setSignIn} = useContext(SearchContext)
+    const { setSignIn } = useContext(SearchContext)
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [loader, setLoader] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoader(true)
 
         //create an instance of Notyf
         const notyf = new Notyf({
@@ -29,54 +31,69 @@ export default function Page() {
             }
         });
 
-        if(email){
-        // validate email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            notyf.error('Invalid email address');
-            return;
-        }
-        //set email to local storage
-        localStorage.setItem('email', email);
-
-        // validate password
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordRegex.test(password)) {
-            notyf.error('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
-            return;
-        }
- 
-        try {
-            const res = await fetch('/api/signup', {
-                method: 'POST',
-                body: JSON.stringify({ username, email, password }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                notyf.error('Error:'+ errorData.message);
+        if (email) {
+            // validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                setLoader(false)
+                notyf.error('Invalid email address');
                 return;
             }
-            const data = await res.json();
-            notyf.success('Registration successful!');
-            navigation.push('/login');
-        }catch(error){
-            notyf.error('Registration failed!'+ error.message);
-            console.log(error);
+            //set email to local storage
+            localStorage.setItem('email', email);
+
+            // validate password
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                setLoader(false)
+                notyf.error('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/signup', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, email, password }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    setLoader(false)
+                    notyf.error('Error:' + errorData.message);
+                    return;
+                }
+                const data = await res.json();
+                console.log(data)
+                setLoader(false)
+                notyf.success('Registration successful!');
+                navigation.push('/login');
+            } catch (error) {
+                setLoader(false)
+                notyf.error('Registration failed!' + error.message);
+                console.log(error);
+            }
         }
-        
-        
-        
-        
+    };
+
+    const Load = () => {
+        return (
+            <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+                <div className="loader-con">
+                    <section className='loader-i'></section>
+                </div>
+            </div>
+        )
     }
-};
 
 
     return (
         <div>
+            {
+                loader ? <Load /> :  ""
+            }
             <div className='register-bg flex justify-center items-center box-border py-11'>
                 <div className={`sub-p flex justify-evenly gap-8 items-center bg-white box-border p-5 overflow-hidden rounded-[8px] `} >
                     <div className='register-img w-full overflow-hidden'>

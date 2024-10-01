@@ -24,7 +24,7 @@ export const POST = async (req, res) => {
 
 
         if (!user) {
-            return NextResponse.json({ success: false, message: 'User mot found' }, { status: 404 });
+            return NextResponse.json({ success: false, message: 'User mot found please sign up' }, { status: 404 });
         };
 
         async function verifyProductId(product_id, productModel) {
@@ -176,27 +176,22 @@ export const POST = async (req, res) => {
                 console.log('Order updated successfully');
             }
             //  updating user orders
-            const verifiedOrdersInUser = await User.find({ _id: userId, 'orders.productId': { $all: orderIds } })
-            console.log(verifiedOrdersInUser);
-            const verifiedOrdersInUser2 = await User.find({ _id: userId, 'orders.productId': { $in: orderIds } })
-            console.log(verifiedOrdersInUser2);
-            const newItems = verifiedItems.filter(item => !user.orders.some(order => order.productId.equals(item.productId)))
-            console.log(newItems);
-            if (!verifiedOrdersInUser == []) {
-                console.log('User has existing order and all items are new');
-            } else if (!verifiedOrdersInUser2 == []) {
-                await User.findByIdAndUpdate(userId, { $push: { orders: newItems } })
-                console.log('User has existing order but new items');
-            } else {
+            const verifiedOrdersInUser = await User.find({ _id: userId, 'order.productId': { $all: orderIds } })
+            const verifiedOrdersInUser2 = await User.find({ _id: userId, 'order.productId': { $in: orderIds } })
+            if (verifiedOrdersInUser) {
                 await User.findByIdAndUpdate(userId, { $set: { orders: verifiedItems } })
-                console.log('User has no existing order');
+            } else if (verifiedOrdersInUser2) {
+                // const existingOrder = await Order.findOne({ user: userId })
+                // const newItems = verifiedItems.find(item => item.productId !== existingOrder.productId)
+                const newItems = verifiedItems.filter(item => !existingOrder.products.some(orderItem => orderItem.productId.equals(item.productId)))
+                await User.findByIdAndUpdate(userId, { $push: { orders: newItems } })
+            } else {
+                await User.findByIdAndUpdate(userId, { $push: { orders: verifiedItems } }) 
             }
-            console.log('Order created successfully');
             return NextResponse.json({ success: true, message: 'Order created successfully' }, { status: 200 });
         }
 
        return createOrder(user._id, cartItems);
-        //  return NextResponse.json({ success: true, message: 'Order created successfully' }, { status: 200 });
     } catch (error) {
         console.error(error);
         console.error(error.message);
