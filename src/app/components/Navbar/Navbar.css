@@ -74,6 +74,7 @@ Navbar
   font-size: 14px;
   width: 100%;
   overflow-x: scroll;
+  scrollbar-width: none;
   /* font-weight: 600; */
   color: #fff;
 }

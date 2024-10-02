@@ -7,9 +7,9 @@ import AOS from 'aos';
 export default function Home() {
 
 
-  useEffect(() => { 
-    AOS.init();
-  }, [])
+  // useEffect(() => {
+  //   AOS.init();
+  // }, [])
 
 
   const hero = [
@@ -44,12 +44,22 @@ export default function Home() {
   ]
   const interval = 8000
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [fade, setFade] = useState(true) 
+  const [count, setCount] = useState(0)
+  const [fade, setFade] = useState(true)
+  
+  useEffect(() => { 
+   const timer = setInterval(()=>{
+      setCount((num)=>(num+1)%(4))
+    },2000)
+    return ()=>clearInterval(timer)
+  }, [])
 
+  console.log(count);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeout(() => {
+        AOS.init();
         setFade(false)
       }, 7000);
       setFade(true)
@@ -58,16 +68,16 @@ export default function Home() {
 
     return () => clearInterval(timer);
 
-  }, [hero.length, interval])
+  }, [hero.length, interval, AOS])
 
-  console.log(currentIndex); 
+  console.log(currentIndex);
 
 
   return (
-    <div> 
+    <div>
       <div className="hero-dis-p mb-[60px] relative">
         <Image className={`w-full h-full imgTransform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
-        <div className="details">
+        <div className={`details ${fade? 'trans-in' : 'trans-out'}`} >
           <h1 className="text-[27px]">{hero[currentIndex].title}</h1>
           <p className="text-[50px] text-center font-[600]">{hero[currentIndex].description}</p>
           <h1 className="text-[27px]">{hero[currentIndex].short}</h1>

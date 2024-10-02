@@ -26,7 +26,8 @@ export default function Hero() {
     useEffect(() => {
 
         AOS.init({
-            duration: 500,
+            duration: 500, 
+
         });
 
         const notyf = new Notyf({

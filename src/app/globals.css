@@ -61,7 +61,7 @@
 }
 
 .active {
-    background-color: rgb(161, 129, 24);
+    background-color: rgb(238, 5, 5);
     box-shadow: inset 0px 0px 1px 2.5px #fff;
 }
 
@@ -78,6 +78,35 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: all 23s linear;
+}
+
+.trans-out {
+    transform: translateY(1500px);
+    opacity: 0;
+    visibility: hidden;
+    animation: opac-blind 15s linear;
+}
+.trans-in{ 
+    opacity: 1;
+    animation: opac-see 3s linear;
+}
+
+@keyframes opac-see {
+    0%{
+        opacity: 0; 
+    }
+    100%{
+        opacity: 1;
+    }
+}
+@keyframes opac-blind {
+    0%{
+        opacity: 0; 
+    } 
+    100%{
+        opacity: 0;
+    }
 }
 
 .loader-con {
