@@ -130,4 +130,15 @@
     .ske-r1 { 
         display: none;
     }
+    .skeleton-arr-p{ 
+        grid-template-columns: repeat(2,1fr); 
+    }
+    .skeleton-arr:nth-child(1),
+    .skeleton-arr:nth-child(2),
+    .skeleton-arr:nth-child(3),
+    .skeleton-arr:nth-child(4),
+    .skeleton-arr:nth-child(5),
+    .skeleton-arr:nth-child(6){
+        display: none;
+    }
  }

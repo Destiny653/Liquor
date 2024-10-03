@@ -1,4 +1,4 @@
-.heroList{
+.heroList {
     display: flex;
     gap: 1%;
     justify-content: space-between;
@@ -7,37 +7,44 @@
     box-sizing: border-box;
     padding: 0 4%;
 }
+
 .heroList li {
     background: #fff;
     box-sizing: border-box;
     overflow: hidden;
     width: 100%;
 }
-.heroList li:nth-child(1){
+
+.heroList li:nth-child(1) {
     background-color: #740f0f;
 }
-.heroList li:nth-child(2){
+
+.heroList li:nth-child(2) {
     background-color: #c45e0b;
 }
-.heroList li:nth-child(3){
+
+.heroList li:nth-child(3) {
     background-color: #792f18;
 }
-.heroList li:nth-child(4){
+
+.heroList li:nth-child(4) {
     background-color: #ca710c;
 }
 
-.heroList li:nth-child(3) .heroListImg{
+.heroList li:nth-child(3) .heroListImg {
     background-color: #792f18;
     position: relative;
     left: 40px;
     top: 18%;
 }
-.heroListImg{
+
+.heroListImg {
     position: relative;
     right: 10px;
     top: 30%;
 }
-.heroList2{
+
+.heroList2 {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     justify-content: center;
@@ -45,9 +52,11 @@
     gap: 30px;
     margin: 0 5%;
 }
-.heroList2-p{
+
+.heroList2-p {
     margin: 80px 0;
 }
+
 .heroList2 li {
     overflow: hidden;
     display: flex;
@@ -58,18 +67,21 @@
     border-radius: 50%;
     box-shadow: 0px 0px 4px rgb(161, 129, 24);
 }
-.heroListImg2{
+
+.heroListImg2 {
     transition: all 0.4s ease-in-out;
 }
-.heroListImg2:hover{
+
+.heroListImg2:hover {
     transform: scale(1.2);
 }
 
-.heroList2-title{
+.heroList2-title {
     text-transform: uppercase;
     color: rgb(161, 129, 24)f;
 }
-.heroHighLight{
+
+.heroHighLight {
     background-image: url('https://www.nestorliquor.com/cdn/shop/files/custome_banner.jpg?v=1683631341&width=1400');
     width: 100%;
     height: 330px;
@@ -78,12 +90,14 @@
     justify-content: space-evenly;
     align-items: center;
 }
-.hero-btn{
+
+.hero-btn {
     padding: 10px 40px;
     border-radius: 30px;
     transition: all 0.6s ease-in-out;
 }
-.heroBtnCart{
+
+.heroBtnCart {
     padding: 10px 40px;
     /* border-radius: 30px; */
     align-items: baseline;
@@ -91,26 +105,29 @@
     transition: all 0.6s ease-in-out;
 }
 
-.heroBtnCart:hover{
+.heroBtnCart:hover {
     background-color: rgb(161, 129, 24);
     color: #fff;
 }
 
-.hero-btn:hover{
+.hero-btn:hover {
     background-color: rgb(161, 129, 24);
     color: #fff;
 }
-.heroBestSellers-p{
+
+.heroBestSellers-p {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-.hero-title{
+
+.hero-title {
     font-size: 24px;
     padding: 20px 10px;
 }
-.heroBestSellers{
+
+.heroBestSellers {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     justify-content: center;
@@ -118,6 +135,7 @@
     box-sizing: border-box;
     padding: 20px 4%;
 }
+
 .heroBestSellers li {
     display: flex;
     flex-direction: column;
@@ -126,6 +144,7 @@
     box-sizing: border-box;
     padding: 10px 10px;
 }
+
 .heroBestSellersImg-p {
     box-sizing: border-box;
     /* max-height: 200px; */
@@ -134,10 +153,12 @@
     justify-content: center;
     /* align-items: center; */
 }
-.heroList3-title{
+
+.heroList3-title {
     font-weight: 600;
 }
-.heroGift{
+
+.heroGift {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -145,35 +166,41 @@
     box-sizing: border-box;
     padding: 20px 4%;
 }
-.heroGift li{
+
+.heroGift li {
     width: 100%;
     height: 400px;
     overflow: hidden;
 }
-.heroGift-Img{
+
+.heroGift-Img {
     transform: translateY(-220px);
     transition: all 0.2s ease-in-out;
 }
-.heroGift-Img:hover{
+
+.heroGift-Img:hover {
     transform: translateY(-240px);
 }
-.heroSell-Img{
+
+.heroSell-Img {
     /* transform: translateY(-200px); */
     transition: all 0.2s ease-in-out;
 }
 
-.heroSell-Img:hover{
+.heroSell-Img:hover {
     transform: translateY(-20px);
 }
-.hero-arr{  
-   display: grid;
-    grid-template-columns: repeat(6,1fr);
+
+.hero-arr {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     place-items: center;
     gap: 5px;
     box-sizing: border-box;
     padding: 0.5%;
 }
-.hero-arr-i{
+
+.hero-arr-i {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -186,21 +213,24 @@
     box-sizing: border-box;
     padding: 9px 9px;
 }
-.hero-arr-img{
+
+.hero-arr-img {
     width: 100%;
     height: 220px;
     background-position: center;
     background-size: cover;
     border-radius: 1%;
 }
-.hero-arr-title{
+
+.hero-arr-title {
     text-transform: lowercase;
 }
-.hero-arr-title::first-letter{
+
+.hero-arr-title::first-letter {
     text-transform: capitalize;
 }
- 
-.hero-btn-arr{
+
+.hero-btn-arr {
     padding: 8px 40px;
     border-radius: 30px;
     transition: all 0.3s ease-in-out;
@@ -212,8 +242,8 @@
 ===================================
  */
 
- @media all and (max-width:391px){
-    .heroList2{
+@media all and (max-width:391px) {
+    .heroList2 {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         justify-content: center;
@@ -221,71 +251,86 @@
         gap: 30px;
         margin: 0 5%;
     }
-    .heroList2-title{
+
+    .heroList2-title {
         text-transform: uppercase;
         color: rgb(161, 129, 24);
         font-size: 14px;
     }
-    .heroList li { 
+
+    .heroList li {
         height: 150px;
     }
-    .heroListImg{
+
+    .heroListImg {
         position: relative;
         right: 7px;
         top: 30%;
     }
-    .heroList li:nth-child(3) .heroListImg{
+
+    .heroList li:nth-child(3) .heroListImg {
         background-color: #792f18;
         position: relative;
         left: 1px;
         top: 19%;
     }
-    .heroList li:nth-child(2) .heroListImg{ 
+
+    .heroList li:nth-child(2) .heroListImg {
         position: relative;
         left: 1px;
         top: 19%;
     }
-    .heroList{ 
+
+    .heroList {
         padding: 0 1%;
         gap: 0px;
         margin: 0;
     }
-    
-.heroList2-p{
-    margin: 8px 0;
-}
-.heroGift li{
-    width: 100%;
-    height: 130px;
-    overflow: hidden;
-}
-.heroGift{ 
-    gap: 1%; 
-    padding: 0 2%;
-}
-.hero-arr-img{
-    width: 60%;
-    height: 130px; 
-}
-.hero-arr{  
-    display: grid;
-     grid-template-columns: repeat(2,1fr);
-     place-items: center;
-     gap: 3px;
-     box-sizing: border-box;
-     padding: 0.5%;
- }
- .hero-arr-i{
-    min-width: 100%;
- }
- /* .hero-arr:nth-child(1),
- .hero-arr:nth-child(2),
- .hero-arr:nth-child(3),
- .hero-arr:nth-child(4),
- .hero-arr:nth-child(5),
- .hero-arr:nth-child(6){
-    display: none;
- } */
- }
 
+    .heroList2-p {
+        margin: 8px 0;
+    } 
+    .hero-arr-img {
+        width: 60%;
+        height: 130px;
+    }
+
+    .hero-arr {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        place-items: center;
+        gap: 3px;
+        box-sizing: border-box;
+        padding: 0.5%;
+    }
+
+    .hero-arr-i {
+        min-width: 100%;
+    }
+    .hero-arr-i:nth-child(1),
+    .hero-arr-i:nth-child(2),
+    .hero-arr-i:nth-child(3),
+    .hero-arr-i:nth-child(4),
+    .hero-arr-i:nth-child(5),
+    .hero-arr-i:nth-child(6){
+        display: none;
+    }
+    .heroGift {
+        gap: 1%;
+        padding: 8 2%;
+    }
+    .heroGift li {
+        width: 100%;
+        height: 130px;
+        overflow: hidden;
+    } 
+    .heroGift-Img {
+        transform: translateY(-90px);
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .heroGift-Img:hover {
+        transform: translateY(-70px);
+    }
  
+}

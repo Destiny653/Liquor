@@ -144,13 +144,13 @@ export default function Hero() {
                             <Image className='heroSell-Img w-full' src="/images/bestsell1.jpg" width={300} height={300} />
                         </li>
                         <li
-                            data-aos="fade-up"
+                            data-aos="fade-down"
                             data-aos-duration="3000"
                         >
                             <Image className='heroSell-Img w-full' src="/images/bestsell2.jpg" width={300} height={300} />
                         </li>
                         <li
-                            data-aos="fade-down"
+                            data-aos="fade-left"
                             data-aos-easing="linear"
                             data-aos-duration="1500"
                         >
@@ -187,17 +187,17 @@ export default function Hero() {
             <div className='heroGift-p'>
                 <ul className='heroGift'>
                     <li className='bg-[]'
-                        data-aos="fade-up"
+                        data-aos="zoom-in-right"
                         data-aos-duration="1500"
                     ><Image className='w-full heroGift-Img' src="/images/gift3.jpg" alt='gift images' width={400} height={400} /></li>
                     <li className='bg-[]'
-                        data-aos="fade-right"
+                        data-aos="zoom-out-up"
                         data-aos-offset="100"
                         data-aos-duration="1500"
                         data-aos-easing="ease-in-sine"
                     ><Image className='w-full heroGift-Img' src="/images/gift1.jpg" alt='gift images' width={400} height={400} /></li>
                     <li className='bg-[]'
-                        data-aos="fade-down"
+                        data-aos="zoom-in-left"
                         data-aos-easing="linear"
                         data-aos-offset="100"
                         data-aos-duration="1500"
