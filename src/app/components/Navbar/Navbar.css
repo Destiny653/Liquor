@@ -143,13 +143,18 @@ Navbar
         justify-content: space-between;
      }
      .nav-item-p{
+        overflow-x: scroll;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     display: flex;
     gap: 30px;
+    max-width: 499px;
+    box-sizing: border-box;
+    padding: 12px 10px;
+    /* margin: 0 10px; */
 }
 .nav-child{
-         scroll-snap-align: start;
+         scroll-snap-align: center;
      }
     /* .dashHoveI{
         display: none;

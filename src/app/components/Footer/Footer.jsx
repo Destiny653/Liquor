@@ -28,11 +28,7 @@ export default function Footer() {
                     <li>
                         <Image className='footImg' src="/images/icon5.jpg" alt="icon" width={40} height={40} />
                         <h1>Subscribe & Save</h1>
-                    </li>
-                    <li>
-                        <Image className='footImg' src="/images/icon6.jpg" alt="icon" width={40} height={40} />
-                        <h1>Earn Points For Every Dollar <br/> Spent</h1>
-                    </li>
+                    </li> 
                 </ul>
                 <section className='footDetail'>
                     <div>
