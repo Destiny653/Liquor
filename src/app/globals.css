@@ -29,6 +29,7 @@
 
 /* } */
 
+
 .imgTransform {
     transition: all 5s ease; 
 }
@@ -197,6 +198,16 @@
         position: absolute;
         left: 40%;
         bottom: 10%;
+    }
+    .details { 
+        width: fit-content; 
+    }
+    .details-pg {
+        font-size: 25px;
+    }
+    .details-h1,
+    .details-h2{
+        font-size: 14px;
     }
     
  }

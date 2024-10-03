@@ -332,5 +332,9 @@
     .heroGift-Img:hover {
         transform: translateY(-70px);
     }
+    .heroHighLight-h1{
+        font-size: 18px;
+        text-align: center;
+    }
  
 }

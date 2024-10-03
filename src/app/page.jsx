@@ -74,13 +74,13 @@ export default function Home() {
 
 
   return (
-    <div>
+    <div className="box-border px-[5px] w-full">
       <div className="hero-dis-p mb-[60px] relative">
         <Image className={`w-full h-full imgTransform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
         <div className={`details ${fade? 'trans-in' : 'trans-out'}`} >
-          <h1 className="text-[27px]">{hero[currentIndex].title}</h1>
-          <p className="text-[50px] text-center font-[600]">{hero[currentIndex].description}</p>
-          <h1 className="text-[27px]">{hero[currentIndex].short}</h1>
+          <h1 className="details-h1 text-[27px]">{hero[currentIndex].title}</h1>
+          <p className="details-pg text-[50px] text-center font-[600]">{hero[currentIndex].description}</p>
+          <h1 className="details-h2 text-[27px]">{hero[currentIndex].short}</h1>
         </div>
         <div className="indicators" >
           {
