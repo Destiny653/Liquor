@@ -4,7 +4,7 @@ import './Skeleton.css';
 export default function SkeletonR() {
     return (
             <section className='skeleton-r-p'>
-                <div cla className='flex flex-col items-center gap-[11px]'>
+                <div cla className='ske-r1 flex flex-col items-center gap-[11px]'>
                     <div className="skeleton-r "></div>
                     <p className='skeleton-prg'></p>
                 </div>

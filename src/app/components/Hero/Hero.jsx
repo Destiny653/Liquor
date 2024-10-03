@@ -117,7 +117,7 @@ export default function Hero() {
                                                 data-aos-duration="1500" key={index}>
                                                 <Image className='heroListImg2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
                                             </li>
-                                            <h3 className='heroList2-title text-center py-3'>{item.title}</h3>
+                                            <h3 className='heroList2-title text-center py-3'>{item.title.slice(0,10)}</h3>
                                         </div>
                                     ))
                                 }

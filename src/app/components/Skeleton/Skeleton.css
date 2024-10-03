@@ -111,4 +111,23 @@
         transform: translateX(100%);
     }
 } 
- 
+/* 
+===================================
+@media all and (max-width:391px){}
+===================================
+ */
+ @media all and (max-width:391px){
+    .skeleton-r-p {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        place-items: center;
+        row-gap: 8%; 
+    }
+    .skeleton-r {
+        width: 100px;
+        height: 100px; 
+    }
+    .ske-r1 { 
+        display: none;
+    }
+ }

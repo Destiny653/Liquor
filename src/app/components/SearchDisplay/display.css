@@ -18,7 +18,4 @@
     text-transform: lowercase;
     text-align: center;
     color: #ffffff;
-}
-.displayP::-webkit-scrollbar{
-    width: 2px;
-}
+} 
