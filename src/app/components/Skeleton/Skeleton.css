@@ -121,7 +121,7 @@
         display: grid;
         grid-template-columns: repeat(3,1fr);
         place-items: center;
-        row-gap: 8%; 
+        row-gap: 10%; 
     }
     .skeleton-r {
         width: 100px;
@@ -132,6 +132,15 @@
     }
     .skeleton-arr-p{ 
         grid-template-columns: repeat(2,1fr); 
+    }
+    .skeleton-prg {
+        width: 100px;
+        height: 25px;
+        background-color: #d8d8d8e3; 
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        animation: shimmer 1s infinite linear;
     }
     .skeleton-arr:nth-child(1),
     .skeleton-arr:nth-child(2),

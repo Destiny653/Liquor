@@ -28,9 +28,12 @@
     font-style: normal; */
 
 /* } */
+/* *{
+    outline: 2px solid gray;
+} */
 
 
-.imgTransform {
+.img-transform {
     transition: all 5s ease; 
 }
 
@@ -181,8 +184,8 @@
  */
 
  @media all and (max-width:391px){
-    .imgTransform { 
-        height: 300px;
+    .img-transform { 
+        height: 160px;
     }
     .hero-dis-p{
         display: flex;
@@ -203,11 +206,11 @@
         width: fit-content; 
     }
     .details-pg {
-        font-size: 25px;
+        font-size: 12px;
     }
     .details-h1,
     .details-h2{
-        font-size: 14px;
+        font-size: 10px;
     }
     
  }

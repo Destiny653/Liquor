@@ -66,14 +66,14 @@ export default function Hero() {
     const brand = 'posts'
 
     return (
-        <div className=''>
-            <ul className='heroList -[300px] overflow-hidden'>
+        <div className='hero-gen-con'>
+            <ul className='hero-list -[300px] overflow-hidden'>
                 <li
                     data-aos="fade-right"
                     data-aos-offset="100"
                     data-aos-duration="1000"
                     className='h-[330px]'>
-                    <Image className='heroListImg' src="/images/Subscribe.png" alt="hero intro" width={300} height={300} />
+                    <Image className='hero-list-img' src="/images/Subscribe.png" alt="hero intro" width={300} height={300} />
                 </li>
                 <li className='h-[330px]'
                     data-aos="fade-down"
@@ -81,7 +81,7 @@ export default function Hero() {
                     data-aos-easing="linear"
                     data-aos-duration="1500"
                 >
-                    <Image className='heroListImg' src="/images/new.png" alt="hero intro" width={300} height={300} />
+                    <Image className='hero-list-img' src="/images/new.png" alt="hero intro" width={300} height={300} />
                 </li>
                 <li className='h-[330px]'
                     data-aos="fade-up"
@@ -89,7 +89,7 @@ export default function Hero() {
                     data-aos-easing="linear"
                     data-aos-duration="1500"
                 >
-                    <Image className='heroListImg scale-[0.9]' src="/images/gift_basket.png" alt="hero intro" width={300} height={300} />
+                    <Image className='hero-list-img scale-[0.9]' src="/images/gift_basket.png" alt="hero intro" width={300} height={300} />
                 </li>
                 <li className='h-[330px]'
                     data-aos="fade-left"
@@ -97,15 +97,15 @@ export default function Hero() {
                     data-aos-easing="linear"
                     data-aos-duration="1500"
                 >
-                    <Image className='heroListImg' src="/images/img9.png" alt="hero intro" width={300} height={300} />
+                    <Image className='hero-list-img' src="/images/img9.png" alt="hero intro" width={300} height={300} />
                 </li>
             </ul>
-            <section className='heroList2-p box-border'>
+            <section className='hero-list2-p box-border'>
                 <h1 className='text-center hero-title'>SHOP BY SPIRIT</h1>
                 <div>
                     {
                         loader ? <SkeletonR /> :
-                            <ul className='heroList2'>
+                            <ul className='hero-list2'>
                                 {
 
                                     data?.slice(1, 13).map((item, index) => (
@@ -115,9 +115,9 @@ export default function Hero() {
                                                 data-aos-offset="100"
                                                 data-aos-easing="ease-out-cubic"
                                                 data-aos-duration="1500" key={index}>
-                                                <Image className='heroListImg2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                                                <Image className='hero-list-img2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
                                             </li>
-                                            <h3 className='heroList2-title text-center py-3'>{item.title.slice(0,10)}</h3>
+                                            <h3 className='hero-list2-title text-center py-3'>{item.title.slice(0,10)}</h3>
                                         </div>
                                     ))
                                 }
@@ -125,36 +125,36 @@ export default function Hero() {
                     }
                 </div>
             </section>
-            <div className='heroHighLight text-white text-center'>
+            <div className='hero-high-light text-white text-center'>
                 <h3 className='text-2xl text-[#da9226]'>Personalize it!</h3>
-                <h1 className='heroHighLight-h1 text-6xl'>CUSTOM ENGRAVING AVAILABLE</h1>
+                <h1 className='hero-high-light-h1 text-6xl'>CUSTOM ENGRAVING AVAILABLE</h1>
                 <p>Choose from our Engraving Collection and add a special message to send a memorable gift!</p>
                 <button className='border hero-btn border-white'>SHOP NOW</button>
             </div>
-            <div className='heroBestSellers-p'>
+            <div className='hero-best-sellers-p'>
                 <h1 className='hero-title'>BEST SELLERS</h1>
-                <div className='topRated-p w-full'>
-                    <ul className='topRated heroGift'>
+                <div className='top-rated-p w-full'>
+                    <ul className='top-rated hero-gift'>
                         <li
                             className='relative'
                             data-aos="fade-left"
                             data-aos-easing="linear"
                             data-aos-duration="1500"
                             >
-                            <Image className='heroSell-Img w-full' src="/images/bestsell1.jpg" width={300} height={300} />
+                            <Image className='hero-sell-img w-full' src="/images/bestsell1.jpg" width={300} height={300} />
                         </li>
                         <li
                             data-aos="fade-down"
                             data-aos-duration="3000"
                         >
-                            <Image className='heroSell-Img w-full' src="/images/bestsell2.jpg" width={300} height={300} />
+                            <Image className='hero-sell-img w-full' src="/images/bestsell2.jpg" width={300} height={300} />
                         </li>
                         <li
                             data-aos="fade-right"
                             data-aos-easing="linear"
                             data-aos-duration="1500"
                         >
-                            <Image className='heroSell-Img w-full' src="/images/bestsell3.jpg" width={300} height={300} />
+                            <Image className='hero-sell-img w-full' src="/images/bestsell3.jpg" width={300} height={300} />
                         </li>
                     </ul>
                 </div>
@@ -184,24 +184,24 @@ export default function Hero() {
                         </ul>
                 }
             </div>
-            <div className='heroGift-p'>
-                <ul className='heroGift'>
+            <div className='hero-gift-p'>
+                <ul className='hero-gift'>
                     <li className='bg-[]'
                         data-aos="zoom-in-left"
                         data-aos-duration="1500"
-                    ><Image className='w-full heroGift-Img' src="/images/gift3.jpg" alt='gift images' width={400} height={400} /></li>
+                    ><Image className='w-full hero-gift-img' src="/images/gift3.jpg" alt='gift images' width={700} height={700} /></li>
                     <li className='bg-[]'
                         data-aos="zoom-out-up"
                         data-aos-offset="100"
                         data-aos-duration="1500"
                         data-aos-easing="ease-in-sine"
-                    ><Image className='w-full heroGift-Img' src="/images/gift1.jpg" alt='gift images' width={400} height={400} /></li>
+                    ><Image className='w-full hero-gift-img' src="/images/gift1.jpg" alt='gift images' width={700} height={700} /></li>
                     <li className='bg-[]'
                         data-aos="zoom-in-right"
                         data-aos-easing="linear"
                         data-aos-offset="100"
                         data-aos-duration="1500"
-                    ><Image className='w-full heroGift-Img' src="/images/gift2.jpg" alt='gift images' width={400} height={400} /></li>
+                    ><Image className='w-full hero-gift-img' src="/images/gift2.jpg" alt='gift images' width={700} height={700} /></li>
                 </ul>
             </div>
 
