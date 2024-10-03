@@ -157,37 +157,38 @@ export default function Navbar() {
                         </section>
                     </div>
                 </section>
+                <section className='flex justify-center items-center'>
+                    <ul style={{ position: 'fixed', top: '0', width: '99.9%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}
+                        className="nav-item-p"
+                        data-aos-offset="500"
+                        data-aos-duration="100"
+                        data-aos="fade-down"
+                    >
+                        {
+                            nav.map((item, index) => {
+                                return (
+                                    <li className='nav-child' key={index}>
+                                        <Link href={item.path}>{item.title}</Link>
+                                    </li>
+                                )
+                            })
+                        }
 
-                <ul style={{ position: 'fixed', top: '0', width: '100%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}
-                    className="nav-item-p"
-                    data-aos-offset="500"
-                    data-aos-duration="100"
-                    data-aos="fade-down"
-                >
-                    {
-                        nav.map((item, index) => {
-                            return (
-                                <li className='nav-child' key={index}>
-                                    <Link href={item.path}>{item.title}</Link>
-                                </li>
-                            )
-                        })
-                    }
-
-                    <li className='dashHoveI'>Dashboard
-                        <div className='dashHover box-border'>
-                            <select className='selectItem create-input w-full outline-none text-black  py-2 px-3' value={option} required onChange={(e) => setOption(e.target.value)}>
-                                <option value="">Select option</option>
-                                <option value="balton">Balton</option>
-                                <option value="buffalo">Buffalo</option>
-                                <option value="pappy">Pappy</option>
-                                <option value="penelope">Penelope</option>
-                                <option value="weller">Weller</option>
-                                <option value="yamazaki">Yamazaki</option>
-                            </select>
-                        </div>
-                    </li>
-                </ul>
+                        <li className='dashHoveI'>Dashboard
+                            <div className='dashHover box-border'>
+                                <select className='selectItem create-input w-full outline-none text-black  py-2 px-3' value={option} required onChange={(e) => setOption(e.target.value)}>
+                                    <option value="">Select option</option>
+                                    <option value="balton">Balton</option>
+                                    <option value="buffalo">Buffalo</option>
+                                    <option value="pappy">Pappy</option>
+                                    <option value="penelope">Penelope</option>
+                                    <option value="weller">Weller</option>
+                                    <option value="yamazaki">Yamazaki</option>
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
             </nav>
         </div>
     )
