@@ -48,7 +48,7 @@ export default function Page() {
                         return (
                             <li key={index} className='detail-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[10px]'>
                                 <Image className='detail-arr-img' src={item.img} alt={item.title} width={700} height={700} onClick={()=>{handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`)}} />
-                                <h1 className='text-[14px] font-[600]'>{item.title}</h1>
+                                <h1 className='detail-arr-t text-[14px] font-[600]'>{item.title}</h1>
                                 {/* <p  className='text-[13px] text-center h-[40px]'>{item.content.slice(0,40)}</p> */}
                                 <h1>
                                     <FaStar color='gold' className='inline' />

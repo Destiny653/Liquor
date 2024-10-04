@@ -44,6 +44,7 @@
     background-position: center;
     background-size: cover;
     border-radius: 1%;
+    font-size: 14px;
 }
 .detail-arr-title{
     text-transform: lowercase;
@@ -120,6 +121,7 @@
     .detail-img-con{
         width:75%;
         height:230px;
+        font-size: 12px;
     }
     .detail-arr-img {
         width: 60%;
@@ -137,5 +139,8 @@
     }
     .detail-arr-title{
         font-size: 28px;
+    }
+    .detail-arr-t{
+        font-size: 12px;
     }
  }
