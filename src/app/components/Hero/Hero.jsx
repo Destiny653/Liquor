@@ -101,7 +101,7 @@ export default function Hero() {
                 </li>
             </ul>
             <section className='hero-list2-p box-border'>
-                <h1 className='text-center hero-title'>SHOP BY SPIRIT</h1>
+                <h1 className='text-center hero-t'>SHOP BY SPIRIT</h1>
                 <div>
                     {
                         loader ? <SkeletonR /> :

@@ -74,7 +74,7 @@ export default function Home() {
 
 
   return (
-    <div className="box-border px-[5px] w-full">
+    <div className="box-border px-[1px] w-full">
       <div className="hero-dis-p mb-[60px] relative">
         <Image className={`w-full h-full img-transform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
         <div className={`details ${fade? 'trans-in' : 'trans-out'}`} >

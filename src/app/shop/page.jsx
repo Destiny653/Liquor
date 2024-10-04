@@ -98,7 +98,7 @@ export default function Page() {
             <li key={index} className='shop-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
             <Image className='shop-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
             <h1 className='text-[14.5px] font-[600] shop-arr-title'>{item.title}</h1>
-            <p className='text-[13px] text-center h-[52px]'>{item.content.slice(0,80)}</p>
+            {/* <p className='shop-arr-content text-[13px] text-center h-[52px]'>{item.content.slice(0,201)}</p> */}
             <h1>
                 <FaStar color='gold' className='inline' />
                 <FaStar color='gold' className='inline' />
@@ -136,8 +136,8 @@ export default function Page() {
     const filterdPrice = data?.filter((product) => product.price >= minPrice && product.price <= maxPrice)
     console.log(filterdPrice); 
     return (
-        <div className='shopParent relative'>
-            <div className='shopChild1 sticky left-0 top-[10vh]'>
+        <div className='shop-parent relative'>
+            <div className='shop-child1 sticky left-0 top-[10vh]'>
                 <section className='brand'>
                     <h1 className=' font-[500] text-2xl text-[red]'>Brand</h1>
                     <label htmlFor="radio">
@@ -169,7 +169,7 @@ export default function Page() {
                         <span>Yamazaki</span>
                     </label>
                 </section>
-                <section className='shopFilter'>
+                <section className='shop-filter'>
                     <h1 className=' font-[500] text-2xl text-[red]'>Filter</h1>
                     <label htmlFor="check">
                         <input type="checkbox" onChange={() => { setMinPrice(100); SetMaxPrice(150) }} />
@@ -246,12 +246,12 @@ export default function Page() {
                     </label>
                 </section>
             </div>
-            <section className='shopChild2'>
-                <div className='shopBanner '>
+            <section className='shop-child2'>
+                <div className='shop-banner '>
                     <Image className='w-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
-                    <h1 className=' text-[red] text-[30px] w-fit shopBrand z-10'>{options}</h1>
+                    <h1 className='shop-brand text-[red] text-[30px] w-fit z-10'>{options}</h1>
                 </div>
-                <h1 className='text-[25px] py-[20px]'>BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE</h1>
+                <h1 className='shop-child2-head text-[25px] py-[20px]'>BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE</h1>
                 <div>
                     <section className='border text-[18px] font-[300] p-2'>
                         showing page: {currentPage} / {getTotalPages()} of: {data?.length} products

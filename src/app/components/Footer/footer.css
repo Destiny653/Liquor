@@ -2,9 +2,7 @@
     margin: 10px  0  0px 0px;
     background-color: #58585821;
     color: #535353;
-    box-shadow: 1px -1px 1px black;
-    box-sizing: border-box;
-    padding: 10px;
+    box-shadow: 1px -1px 1px black; 
     width: 100%;
 }
 .footIconCon{
@@ -47,7 +45,7 @@
 .footBase{
     display: flex;
     box-sizing: border-box;
-    padding: 40px 5%;
+    padding: 40px 6px;
     background-color: rgb(116, 10, 10);
     margin-bottom: 0;
     gap: 2%;

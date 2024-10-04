@@ -135,11 +135,11 @@ export default function Navbar() {
                         <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
                         <Display />
                     </label>
-                    <section className="n-search-3 flex justify-center items-center gap-2">
-                        <h2>{session?.user.name}</h2>
+                    <section className="nav-search-3 flex justify-center items-center gap-2">
                         <div className="nav-user-img">
                             <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
                         </div>
+                        <h2>{session?.user.name}</h2>
                     </section>
                 </section>
                 <section id='second-nav' className=" nav-search-p mt-[49px]">
@@ -150,10 +150,10 @@ export default function Navbar() {
                     <div className='second-nav-ch2 flex justify-between w-full'>
                         <div className="n-search-1 font-bold text-2xl nav-logo ">LOGO</div>
                         <section className="n-search-3 flex justify-center items-center gap-2">
+                            <h2>{session?.user.name}</h2>
                             <div className="nav-user-img">
                                 <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
                             </div>
-                            <h2>{session?.user.name}</h2>
                         </section>
                     </div>
                 </section>

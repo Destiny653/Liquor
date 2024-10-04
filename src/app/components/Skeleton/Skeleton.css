@@ -2,7 +2,19 @@
     display: grid;
     grid-template-columns: repeat(5,1fr);
     place-items: center;
-    row-gap: 8%; 
+    column-gap: 10%;
+    padding: 0 1%;
+    width: 99%;
+}
+.skeleton-r {
+    width: 160px;
+    height: 160px;
+    border-radius: 100%; 
+    position: relative;
+    overflow: hidden;
+    margin-top: 10px;
+    background-color: #d8d8d8e3; 
+    animation: shimmer 1.5s infinite linear;
 }
 
 .skeleton-arr-p{
@@ -34,15 +46,6 @@
     position: relative;
     overflow: hidden; 
     animation: shimmer 1s infinite linear;
-}
- .skeleton-r {
-    width: 160px;
-    height: 160px;
-    border-radius: 100%; 
-    position: relative;
-    overflow: hidden;
-    background-color: #d8d8d8e3; 
-    animation: shimmer 1.5s infinite linear;
 }
 .skeleton-prg {
     width: 150px;
