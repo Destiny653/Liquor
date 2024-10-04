@@ -248,12 +248,12 @@ export default function Page() {
             </div>
             <section className='shop-child2'>
                 <div className='shop-banner '>
-                    <Image className='w-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
+                    <Image className='h-full w-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
                     <h1 className='shop-brand text-[red] text-[30px] w-fit z-10'>{options}</h1>
                 </div>
                 <h1 className='shop-child2-head text-[25px] py-[20px]'>BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE</h1>
                 <div>
-                    <section className='border text-[18px] font-[300] p-2'>
+                    <section className='shop-info border text-[18px] font-[300] p-2'>
                         showing page: {currentPage} / {getTotalPages()} of: {data?.length} products
                     </section>
                     <section>
@@ -263,9 +263,9 @@ export default function Page() {
                     {loader ? <SkeletonArr2/> : displayItems()}
                 </div>
                 <div className='pagination flex items-center justify-center gap-9'>
-                    <button className='border px-8 py-1' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
+                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212]  ' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
                     <span>{currentPage} of {getTotalPages()}</span>
-                    <button className='border px-8 py-1' onClick={nextPage} disabled={currentPage === getTotalPages()}>Next</button>
+                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212]  ' onClick={nextPage} disabled={currentPage === getTotalPages()}>Next</button>
                 </div>
             </section>
         </div>

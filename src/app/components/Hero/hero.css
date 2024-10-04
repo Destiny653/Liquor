@@ -365,5 +365,16 @@
         font-weight: 600;
         padding:  25px;
     }
+    .hero-btn-arr {
+        padding: 8px 17px;
+        border-radius: 30px;
+        transition: all 0.3s ease-in-out;
+        font-size: 12px;
+        text-transform: lowercase;
+    }
+    .hero-btn-arr::first-letter{
+        text-transform: uppercase;
+    }
+   
  
 }

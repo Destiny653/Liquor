@@ -23,11 +23,11 @@ export default function Page() {
             <div className='w-full flex items-center justify-center box-border'>
                 <div className='detail-p  w-full box-border pl-[40px] bg-[#a8a8a80c] border rounded-[10px]'>
                     <section className='detail detail-img-con  box-border rounded-2xl overflow-hidden'>
-                        <Image className=' ' src={detailPro.img} alt={detailPro.title} width={400} height={400} />
+                        <Image className='h-full w-full ' src={detailPro.img} alt={detailPro.title} width={400} height={400} />
                     </section>
                     <section className='detail2 relative ml-4 flex flex-col justify-center items-center gap-2 box-border p-[30px] '>
-                        <h1 className='text-3xl font-bold nunitoextralight_italic '>{detailPro.title}</h1>
-                        <p className='nunitoextralight_italic text-[30px] text-center'>{detailPro.content}</p>
+                        <h1 className='detail2-title text-3xl font-bold nunitoextralight_italic '>{detailPro.title}</h1>
+                        <p className='detail2-des nunitoextralight_italic text-[30px] text-center'>{detailPro.content}</p>
                         <h1>
                             <FaStar color='gold' className='inline' />
                             <FaStar color='gold' className='inline' />
@@ -41,15 +41,15 @@ export default function Page() {
                     </section>
                 </div>
             </div>
-            <h1 className=' text-center text-[30px] font-[600]'>YOU MAY ALSO LIKE</h1>
+            <h1 className='detail-arr-title text-center text-[30px] font-[600]'>YOU MAY ALSO LIKE</h1>
             <ul className='detail-arr'>
                 {
                     detailArr.map((item, index) => {
                         return (
                             <li key={index} className='detail-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[10px]'>
-                                <Image className='detail-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={()=>{handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`)}} />
-                                <h1 className='text-[14.5px] font-[600] detail-arr-title'>{item.title}</h1>
-                                <p  className='text-[13px] text-center h-[40px]'>{item.content.slice(0,40)}</p>
+                                <Image className='detail-arr-img' src={item.img} alt={item.title} width={700} height={700} onClick={()=>{handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`)}} />
+                                <h1 className='text-[14px] font-[600]'>{item.title}</h1>
+                                {/* <p  className='text-[13px] text-center h-[40px]'>{item.content.slice(0,40)}</p> */}
                                 <h1>
                                     <FaStar color='gold' className='inline' />
                                     <FaStar color='gold' className='inline' />
@@ -61,7 +61,7 @@ export default function Page() {
                             </li>
                         )
                     })
-                }
+                } 
             </ul>
         </div>
     )
