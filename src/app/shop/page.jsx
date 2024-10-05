@@ -92,7 +92,7 @@ export default function Page() {
     const displayItems = () => {
         const totalPages = getTotalPages();
         if (currentPage < 1 || currentPage > totalPages) {
-            return "Invalid page number"
+            return <SkeletonArr2/>
         }
         return getItemsForPage(currentPage)?.map((item, index) => (
             <li key={index} className='shop-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
