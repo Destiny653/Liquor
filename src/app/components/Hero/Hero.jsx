@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import React, { useContext, useEffect, useState } from 'react'
-import "./hero.css"; 
+import "./hero.css";
 import { FaStar } from 'react-icons/fa';
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -9,7 +9,8 @@ import { SearchContext } from '../../../../context/SearchContext';
 import { useRouter } from 'next/navigation';
 import { CartContext } from '../../../../context/CartContext';
 import SkeletonR, { SkeletonArr } from '../Skeleton/Skeleton';
-import { Notyf } from 'notyf';
+import { Notyf } from 'notyf'; 
+import Qty from '../Quantity/quantity';
 
 
 
@@ -26,7 +27,7 @@ export default function Hero() {
     useEffect(() => {
 
         AOS.init({
-            duration: 500, 
+            duration: 500,
 
         });
 
@@ -46,7 +47,7 @@ export default function Hero() {
 
                 if (!res.ok) {
                     console.log('failed to fetch data');
-                    notyf.error('Something went wrong please refresh your browser');
+                    notyf.error('Network error, please refresh your browser.');
                     setLoader(false)
                 }
 
@@ -61,7 +62,11 @@ export default function Hero() {
         getData()
     }, [])
 
+    // return localCartItems.reduce((acc, item) => item.brand === brand? acc + item.quantity : acc, 0);
+ 
+
     console.log(data);
+
     handleArr(data)
     const brand = 'posts'
 
@@ -117,7 +122,7 @@ export default function Hero() {
                                                 data-aos-duration="1500" key={index}>
                                                 <Image className='hero-list-img2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
                                             </li>
-                                            <h3 className='hero-list2-title text-center py-3'>{item.title.slice(0,10)}</h3>
+                                            <h3 className='hero-list2-title text-center py-3'>{item.title.slice(0, 10)}</h3>
                                         </div>
                                     ))
                                 }
@@ -140,7 +145,7 @@ export default function Hero() {
                             data-aos="fade-left"
                             data-aos-easing="linear"
                             data-aos-duration="1500"
-                            >
+                        >
                             <Image className='hero-sell-img w-full' src="/images/bestsell1.jpg" width={300} height={300} />
                         </li>
                         <li
@@ -164,20 +169,24 @@ export default function Hero() {
                         <ul className='hero-arr'>
                             {
                                 data?.slice(4, 16).map((item, index) => (
-                                    <li key={index} className='hero-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
-                                        <Image className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
-                                        <h1 className='text-[14.5px] font-[600] hero-arr-title'>{item.title}</h1>
-                                        <p className='text-[13px] text-center h-[52px]'>{item.content}</p>
-                                        <h1>
-                                            <FaStar color='gold' className='inline' />
-                                            <FaStar color='gold' className='inline' />
-                                            <FaStar color='gold' className='inline' />
-                                            <FaStar color='gold' className='inline' />
-                                        </h1>
-                                        <p>From </p>
-                                        <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
-                                        <button className='hero-btn-arr px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
-                                    </li>
+                                    <>
+                                        <li key={index} className='hero-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
+                                            <Image className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                                            <h1 className='text-[14.5px] font-[600] hero-arr-title'>{item.title}</h1>
+                                            <p className='text-[13px] text-center h-[52px]'>{item.content}</p>
+                                            <h1>
+                                                <FaStar color='gold' className='inline' />
+                                                <FaStar color='gold' className='inline' />
+                                                <FaStar color='gold' className='inline' />
+                                                <FaStar color='gold' className='inline' />
+                                            </h1>
+                                            <p>From </p>
+                                            <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
+                                            <button className='hero-btn-arr qty-p-i px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>
+                                            <Qty productId={item._id}/>
+                                            ADD TO CART</button>
+                                        </li>
+                                    </>
                                 ))
 
                             }

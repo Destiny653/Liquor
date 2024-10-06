@@ -177,6 +177,26 @@
     }
 }
 
+.qty-p-i { 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cart-item-display{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    background-color: #555050;
+    position: absolute;
+    left: 8%;
+    top: 14%;
+}
+
 /* 
 ===================================
 @media all and (max-width:391px){}

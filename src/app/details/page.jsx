@@ -6,6 +6,7 @@ import './details.css';
 import Image from 'next/image';
 import { CartContext } from '../../../context/CartContext';
 import { useRouter } from 'next/navigation';
+import Qty from '../components/Quantity/quantity';
 
 
 export default function Page() {
@@ -47,7 +48,7 @@ export default function Page() {
                     detailArr.map((item, index) => {
                         return (
                             <li key={index} className='detail-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[10px]'>
-                                <Image className='detail-arr-img' src={item.img} alt={item.title} width={700} height={700} onClick={()=>{handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`)}} />
+                                <Image className='detail-arr-img' src={item.img} alt={item.title} width={700} height={700} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
                                 <h1 className='detail-arr-t text-[14px] font-[600]'>{item.title}</h1>
                                 {/* <p  className='text-[13px] text-center h-[40px]'>{item.content.slice(0,40)}</p> */}
                                 <h1>
@@ -57,11 +58,13 @@ export default function Page() {
                                     <FaStar color='gold' className='inline' />
                                 </h1>
                                 <h1 className='text-[15px] font-[600] text-[#f1ce07]'>${item.price}</h1>
-                                <button className='detail-btn-arr px-9 py-2 hover:bg-[#9b1d1d] border hover:text-white text-[11px] font-[500]rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
+                                <button className='detail-btn-arr qty-p-i px-9 py-2 hover:bg-[#9b1d1d] border hover:text-white text-[11px] font-[500]rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>
+                                <Qty productId={item._id} />
+                                ADD TO CART</button>
                             </li>
                         )
                     })
-                } 
+                }
             </ul>
         </div>
     )

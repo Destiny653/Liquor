@@ -9,6 +9,7 @@ import { CartContext } from '../../../context/CartContext';
 import { FaStar } from 'react-icons/fa';
 import { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton';
 import { SiTrueup } from 'react-icons/si';
+import Qty from '../components/Quantity/quantity';
 
 export default function Page() {
 
@@ -20,7 +21,7 @@ export default function Page() {
     const [data, setData] = useState();
     const [options, setOptions] = useState('All Brands');
     const [brand, setBrand] = useState([]);
-    const [loader, setLoader] =useState(true)
+    const [loader, setLoader] = useState(true)
     let choice = ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'];
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -92,22 +93,24 @@ export default function Page() {
     const displayItems = () => {
         const totalPages = getTotalPages();
         if (currentPage < 1 || currentPage > totalPages) {
-            return <SkeletonArr2/>
+            return <SkeletonArr2 />
         }
         return getItemsForPage(currentPage)?.map((item, index) => (
-            <li key={index} className='shop-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
-            <Image className='shop-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
-            <h1 className='text-[14.5px] font-[600] shop-arr-title'>{item.title}</h1>
-            {/* <p className='shop-arr-content text-[13px] text-center h-[52px]'>{item.content.slice(0,201)}</p> */}
-            <h1>
-                <FaStar color='gold' className='inline' />
-                <FaStar color='gold' className='inline' />
-                <FaStar color='gold' className='inline' />
-                <FaStar color='gold' className='inline' />
-            </h1> 
-            <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
-            <button className='shop-btn-arr px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>ADD TO CART</button>
-        </li>
+            <li key={index} className='shop-arr-i  bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
+                <Image className='shop-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                <h1 className='text-[14.5px] font-[600] shop-arr-title'>{item.title}</h1>
+                {/* <p className='shop-arr-content text-[13px] text-center h-[52px]'>{item.content.slice(0,201)}</p> */}
+                <h1>
+                    <FaStar color='gold' className='inline' />
+                    <FaStar color='gold' className='inline' />
+                    <FaStar color='gold' className='inline' />
+                    <FaStar color='gold' className='inline' />
+                </h1>
+                <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
+                <button className='shop-btn-arr qty-p-i px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>
+                <Qty productId={item._id} />
+                ADD TO CART</button>
+            </li>
         ));
     };
 
@@ -134,7 +137,7 @@ export default function Page() {
 
 
     const filterdPrice = data?.filter((product) => product.price >= minPrice && product.price <= maxPrice)
-    console.log(filterdPrice); 
+    console.log(filterdPrice);
     return (
         <div className='shop-parent relative'>
             <div className='shop-child1 sticky left-0 top-[10vh]'>
@@ -260,7 +263,7 @@ export default function Page() {
                     </section>
                 </div>
                 <div className='shop-arr w-full'>
-                    {loader ? <SkeletonArr2/> : displayItems()}
+                    {loader ? <SkeletonArr2 /> : displayItems()}
                 </div>
                 <div className='pagination flex items-center justify-center gap-9'>
                     <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212]  ' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
