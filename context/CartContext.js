@@ -36,7 +36,7 @@ export const CartProvider = ({ children }) => {
 
     const emptyCart = () => {
         localStorage.removeItem('cartItems');
-    }
+    } 
 
     useEffect(() => {
         setCartItems(JSON.parse(localStorage.getItem('cartItems')))

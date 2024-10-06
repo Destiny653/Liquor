@@ -22,22 +22,31 @@ export default function Page() {
 
     // }
 
+    const getCrt = JSON.parse(localStorage.getItem('cartItems'))
+    console.log(getCrt);
+    
+
 
     useEffect(() => {
         async function getData() {
+            const brand = [
+                '/api/posts',
+                '/api/baltons',
+                '/api/wellers',
+                '/api/buffalos',
+                '/api/pappies',
+                '/api/penelopes',
+                '/api/yamazakis',
+            ]
 
-            const res = await fetch('api/posts');
-            if (!res.ok) {
-                throw new Error('failed to fetch data')
-            }
-            setNewCart(await res.json());
+            const fetchPromises = brand.map(api => fetch(api).then(res => res.json())); 
+            const ans = await Promise.all(fetchPromises)
+            setNewCart(ans.flat());
         }
-
         getData();
 
     }, [])
-
-
+    console.log(newCart)
 
 
     // is client to ensure smooth running
@@ -68,7 +77,10 @@ export default function Page() {
                         {!cartItems == [] ?
                             cartItems?.map((item, index) => {
 
+                                // This comparison is done to exstract the other items that are not being pushed in cart such as img 
                                 let position = newCart.findIndex((value) => value._id === item.product_id);
+                                console.log(position);
+                                
                                 let itemInCart = newCart[position]
                                 console.log(itemInCart);
                                 

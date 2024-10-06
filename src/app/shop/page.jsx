@@ -266,9 +266,9 @@ export default function Page() {
                     {loader ? <SkeletonArr2 /> : displayItems()}
                 </div>
                 <div className='pagination flex items-center justify-center gap-9'>
-                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212]  ' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
+                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212] hover:text-[#fff]' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
                     <span>{currentPage} of {getTotalPages()}</span>
-                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212]  ' onClick={nextPage} disabled={currentPage === getTotalPages()}>Next</button>
+                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212] hover:text-[#fff]' onClick={nextPage} disabled={currentPage === getTotalPages()}>Next</button>
                 </div>
             </section>
         </div>

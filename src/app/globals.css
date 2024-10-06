@@ -183,7 +183,7 @@
     align-items: center;
     justify-content: center;
 }
-.cart-item-display{
+ .cart-item-display{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -191,10 +191,10 @@
     height: 20px;
     border-radius: 50%;
     color: white;
-    background-color: #555050;
+    background-color: #3a78c9;
     position: absolute;
-    left: 8%;
-    top: 14%;
+    right: -4%;
+    top: -4%;
 }
 
 /* 
