@@ -20,12 +20,7 @@ export default function Page() {
     //     const cart = cartItems[i]?.price;
     //     console.log(cart);
 
-    // }
-
-    const getCrt = JSON.parse(localStorage.getItem('cartItems'))
-    console.log(getCrt);
-    
-
+    // } 
 
     useEffect(() => {
         async function getData() {

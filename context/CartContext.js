@@ -29,7 +29,9 @@ export const CartProvider = ({ children }) => {
             }
         }
         setCartItems(cart)
-        localStorage.setItem('cartItems', JSON.stringify(cart));
+        if(typeof window !== 'undefined'){
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+        }
         //add item to cart or update quantity
 
     }
@@ -39,8 +41,10 @@ export const CartProvider = ({ children }) => {
     } 
 
     useEffect(() => {
-        setCartItems(JSON.parse(localStorage.getItem('cartItems')))
-        forceUpdate(cartItems)
+        if(typeof window !== 'undefined'){
+            setCartItems(JSON.parse(localStorage.getItem('cartItems')))
+            forceUpdate(cartItems)
+        }
     }, [])
 
 
