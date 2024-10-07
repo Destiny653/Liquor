@@ -44,11 +44,7 @@ export default function Navbar() {
         {
             title: 'Checkout',
             path: '/checkout'
-        },
-        {
-            title: 'Account',
-            path: '/account'
-        },
+        }, 
         {
             title: 'Login',
             path: '/login'
