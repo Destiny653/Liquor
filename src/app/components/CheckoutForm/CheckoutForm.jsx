@@ -21,7 +21,7 @@ const CheckoutForm = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                amount: 1000, // Example amount, replace with your own
+                amount: 1000,  
             }),
         }).then((res) => res.json());
 
@@ -30,10 +30,7 @@ const CheckoutForm = () => {
         }
         const result = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
-                card: elements.getElement('cardNumber'),
-                // exp_month: elements.getElement('expiryMonth').value,
-                // exp_year: elements.getElement('expiryYear').value,
-                // cvc: elements.getElement('cvc').value,
+                card: elements.getElement('cardNumber'), 
             },
         });
         if (result.error) {
@@ -47,20 +44,7 @@ const CheckoutForm = () => {
 
 return (
     <form onSubmit={handleSubmit}>
-        <CardElement />
-        {/* <label>
-                Card number
-                <input type="text" name="cardNumber" required />
-            </label>
-            <label>
-                Expiration date
-                <input type="text" name="expiryMonth" placeholder="MM" required />
-                <input type="text" name="expiryYear" placeholder="YYYY" required />
-            </label>
-            <label>
-                CVC
-                <input type="text" name="cvc" required />
-            </label> */}
+        <CardElement /> 
         <button type="submit" disabled={!stripe || loading}>
             {loading ? 'Loading...' : 'Pay'}
         </button>
@@ -68,10 +52,11 @@ return (
 );
 };
 
+
 const StripeCheckout = () => (
     <Elements stripe={stripePromise}>
         <CheckoutForm />
     </Elements>
 );
 
-export default StripeCheckout;
+// export default StripeCheckout;
