@@ -3,8 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './check.css';
 import { CartContext } from '../../../context/CartContext';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import StripeCheckout from '../components/CheckoutForm/CheckoutForm';
+import { useRouter } from 'next/navigation'; 
 import { Notyf } from 'notyf';
 
 
@@ -214,8 +213,7 @@ export default function Checkout({ amount }) {
                             <input type="radio" name='radio' />
                             <span>Credit card</span>
                         </label>
-                    </div>
-                    <StripeCheckout />
+                    </div> 
                 </section>
             </div>
         </>
