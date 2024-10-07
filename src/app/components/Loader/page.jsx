@@ -1,5 +1,5 @@
-import React from 'react'
-import SkeletonR, { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton'
+import React from 'react' 
+import SkeletonR, { SkeletonArr, SkeletonArr2 } from '../Skeleton/Skeleton'
 
 export default function page() {
   return (

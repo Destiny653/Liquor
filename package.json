@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.3.3",
-    "@stripe/react-stripe-js": "^2.8.0",
-    "@stripe/stripe-js": "^4.4.0",
     "aos": "^2.3.4",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
