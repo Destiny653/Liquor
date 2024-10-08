@@ -22,7 +22,7 @@ export default function MsgBtn() {
   return (
     <div>
       { effect && <Contact/>}
-      <div onClick={() => effect === false ? setEffect(true) : setEffect(false)} className={`btnActive fixed right-[20px] bottom-[25px] cursor-pointer text-white chatBtn`}> <AiFillMessage className="inline msgBtn" size={25} /> Chat with us</div>
+      <div onClick={() => effect === false ? setEffect(true) : setEffect(false)} className={`btnActive fixed right-[20px] bottom-[25px] cursor-pointer text-white chatBtn`}> <AiFillMessage className="inline msgBtn" size={25} /> Contact us</div>
     </div>
   )
 }

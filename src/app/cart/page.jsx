@@ -11,8 +11,7 @@ export default function Page() {
     const { cartItems, handleAddToCart, emptyCart } = useContext(CartContext)
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     const [newCart, setNewCart] = useState([])
-    let totalPrice = 0;
-    let totalPriceFix;
+    let totalPrice = 0; 
 
     // const [ignored, forceUpdate] = useReducer(x => x + 1, 0 )
 
@@ -39,7 +38,7 @@ export default function Page() {
             setNewCart(ans.flat());
         }
         getData();
-
+        return;
     }, [])
     console.log(newCart)
 
@@ -49,8 +48,8 @@ export default function Page() {
     const [isClient, setIsClient] = useState(false)
 
     useEffect(() => {
-        setIsClient(true)
-        // forceUpdate()
+        setIsClient(true) 
+        return;
     })
 
 
