@@ -1,7 +1,8 @@
 'use client'
 import React, { createContext, useEffect, useReducer, useState } from 'react'
 
-export const SearchContext = createContext();
+export const SearchContext = createContext(); 
+
 export default function SearchProvider({children}) {
     const [searchVal, setSearchVal] = useState('');
     const [searchInp, setSearchInp] = useState('');
@@ -9,6 +10,34 @@ export default function SearchProvider({children}) {
     const [detailArr, setDetailArr] = useState([]);
     const [signIn, setSignIn] = useState('');
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0 )
+
+
+    const [api, setApi] = useState(null);
+    const apis = [
+        '/api/posts',
+        '/api/pappies',
+        '/api/penelopes',
+        '/api/wellers',
+        '/api/yamazakis',
+        '/api/baltons',
+        '/api/buffalos'
+    ]
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await Promise.all(apis.map(async api => {
+                    const response = await fetch(api);
+                    return response.json();
+                }))
+                setApi(data.flat());
+                console.log('Fetched data:', api);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchData();
+    }, [api])
 
 
 
@@ -48,7 +77,7 @@ export default function SearchProvider({children}) {
     },[searchInp])
 
   return (
-      <SearchContext.Provider value={{searchVal, detailPro, searchInp, signIn, detailArr, handleSearch, handleArr, setSignIn, handlePro, setSearchVal, setSearchInp}}>
+      <SearchContext.Provider value={{searchVal, detailPro, searchInp, signIn, detailArr,api, handleSearch, handleArr, setSignIn, handlePro, setSearchVal, setSearchInp}}>
         {children}
       </SearchContext.Provider>
   )

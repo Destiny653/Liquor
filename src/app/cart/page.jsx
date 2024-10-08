@@ -4,14 +4,15 @@ import './cart.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaRegTrashAlt } from "react-icons/fa";
-import { CartContext } from '../../../context/CartContext';
+import { CartContext } from '../../../context/CartContext'; 
 
 export default function Page() {
 
-    const { cartItems, handleAddToCart, emptyCart } = useContext(CartContext)
+    const { cartItems, handleAddToCart, emptyCart } = useContext(CartContext) 
+
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     const [newCart, setNewCart] = useState([])
-    let totalPrice = 0; 
+    let totalPrice = 0;
 
     // const [ignored, forceUpdate] = useReducer(x => x + 1, 0 )
 
@@ -19,36 +20,14 @@ export default function Page() {
     //     const cart = cartItems[i]?.price;
     //     console.log(cart);
 
-    // } 
-
-    useEffect(() => {
-        async function getData() {
-            const brand = [
-                '/api/posts',
-                '/api/baltons',
-                '/api/wellers',
-                '/api/buffalos',
-                '/api/pappies',
-                '/api/penelopes',
-                '/api/yamazakis',
-            ]
-
-            const fetchPromises = brand.map(api => fetch(api).then(res => res.json())); 
-            const ans = await Promise.all(fetchPromises)
-            setNewCart(ans.flat());
-        }
-        getData();
-        return;
-    }, [])
-    console.log(newCart)
-
+// }
 
     // is client to ensure smooth running
 
     const [isClient, setIsClient] = useState(false)
 
     useEffect(() => {
-        setIsClient(true) 
+        setIsClient(true)
         return;
     })
 
@@ -69,44 +48,37 @@ export default function Page() {
                     </thead>
                     <tbody>
                         {!cartItems == [] ?
-                            cartItems?.map((item, index) => {
+                            cartItems?.map((item, index) => { 
+                                    let qtyInCart = item.quantity
+                                    // console.log(item.price);
+                                    let price = item?.price
+                                    // console.log(price);
 
-                                // This comparison is done to exstract the other items that are not being pushed in cart such as img 
-                                let position = newCart.findIndex((value) => value._id === item.product_id);
-                                console.log(position);
-                                
-                                let itemInCart = newCart[position]
-                                console.log(itemInCart);
-                                
-                                let qtyInCart = item.quantity
-                                console.log(item.price);
-                                let price = itemInCart?.price
-                                console.log(price);
-
-                                totalPrice += itemInCart?.price * qtyInCart
+                                    totalPrice += item?.price * qtyInCart
 
 
-                                return (
-                                    <tr key={index}>
-                                        <td>
-                                            <Image className=' size-24 rounded-full cart-img ' src={itemInCart?.img} alt='product' height={400} width={400} />
-                                        </td>
-                                        <td className='cart-title-name'>{itemInCart?.title.slice(0, 15)}</td>
-                                        <td>{formatter.format(price)}</td>
-                                        <td>
-                                            <div className='border text-black w-fit  hover:bg-[#610f0f] hover:text-white box-border px-2 py-1'>
-                                                <button className=' bg-inherit' onClick={() => { handleAddToCart(itemInCart, qtyInCart); }}>- </button>
-                                                <span className='  px-3 py-1 rounded-full'>{qtyInCart}</span>
-                                                <button className=' bg-inherit' onClick={() => { handleAddToCart(itemInCart); }} >+</button>
-                                            </div>
-                                        </td>
-                                        <td>{(formatter.format(price * qtyInCart))}</td>
-                                        <td>
-                                            <button onClick={() => handleAddToCart(itemInCart, qtyInCart, index)} ><FaRegTrashAlt className='text-red-600' size={30} /></button>
-                                        </td>
-                                    </tr>
-                                )
-                            }) :
+                                    return (
+                                        <tr key={index}>
+                                            <td>
+                                                <Image className=' size-24 rounded-full cart-img ' src={item?.img} alt='product' height={400} width={400} />
+                                            </td>
+                                            <td className='cart-title-name'>{item?.title.slice(0, 15)}</td>
+                                            <td>{formatter.format(price)}</td>
+                                            <td>
+                                                <div className='border text-black w-fit  hover:bg-[#610f0f] hover:text-white box-border px-2 py-1'>
+                                                    <button className=' bg-inherit' onClick={() => { handleAddToCart(item, qtyInCart); }}>- </button>
+                                                    <span className='  px-3 py-1 rounded-full'>{qtyInCart}</span>
+                                                    <button className=' bg-inherit' onClick={() => { handleAddToCart(item); }} >+</button>
+                                                </div>
+                                            </td>
+                                            <td>{(formatter.format(price * qtyInCart))}</td>
+                                            <td>
+                                                <button onClick={() => handleAddToCart(item, qtyInCart, index)} ><FaRegTrashAlt className='text-red-600' size={30} /></button>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                            ) :
 
                             <h1 className=' m-auto text-2xl'>Your Cart is empty</h1>
                         }

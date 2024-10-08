@@ -13,7 +13,7 @@ import Qty from '../components/Quantity/quantity';
 
 export default function Page() {
 
-    const { searchVal, searchInp, handlePro } = useContext(SearchContext);
+    const { searchVal, searchInp, handlePro, api } = useContext(SearchContext);
     const { handleAddToCart } = useContext(CartContext);
     const navigation = useRouter();
     console.log(searchInp);

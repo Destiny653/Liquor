@@ -148,7 +148,7 @@ export default function Navbar() {
                         <section className="n-search-3 flex justify-center items-center gap-2">
                             <h2>{session?.user.name}</h2>
                             <div className="nav-user-img">
-                                <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
+                                <Image  src={session?.user.image} alt="user-icon" width={100} height={100} className='w-full h-full rounded-full' />
                             </div>
                         </section>
                     </div>

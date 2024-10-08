@@ -87,8 +87,7 @@ export const POST = async (req, res) => {
                         id: product_id,
                         model: productModel
                     }
-                    break;
-                    throw new Error(`Product with ID ${product_id} not found in ${productModel} collection.`)
+                    break; 
                 }
             }
 
@@ -193,9 +192,8 @@ export const POST = async (req, res) => {
 
        return createOrder(user._id, cartItems);
     } catch (error) {
-        console.error(error);
-        console.error(error.message);
-        return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+        console.error(error); 
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }
 
@@ -213,6 +211,6 @@ export const GET = async (req, res) => {
         return NextResponse.json({ success: true, order }, { status: 200 });
     } catch (err) {
         console.error(err);
-        return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+        return NextResponse.json({ success: false, message: err.message }, { status: 500 });
     }
 }

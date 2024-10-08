@@ -15,8 +15,8 @@ import Qty from '../Quantity/quantity';
 
 
 export default function Hero() {
-    const [data, setData] = useState([])
-    const { handlePro, handleArr } = useContext(SearchContext)
+    const [data, setData] = useState(null)
+    const { handlePro} = useContext(SearchContext)
     const { handleAddToCart } = useContext(CartContext)
     const navigation = useRouter();
     const [loader, setLoader] = useState(false)
@@ -65,9 +65,7 @@ export default function Hero() {
     // return localCartItems.reduce((acc, item) => item.brand === brand? acc + item.quantity : acc, 0);
  
 
-    console.log(data);
-
-    handleArr(data)
+    console.log(data); 
     const brand = 'posts'
 
     return (
@@ -114,7 +112,7 @@ export default function Hero() {
                                 {
 
                                     data?.slice(1, 13).map((item, index) => (
-                                        <div>
+                                        <div key={item._id} >
                                             <li
                                                 data-aos="flip-left"
                                                 data-aos-offset="100"
@@ -146,20 +144,20 @@ export default function Hero() {
                             data-aos-easing="linear"
                             data-aos-duration="1500"
                         >
-                            <Image className='hero-sell-img w-full' src="/images/bestsell1.jpg" width={300} height={300} />
+                            <Image className='hero-sell-img w-full' src="/images/bestsell1.jpg" alt='intro img' width={300} height={300} />
                         </li>
                         <li
                             data-aos="fade-down"
                             data-aos-duration="3000"
                         >
-                            <Image className='hero-sell-img w-full' src="/images/bestsell2.jpg" width={300} height={300} />
+                            <Image className='hero-sell-img w-full' src="/images/bestsell2.jpg" alt='intro img' width={300} height={300} />
                         </li>
                         <li
                             data-aos="fade-right"
                             data-aos-easing="linear"
                             data-aos-duration="1500"
                         >
-                            <Image className='hero-sell-img w-full' src="/images/bestsell3.jpg" width={300} height={300} />
+                            <Image className='hero-sell-img w-full' src="/images/bestsell3.jpg" alt='intro img' width={300} height={300} />
                         </li>
                     </ul>
                 </div>
