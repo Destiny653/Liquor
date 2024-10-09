@@ -1,9 +1,10 @@
  import UpdateForm from '@/app/components/UpdateForm/UpdateForm'
 
- const getProductId = async (id)=> {
+ const getProductId = async (option, id)=> {
+  
  
    try{
-     const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
+     const res = await fetch(`https://liquorluxx.vercel.app/api/${option.toLowerCase()}s/${id}`, {
        cache: "no-store",
      })
  
@@ -14,18 +15,28 @@
      }
  
      return await res.json();
- 
+
    }catch(error){
      console.log(error);
    }
   
  }
 export default async function Page({params}) {
+  // // let fulUrl = null
+  // if(typeof window !== 'undefined'){
+  //  const fulUrl = `${window.location.protocol}//${window.location.hostname}`
+  //   console.log(fulUrl);
+  // } 
+  // console.log(fulUrl);
 
-
-    const {id} = params;
-    const product = await getProductId(id);
+    const {option, id} = params; 
+    console.log('option: '+ option.toLowerCase(), 'id: '+id);
+    
+    const product = await getProductId(option, id);
     console.log(product);
+    if(product){
+      'hello'
+    }
     const {title, content, price, img, rate} = product;
     
    return ( 

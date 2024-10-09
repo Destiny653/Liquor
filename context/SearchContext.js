@@ -31,12 +31,12 @@ export default function SearchProvider({children}) {
                     return response.json();
                 }))
                 setApi(data.flat());
-                console.log('Fetched data:', api);
+                // console.log('Fetched data:', api);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
-        fetchData();
+        // fetchData();
     }, [api])
 
 

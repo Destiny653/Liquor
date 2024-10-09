@@ -18,7 +18,7 @@ export async function GET(req, { params }) {
 
 //update a product
 export async function PUT(req, { params }) {
-    const { id } = params
+    const {id } = params
     const { title, content, price, img, rate } = await req.json();
 
     //cloudinary configuration

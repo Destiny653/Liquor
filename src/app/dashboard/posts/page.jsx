@@ -62,7 +62,7 @@ export default function Page() {
                             <h2 className='font-semibold '>{formatter.format(posts[mainindex]?.price)}</h2>
                             <p className=' post-pg'>{posts[mainindex]?.content}</p>
                             <div className='flex justify-center items-center gap-6'>
-                              <Link href={`/dashboard/posts/update/${posts[mainindex]?._id}`}>
+                              <Link href={`/dashboard/update/${posts[mainindex]?.productModel}/${posts[mainindex]?._id}`}>
                                 <button className=' post-btn bg-black  text-white '>Edit</button>
                               </Link>
                                 <button onClick={() => { deletePost(posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-[#850303] text-white'>Delete</button>
@@ -73,7 +73,7 @@ export default function Page() {
                         <div className='post-opt flex gap-4'>
                             <h1 className='text-xl text-[#850303]'>All Posts</h1>
                             <button className=' bg-black  text-white py-2 px-12'>
-                                <Link href='/dashboard/posts/create'>Add</Link>
+                                <Link href='/dashboard/create'>Add</Link>
                             </button>
                         </div>
 
