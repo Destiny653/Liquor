@@ -2,19 +2,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import './updateform.css'
-import { useRouter } from 'next/navigation';
-import Menu from '../menu/Menu';
+import { useRouter } from 'next/navigation'; 
 import '../../dashboard/create/create.css'
-import { TfiHome } from "react-icons/tfi";
-import { IoCreateOutline } from "react-icons/io5";
-import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
-import { CiUser } from "react-icons/ci";
-import { MdOutlineAddchart } from "react-icons/md";
-import { IoIosLogIn } from "react-icons/io";
-import { GoSignOut } from "react-icons/go";
+
 import Link from 'next/link';
 import { Notyf } from 'notyf';
 import { Load } from '../Skeleton/Skeleton';
+import Menu from '../menu/Menu';
 
 export default function UpdateForm({ id, title, content, price, img, rate, option }) {
 
@@ -100,47 +94,16 @@ export default function UpdateForm({ id, title, content, price, img, rate, optio
     }
 
     return (
-        <div className='w-full flex justify-evenly box-border py-[2%] bg-[#9e7f193b] h-[80vh] text-[#000]'>
+        <div className='w-full flex justify-evenly box-border py-[2%] bg-[#f7f7f7] h-[80vh] text-[#000]'>
             {loader && <Load />}
             <section className='w-[16%] relative bg-[#ffffff] rounded-[15px]'>
-                <ul className='flex flex-col box-border p-[6%]'>
-                    <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/'}>
-                        <TfiHome size={20} className='text-[#000000]' />
-                        <li>Home</li>
-                    </Link>
-                    <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/dashboard/create'}>
-                        <IoCreateOutline size={20} className='text-[#000000]' />
-                        <li>Create post</li>
-                    </Link>
-                    <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'#'}>
-                        <VscGitPullRequestGoToChanges size={20} className='text-[#000000]' />
-                        <li>Orders</li>
-                    </Link>
-                    <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/dashboard/posts'}>
-                        <MdOutlineAddchart size={20} className='text-[#000000]' />
-                        <li>Posts</li>
-                    </Link>
-                    <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'#'}>
-                        <CiUser size={22} className='text-[#000000]' />
-                        <li>Clients</li>
-                    </Link>
-                    <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/signup'}>
-                        <IoIosLogIn size={22} className='text-[#000000]' />
-                        <li>Login</li>
-                    </Link>
-                    <li className='absolute bottom-[5%] left-[4%] w-[50%] h-[7%]'>
-                        <button className='flex items-center justify-center text-[15px] w-[100%] h-[100%] text-[#ffffff] rounded-[10px] bg-[#000000]'>
-                            <GoSignOut size={20} className='text-[#ffffff]' />
-                            Logout
-                        </button>
-                    </li>
-                </ul>
+                <Menu/>
             </section>
             <section className='w-[80%] flex justify-evenly items-center bg-[#ffffff] rounded-[15px]'>
                 <form className='flex flex-col w-[50%]' onSubmit={handleSubmit}>
                     <section className='flex gap-2 my-[1%]'>
                         <label htmlFor="name" className='flex flex-col gap-[4px] w-[50%] '>
-                            <span className=''>Product title</span>
+                            <span className=''>Product Model</span>
                             <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} className=' outline-[0] border-[1px] border-[#6d471648] rounded-[20px] w-[100%] py-[6px] px-[20px]' type="text" id="name" name="name" placeholder="Enter product name" required />
                         </label>
                         <label htmlFor="rate" className='flex flex-col gap-[4px] w-[50%]'>

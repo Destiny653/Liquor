@@ -1,25 +1,47 @@
 import React from 'react'
 import './menu.css'
+import Link from 'next/link';
+import { TfiHome } from "react-icons/tfi";
+import { IoCreateOutline } from "react-icons/io5";
+import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
+import { CiUser } from "react-icons/ci";
+import { MdOutlineAddchart } from "react-icons/md";
+import { IoIosLogIn } from "react-icons/io";
+import { GoSignOut } from "react-icons/go";
 
 export default function Menu() {
   return (
-    <div className='inline'>
-      <section className="menu-p flex flex-col gap-7 box-border px-4  text-white w-[230px] h-[75vh]">
-       <div className="mt-3 menu-title">
-        <h1 className="py-1 pl-2">LiquorLuxx</h1>
-        </div>
-        <ul>
-            <h1 className="menu-t">MANAGEMENT</h1>
-            <li>Upload product</li>
-            <li>Product menu</li>
-            <li>Orders</li> 
-        </ul>
-        <ul>
-            <h1 className="menu-t">ACCOUNTS</h1>
-            <li>Admin</li>
-            <li>Clients</li>
-        </ul>
-      </section>
-    </div>
+    <ul className='flex flex-col box-border p-[6%]'>
+      <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/'}>
+        <TfiHome size={20} className='text-[#000000]' />
+        <li>Home</li>
+      </Link>
+      <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/dashboard/create'}>
+        <IoCreateOutline size={20} className='text-[#000000]' />
+        <li>Create post</li>
+      </Link>
+      <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'#'}>
+        <VscGitPullRequestGoToChanges size={20} className='text-[#000000]' />
+        <li>Orders</li>
+      </Link>
+      <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/dashboard/posts'}>
+        <MdOutlineAddchart size={20} className='text-[#000000]' />
+        <li>Posts</li>
+      </Link>
+      <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'#'}>
+        <CiUser size={22} className='text-[#000000]' />
+        <li>Clients</li>
+      </Link>
+      <Link className='flex gap-2 items-center my-[4%] text-[15px]' href={'/signup'}>
+        <IoIosLogIn size={22} className='text-[#000000]' />
+        <li>Login</li>
+      </Link>
+      <li className='absolute bottom-[5%] left-[4%] w-[50%] h-[7%]'>
+        <button className='flex items-center justify-center text-[15px] w-[100%] h-[100%] text-[#ffffff] rounded-[10px] bg-[#000000]'>
+          <GoSignOut size={20} className='text-[#ffffff]' />
+          Logout
+        </button>
+      </li>
+    </ul>
   )
 }
