@@ -80,3 +80,14 @@ export function SkeletonArr2(){
         </>
     )
 }
+ 
+export const Load = () => {
+    return (
+        <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+            <div className="loader-con">
+                <section className='loader-i'></section>
+            </div>
+        </div>
+    )
+}
+

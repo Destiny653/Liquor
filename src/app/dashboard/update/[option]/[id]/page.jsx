@@ -4,7 +4,7 @@
   
  
    try{
-     const res = await fetch(`https://liquorluxx.vercel.app/api/${option.toLowerCase()}s/${id}`, {
+     const res = await fetch(`http://localhost:3000/api/${option.toLowerCase()}s/${id}`, {
        cache: "no-store",
      })
  
@@ -41,7 +41,7 @@ export default async function Page({params}) {
     
    return ( 
      <div>
-       <UpdateForm id={id} title={title} content={content} price={price} img={img} rate={rate} />
+       <UpdateForm id={id} title={title} content={content} price={price} img={img} rate={rate} option={option.toLowerCase()} />
      </div>
    )
  }
