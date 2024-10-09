@@ -4,7 +4,7 @@
   
  
    try{
-     const res = await fetch(`http://localhost:3000/api/${option.toLowerCase()}s/${id}`, {
+     const res = await fetch(`https://liquorluxx.vercel.app/api/${option.toLowerCase()}s/${id}`, {
        cache: "no-store",
      })
  

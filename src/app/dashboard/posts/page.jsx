@@ -29,8 +29,8 @@ export default function Page() {
     getData()
 }, [posts]);
 
-    const deletePost = async (id) => {
-        const res = await fetch(`/api/posts/${id}`, {
+    const deletePost = async (option, id) => {
+        const res = await fetch(`/api/${option.toLowerCase()}s/${id}`, {
             method: 'DELETE'
         })
         if (res.status === 200) {
@@ -40,7 +40,6 @@ export default function Page() {
         } else {
             alert('Deletion Error')
         }
-
         setPosts(posts.filter((data, index) => index !== mainindex))
     }
 
@@ -65,7 +64,7 @@ export default function Page() {
                               <Link href={`/dashboard/update/${posts[mainindex]?.productModel}/${posts[mainindex]?._id}`}>
                                 <button className=' post-btn bg-black  text-white '>Edit</button>
                               </Link>
-                                <button onClick={() => { deletePost(posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-[#850303] text-white'>Delete</button>
+                                <button onClick={() => { deletePost(posts[mainindex]?.productModel,posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-[#850303] text-white'>Delete</button>
                             </div>
                         </div>
                     </div>

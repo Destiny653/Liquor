@@ -72,7 +72,7 @@ export default function UpdateForm({ id, title, content, price, img, rate, optio
 
         try {
 
-            const res = await fetch(`http://localhost:3000/api/${option}s/${id}`, {
+            const res = await fetch(`/api/${option}s/${id}`, {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json'
@@ -155,7 +155,7 @@ export default function UpdateForm({ id, title, content, price, img, rate, optio
                         </label>
                         <label htmlFor="img" className='flex flex-col gap-[4px] w-[50%]'>
                             <span className=''>Product img</span>
-                            <input onChange={handleFileChange} className=' outline-[0] border-[1px] border-[#6d471648] rounded[20px] bg-[#ac7e1c57] w-[100%] py-[3px] px-[20px]' type="file" id="img" name="img" accept="img/*" required />
+                            <input onChange={handleFileChange} className=' outline-[0] border-[1px] border-[#6d471648] rounded[20px] bg-[#ac7e1c57] w-[100%] py-[3px] px-[20px]' type="file" id="img" name="img" accept="img/*" />
                         </label>
                     </section>
                     <label htmlFor="content " className='flex flex-col my-[2%]'>
