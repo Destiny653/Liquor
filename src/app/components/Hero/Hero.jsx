@@ -118,7 +118,7 @@ export default function Hero() {
                                                 data-aos-offset="100"
                                                 data-aos-easing="ease-out-cubic"
                                                 data-aos-duration="1500" key={index}>
-                                                <Image className='hero-list-img2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                                                <Image className='hero-list-img2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
                                             </li>
                                             <h3 className='hero-list2-title text-center py-3'>{item.title.slice(0, 10)}</h3>
                                         </div>
@@ -169,7 +169,7 @@ export default function Hero() {
                                 data?.slice(4, 16).map((item, index) => (
                                     <>
                                         <li key={index} className='hero-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
-                                            <Image className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                                            <Image className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() =>{ handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
                                             <h1 className='text-[14.5px] font-[600] hero-arr-title'>{item.title}</h1>
                                             <p className='text-[13px] text-center h-[52px]'>{item.content}</p>
                                             <h1>

@@ -36,8 +36,11 @@ export default function SearchProvider({children}) {
                 console.error('Error fetching data:', error);
             }
         }
-        // fetchData();
-    }, [api])
+        fetchData();
+        return;
+    }, [])
+    console.log(api);
+    
 
 
 

@@ -13,8 +13,9 @@ import Qty from '../components/Quantity/quantity';
 
 export default function Page() {
 
-    const { searchVal, searchInp, handlePro, api } = useContext(SearchContext);
-    const { handleAddToCart } = useContext(CartContext);
+    const { searchVal, searchInp, handlePro} = useContext(SearchContext);
+    const { handleAddToCart } = useContext(CartContext); 
+    
     const navigation = useRouter();
     console.log(searchInp);
     console.log(searchVal);
@@ -97,7 +98,7 @@ export default function Page() {
         }
         return getItemsForPage(currentPage)?.map((item, index) => (
             <li key={index} className='shop-arr-i  bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
-                <Image className='shop-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?${item.title.toLowerCase()}`) }} />
+                <Image className='shop-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
                 <h1 className='text-[14.5px] font-[600] shop-arr-title'>{item.title}</h1>
                 {/* <p className='shop-arr-content text-[13px] text-center h-[52px]'>{item.content.slice(0,201)}</p> */}
                 <h1>

@@ -80,7 +80,7 @@ export default function Page() {
                                 }
                             ) :
 
-                            <h1 className=' m-auto text-2xl'>Your Cart is empty</h1>
+                            <h1 className=' m-auto text-2xl text-center align-middle'>Your Cart is empty</h1>
                         }
                     </tbody>
                     <Link href='/cart'>
