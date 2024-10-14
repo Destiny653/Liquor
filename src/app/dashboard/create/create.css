@@ -60,3 +60,20 @@ span{
  height: 100vh;
  background-color: #00000050;
 }
+.dashboard-display{
+    overflow-x: scroll;
+    scrollbar-width: 0;
+}
+
+/* 
+=====================================
+@media all and (max-width:391px){}
+=====================================
+*/
+@media all and (max-width:391px){
+     .dashboard-display{
+        display: flex;
+        flex-direction: column;
+        /* flex-direction: ; */
+    }
+}

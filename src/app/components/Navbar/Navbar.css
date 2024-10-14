@@ -134,7 +134,7 @@ Navbar
      } 
      .nav-search-p{ 
         display: flex;
-        padding: 0 10px;
+        padding: 0 1px;
         gap: 10px;
      }
      .second-nav-ch2{ 
@@ -151,7 +151,7 @@ Navbar
     max-width: 499px;
     box-sizing: border-box;
     padding: 12px 10px;
-    margin: 0 10px;
+    margin: 0 1px;
     /* margin-right: 20px; */
 }
 .nav-child{

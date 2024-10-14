@@ -1,14 +1,14 @@
 'use client'
 import Image from 'next/image';
 import React from 'react';
-import { FaStar } from 'react-icons/fa';
-import Menu from '@/app/components/menu/Menu';
+import { FaStar } from 'react-icons/fa'; 
 
 
 const idItem = async (brand,id)=>{
     const res = await fetch(`http://localhost:3000/api/${brand}/${id}`)
     if (!res.ok) {
-        throw new Error('failed to fetch data')
+        console.log('faild to fetch data');
+        
     }
     return await res.json()
 }
