@@ -55,7 +55,7 @@ export default function Navbar() {
         },
         {
             title: 'Dashboard',
-            path: '/dashboard'
+            path: '/dashboard/posts'
         }
     ]
     const navstyle = {
@@ -129,7 +129,7 @@ export default function Navbar() {
     return (
         <div  style={{ position: 'fixed', top: '0', width: '99.9%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
             <nav className="bg-white">
-                <section id='first-nav' className="first-nav nav-search-p">
+                <section id='first-nav' className="first-nav nav-search-p z-20">
                     <div className="n-search-1 font-bold text-2xl nav-logo ">LOGO</div>
                     <label className='n-search-2 relative grid place-items-center w-[60%]'>
                         <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
@@ -142,7 +142,7 @@ export default function Navbar() {
                         <h2>{session?.user.name}</h2>
                     </section>
                 </section>
-                <section id='second-nav' className=" nav-search-p">
+                <section id='second-nav' className=" nav-search-p z-20">
                     <label className='n-search-2 relative grid place-items-center w-[100%]'>
                         <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
                         <Display />

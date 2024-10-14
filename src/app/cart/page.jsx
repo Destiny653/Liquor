@@ -34,7 +34,7 @@ export default function Page() {
 
     return (
         <>
-            {isClient && <div className='cart-parent flex w-full justify-center gap-7 m-10 ml-0 box-border px-1 relative'>
+            {isClient && <div className='cart-parent flex w-full justify-center gap-7 m-10 ml-0 box-border px-1 relative nav-obscure-view'>
                 <table className='w-3/4 cart-table table1 '>
                     <thead>
                         <tr>

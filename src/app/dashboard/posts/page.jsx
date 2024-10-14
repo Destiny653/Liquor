@@ -49,7 +49,7 @@ export default function Page() {
 
     return (
         <>
-                <section className='post-sub-container relative'>
+                <section className='post-sub-container relative nav-obscure-view'>
 
                     <div className='post-detail sticky top-[10vh] right-0'>
                         <div className='w-full nunitoextralight_italic flex flex-col gap-2'>

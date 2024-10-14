@@ -21,7 +21,7 @@ export default function Page() {
     //     return;
     // },[setData])
     return (
-        <div className='flex gap-[50px] flex-col box-border py-[5%]'>
+        <div className='flex gap-[50px] flex-col box-border py-[5%] nav-obscure-view'>
             <div className='w-full flex items-center justify-center box-border'>
                 <div className='detail-p  w-full box-border pl-[40px] bg-[#a8a8a80c] border rounded-[10px]'>
                     <section className='detail detail-img-con  box-border rounded-2xl overflow-hidden'>

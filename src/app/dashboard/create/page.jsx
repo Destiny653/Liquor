@@ -111,7 +111,7 @@ export default function Page() {
     }
 
     return (
-        <div className='w-full dashboard-parent'>
+        <div className='w-full dashboard-parent nav-obscure-view'>
             <div className='w-full  flex justify-evenly box-border py-[2%] bg-[#f7f7f7]  h-[80vh] text-[#000]'>
 
                 {_option()}

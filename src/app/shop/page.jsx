@@ -140,7 +140,7 @@ export default function Page() {
     const filterdPrice = data?.filter((product) => product.price >= minPrice && product.price <= maxPrice)
     console.log(filterdPrice);
     return (
-        <div className='shop-parent relative'>
+        <div className='shop-parent relative nav-obscure-view'>
             <div className='shop-child1 sticky left-0 top-[10vh]'>
                 <section className='brand'>
                     <h1 className=' font-[500] text-2xl text-[red]'>Brand</h1>
@@ -253,7 +253,7 @@ export default function Page() {
             <section className='shop-child2'>
                 <div className='shop-banner '>
                     <Image className='h-full w-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
-                    <h1 className='shop-brand text-[red] text-[30px] w-fit z-10'>{options}</h1>
+                    <h1 className='shop-brand text-[red] text-[30px] w-fit'>{options}</h1>
                 </div>
                 <h1 className='shop-child2-head text-[25px] py-[20px]'>BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE</h1>
                 <div>

@@ -69,7 +69,7 @@ const Page = () => {
     return (
         <>
 
-                <div className='authContainer'>
+                <div className='authContainer nav-obscure-view'>
                     <div className='signCard'  >
                         <form className='sign-form' onSubmit={handleSubmit}>
                             <div className=' mb-3 flex flex-col'>

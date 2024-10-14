@@ -93,7 +93,7 @@ export default function Checkout({ amount }) {
 
             {/* checkout your card items */}
 
-            <div className='section-con flex justify-center w-full gap-2 pt-6 box-border'>
+            <div className='section-con flex justify-center w-full gap-2 pt-6 box-border nav-obscure-view'>
                 {
                     loader ? <Load/> : console.log('not loading')
                     

@@ -132,7 +132,7 @@ export default function Hero() {
                 <h3 className='text-2xl text-[#da9226]'>Personalize it!</h3>
                 <h1 className='hero-high-light-h1 text-6xl'>CUSTOM ENGRAVING AVAILABLE</h1>
                 <p>Choose from our Engraving Collection and add a special message to send a memorable gift!</p>
-                <button className='border hero-btn border-white'>SHOP NOW</button>
+                <button onClick={()=>navigation.push('/shop')} className='border hero-btn border-white'>SHOP NOW</button>
             </div>
             <div className='hero-best-sellers-p'>
                 <h1 className='hero-title'>BEST SELLERS</h1>

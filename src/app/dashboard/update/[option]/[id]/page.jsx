@@ -40,7 +40,7 @@ export default async function Page({params}) {
     const {title, content, price, img, rate} = product;
     
    return ( 
-     <div>
+     <div className='nav-obscure-view'>
        <UpdateForm id={id} title={title} content={content} price={price} img={img} rate={rate} option={option.toLowerCase()} />
      </div>
    )

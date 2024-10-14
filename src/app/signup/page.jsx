@@ -90,7 +90,7 @@ export default function Page() {
 
 
     return (
-        <div>
+        <div className='nav-obscure-view'>
             {
                 loader ? <Load /> :  ""
             }
