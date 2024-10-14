@@ -142,11 +142,7 @@ export default function Navbar() {
                         <h2>{session?.user.name}</h2>
                     </section>
                 </section>
-                <section id='second-nav' className=" nav-search-p z-20">
-                    <label className='n-search-2 relative grid place-items-center w-[100%]'>
-                        <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
-                        <Display />
-                    </label>
+                <section id='second-nav' className=" nav-search-p box-border pt-[10px] z-20">
                     <div className='second-nav-ch2 flex justify-between w-full'>
                         <div className="n-search-1 font-bold text-2xl nav-logo ">LOGO</div>
                         <section className="n-search-3 flex justify-center items-center gap-2">
@@ -156,8 +152,12 @@ export default function Navbar() {
                             </div>
                         </section>
                     </div>
+                    <label className='n-search-2 relative grid place-items-center w-[100%]'>
+                        <input className="nav-search-bar rounded-[25px]" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
+                        <Display />
+                    </label>
                 </section>
-                <section className='flex justify-center items-center'>
+                <section className='flex justify-center items-center pt-4'>
                     <ul  
                         className="nav-item-p"
                         data-aos-offset="500"
