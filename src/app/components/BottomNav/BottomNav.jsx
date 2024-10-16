@@ -3,11 +3,13 @@ import React, { useContext } from 'react'
 import { AiFillMessage } from 'react-icons/ai';
 import { SearchContext } from '../../../../context/SearchContext';
 import './bottom.css'
+import Contact from '@/app/contact/page';
 
 export default function BottomNav() {
     const { msgBtn, setMsgBtn } = useContext(SearchContext)
     return (
         <div className='icon-parent'>
+            {msgBtn && <Contact />}
             <div className="icon w-[30px] h-[30px] rounded-full bg-white flex items-center justify-center"></div>
             <div className="icon w-[30px] h-[30px] rounded-full bg-white flex items-center justify-center"></div>
             <div className="icon w-[30px] h-[30px] rounded-full bg-white flex items-center justify-center"></div>
