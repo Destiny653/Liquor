@@ -52,8 +52,11 @@ const Page = () => {
         }
     };
     
-    if (session || typeof window !== 'undefined') {
-        const email = localStorage.getItem('email')
+    if (session) {
+        let email = null
+        if(typeof window !== 'undefined'){
+             email = localStorage.getItem('email')
+        }
         const googlePass = prompt('Enter secret password, keep in mind, this will be used for purchase verification.') 
         console.log(googlePass);
 
