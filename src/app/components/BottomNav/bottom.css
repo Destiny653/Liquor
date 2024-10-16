@@ -16,13 +16,17 @@
         display: flex;
         justify-content: space-evenly;
         align-items: center;
-        height: 50px;
-        /* padding: 0 10px; */
-        padding-top: -20px;
+        height: 30px;
+        /* margin-top: -50px;   */
         overflow: visible;
         width: 100%;
         position: fixed;
         bottom: 0;
+        background-color: #000;
+     }
+     .icon{
+        margin-top: -30px;
+        color: #fff;
         background-color: #000;
      }
  }
