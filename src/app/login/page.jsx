@@ -33,7 +33,7 @@ const Page = () => {
 
 
         try {
-            const res = await fetch('/api/auth/authentification', {
+            const res = await fetch('http://localhost:3000/api/auth/authentification', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -54,10 +54,11 @@ const Page = () => {
     
     if (session) {
         let email = null
+        let googlePass = null
         if(typeof window !== 'undefined'){
              email = localStorage.getItem('email')
+             googlePass = prompt('Enter secret password, keep in mind, this will be used for purchase verification.')
         }
-        const googlePass = prompt('Enter secret password, keep in mind, this will be used for purchase verification.') 
         console.log(googlePass);
 
         if (!email) {
@@ -92,9 +93,9 @@ const Page = () => {
                 <div className='authContainer'>
                     {" "}
                     <div className='profileImage'>
-                        <Image src={session.user.image} alt='user image' className='image' width={2000} height={2000} />
+                        <Image src={session?.user.image} alt='user image' className='image' width={2000} height={2000} />
                     </div>
-                    <h1 className='text-black '>Signed in as {session.user.email}</h1> <br /> {" "}
+                    <h1 className='text-black '>Signed in as {session?.user.email}</h1> <br /> {" "}
                     <button className='signin-btn' onClick={() => signOut("google")}>Sign out</button>{" "}
                 </div>
             </>
