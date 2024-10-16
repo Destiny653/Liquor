@@ -13,7 +13,8 @@ const Page = () => {
 
     const navigation = useRouter();
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('');
+    const [loader, setLoader] = useState(false);
 
 
 
@@ -29,7 +30,7 @@ const Page = () => {
         }
         async function handleSubmitGoogle(){
             const notyf = new Notyf({
-                duration: 3000,
+                duration: 5000,
                 position: {
                     x: 'right',
                     y: 'top'
@@ -38,7 +39,7 @@ const Page = () => {
     
             try {
                 const res = await fetch('/api/signup',{
-                     methot:'POST',
+                     method:'POST',
                      headers: {
                          'Content-Type': 'application/json',
                          'Authorization': `Bearer ${session.access_token}`
@@ -100,10 +101,20 @@ const Page = () => {
         }
     };
 
+    const Load = () => {
+        return (
+            <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+                <div className="loader-con">
+                    <section className='loader-i'></section>
+                </div>
+            </div>
+        )
+    }
+
 
     return (
         <>
-
+        {loader && <Load/>}
                 <div className='authContainer nav-obscure-view'>
                     <div className='signCard'  >
                         <form className='sign-form' onSubmit={handleSubmit}>
@@ -127,7 +138,7 @@ const Page = () => {
                         </form>
                         <h1 className='signin-opt text-2xl'>or</h1>
 
-                        <button className='signin-btn' onClick={() => signIn("google") }>Sign in with <FcGoogle size={30} /> </button>
+                        <button className='signin-btn' onClick={() =>{signIn("google"); setLoader(true)} }>Sign in with <FcGoogle size={30} /> </button>
                     </div>
                 </div>
         </>
