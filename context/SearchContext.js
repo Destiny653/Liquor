@@ -8,6 +8,7 @@ export default function SearchProvider({children}) {
     const [searchInp, setSearchInp] = useState('');
     const [detailPro, setDetailPro] = useState([]);
     const [detailArr, setDetailArr] = useState([]);
+    const [msgBtn, setMsgBtn] = useState(false);
     const [signIn, setSignIn] = useState('');
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0 )
 
@@ -80,7 +81,7 @@ export default function SearchProvider({children}) {
     },[searchInp])
 
   return (
-      <SearchContext.Provider value={{searchVal, detailPro, searchInp, signIn, detailArr,api, handleSearch, handleArr, setSignIn, handlePro, setSearchVal, setSearchInp}}>
+      <SearchContext.Provider value={{searchVal, detailPro, searchInp, signIn, detailArr,api, msgBtn, setMsgBtn, handleSearch, handleArr, setSignIn, handlePro, setSearchVal, setSearchInp}}>
         {children}
       </SearchContext.Provider>
   )

@@ -1,0 +1,26 @@
+.icon-parent{
+    display: none;
+    background-color: #000;
+    height: 50px;
+    width: 100%;
+}
+
+/*
+==================================
+ @media all and (max-width:391px){} 
+================================== 
+ */
+ 
+ @media all and (max-width:391px){
+    .icon-parent{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        height: 50px;
+        width: 100%;
+        padding: 0 10px;
+        position: fixed;
+        bottom: 0;
+        background-color: #000;
+     }
+ }

@@ -6,6 +6,7 @@ import Footer from "./components/Footer/Footer";
 import SearchProvider from "../../context/SearchContext";
 import MsgBtn from "./components/MsgBtn/MsgBtn";
 import { CartProvider } from "../../context/CartContext"; 
+import BottomNav from "./components/BottomNav/BottomNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
                 {children}
                 <MsgBtn />
                 <Footer />
+                <BottomNav/>
               </CartProvider>
             </SearchProvider>
         </AuthProvider>
