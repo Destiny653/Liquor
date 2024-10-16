@@ -27,7 +27,7 @@ const Page = () => {
             email = window.localStorage.getItem('email')
             reqPass = window.prompt('Enter secret password, keep in mind that it will be use for purchase verification.')
         }
-        async function handleSubmit(){
+        async function handleSubmitGoogle(){
             const notyf = new Notyf({
                 duration: 3000,
                 position: {
@@ -53,6 +53,7 @@ const Page = () => {
                 notyf.error('Error: '+error)   
             }
         }
+        handleSubmitGoogle()
 
         return (
             <>
