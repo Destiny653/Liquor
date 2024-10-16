@@ -15,12 +15,12 @@ export const POST =  async (req, res, next) =>{
             const isUserPassword = isUser.password;
             const isUserPasswordMatch = bcrypt.compareSync(password, isUserPassword);
             if(isUserPasswordMatch){
-                return new NextResponse(JSON.stringify({userData:isUser,message:'Succesfully logged in'}) ,{status: 200});
+                return new NextResponse(JSON.stringify({userData:isUser,message:'Succesfully logged in'}) ,{status: 201});
             }else{
-                return new NextResponse(JSON.stringify({message: "Invalid cridentials"}),{status:400})
+                return new NextResponse(JSON.stringify({message: "Invalid cridentials"}),{status:404})
             }
         }else{
-            return new NextResponse(JSON.stringify({message: "User does not exist"}),{status:400})
+            return new NextResponse(JSON.stringify({message: "User does not exist"}),{status:404})
         }
     }catch(e){
         console.log(e);

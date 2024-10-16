@@ -28,11 +28,13 @@
         margin-top: -20px;
         color: #fff;
         background-color: #000;
+        border-bottom: 1px solid #fff;
         transition: all 0.3s ease;
      }
      /* hover effect */
      .icon:hover{
-        background-color: #fff;
+        background-color:#fff;
         color: #000;
+        border-bottom: 1px solid #000;
      }
  }

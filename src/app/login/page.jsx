@@ -7,6 +7,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { useRouter } from 'next/navigation'
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css'
+import Link from 'next/link'
 
 const Page = () => {
 
@@ -88,6 +89,7 @@ const Page = () => {
                             <button className='signin-btn' type='submit'>
                                 Login
                             </button>
+                            <p className='text-centr text-[15px] text-[blue] pt-[6px]'><Link href={'/signup'}>Don't have an account? signup</Link></p>
                         </form>
                         <h1 className='signin-opt text-2xl'>or</h1>
 

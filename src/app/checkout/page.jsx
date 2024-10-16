@@ -39,13 +39,7 @@ export default function Checkout({ amount }) {
                 x: 'right',
                 y: 'top'
             }
-        });
-
-        if (!email) {
-            alert('Please login or register to checkout')
-            navigation.push('/login')
-            return;
-        }
+        }); 
 
         try {
 
