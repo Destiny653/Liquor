@@ -27,6 +27,33 @@ const Page = () => {
             email = window.localStorage.getItem('email')
             reqPass = window.prompt('Enter secret password, keep in mind that it will be use for purchase verification.')
         }
+        async function handleSubmit(){
+            const notyf = new Notyf({
+                duration: 3000,
+                position: {
+                    x: 'right',
+                    y: 'top'
+                }
+            });
+    
+            try {
+                const res = await fetch('/api/signup',{
+                     methot:'POST',
+                     headers: {
+                         'Content-Type': 'application/json',
+                         'Authorization': `Bearer ${session.access_token}`
+                     },
+                     body: JSON.stringify({email:session.user.email, name:session.user.name, password:reqPass})
+                 })
+                 if(res.error){
+                     notyf.error('Error: '+res.error)
+                 }
+                
+            } catch (error) {
+                notyf.error('Error: '+error)   
+            }
+        }
+
         return (
             <>
                 <div className='authContainer'>
