@@ -1,11 +1,11 @@
 .authContainer {
-   height: 80vh;
+   height: 70vh;
    align-items: center;
    justify-content: center;
    display: flex;
    flex-direction: column;
    width: 100%;
-   margin: 90px 0 0 0;
+   margin: 130px 0 0 0;
    box-sizing: border-box;
    overflow: hidden;
 }
@@ -20,7 +20,7 @@
 
 .signin-btn {
    border: none;
-   width: 100%;
+   width: 280px;
    padding: 10px;
    font-size: 18px;
    border-radius: 9px;
@@ -113,6 +113,10 @@
       padding: 15px;
       box-sizing: border-box;
    }
+   .signin-btn {
+   border: none;
+   width: 100%; 
+}
 
    .signCard {
       width: 100%;

@@ -8,7 +8,9 @@ import { NextResponse } from "next/server";
     if (req.method !== 'POST') {
         return  NextResponse.json({success: false, message: `Method ${req.method} not allowed`}, {status: 405});
     }  
-        const { username, email, password } = await req.json();
+        const { name, email, password } = await req.json();
+        console.log('signup credentials: '+ name, email, password);
+        
 
         try {
             const existUser = await User.findOne({ email });
@@ -17,7 +19,7 @@ import { NextResponse } from "next/server";
             }
             const hashedpassword = await bcrypt.hash(password, 5)
             const newUser = new User({
-                name: username,
+                name: name,
                 email,
                 password: hashedpassword
             })
