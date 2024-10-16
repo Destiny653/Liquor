@@ -22,15 +22,15 @@ const Page = () => {
     console.log(session)
 
     if (session) {
-        let email = null
+        let newEmail = null
         let reqPass = null
-        if(typeof window !== 'undefined'){
-            email = window.localStorage.getItem('email')
-            // window.localStorage.setItem('email', email)
+        if (typeof window !== 'undefined') {
+            newEmail = window.localStorage.getItem('email')
         }
-        
-        async function handleSubmitGoogle(){
-            if(typeof window!== 'undefined'){
+
+        async function handleSubmitGoogle() {
+            if (typeof window !== 'undefined') {
+                window.localStorage.setItem('email', session.user.email)
                 reqPass = window.prompt('Enter secret password, keep in mind that it will be use for purchase verification.')
             }
             const notyf = new Notyf({
@@ -40,33 +40,35 @@ const Page = () => {
                     y: 'top'
                 }
             });
-    
+
             try {
-                const res = await fetch('/api/signup',{
-                     method:'POST',
-                     headers: {
-                         'Content-Type': 'application/json',
-                         'Authorization': `Bearer ${session.access_token}`
-                     },
-                     body: JSON.stringify({email:session.user.email, name:session.user.name, password:reqPass})
-                 })
-                 if(res.error){
-                     notyf.error('Error: '+res.error)
-                 }
-                 notyf.success('Welcome '+session.user.email)
-                
+                const res = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.access_token}`
+                    },
+                    body: JSON.stringify({ email: session.user.email, name: session.user.name, password: reqPass })
+                })
+                if (res.error) {
+                    notyf.error('Error: ' + res.error)
+                }
+                notyf.success('Welcome ' + session.user.email)
+
             } catch (error) {
-                notyf.error('Error: '+error)   
+                notyf.error('Error: ' + error)
             }
         }
-        !email && handleSubmitGoogle()
+        if (!newEmail) {
+            handleSubmitGoogle()
+        }
 
         return (
             <>
                 <div className='authContainer'>
                     {" "}
                     <div className='profileImage'>
-                        <Image src={session.user.image} alt='user image' className='image'  width={2000} height={2000} />
+                        <Image src={session.user.image} alt='user image' className='image' width={2000} height={2000} />
                     </div>
                     <h1 className='text-black '>Signed in as {session.user.email}</h1> <br /> {" "}
                     <button className='signin-btn' onClick={() => signOut("google")}>Sign out</button>{" "}
@@ -119,33 +121,33 @@ const Page = () => {
 
     return (
         <>
-        {loader && <Load/>}
-                <div className='authContainer nav-obscure-view'>
-                    <div className='signCard'  >
-                        <form className='sign-form' onSubmit={handleSubmit}>
-                            <div className=' mb-3 flex flex-col'>
-                                <h1 className='signin-label text-3xl m-auto'>Sign in</h1>
-                                <label htmlFor="email" className=' signin-label pb-1'>
-                                    Email
-                                </label>
-                                <input type="email" value={email} name='email' placeholder='Enter email...' className='singin-holder outline-0 rounded-none form-control py-2 px-4 border' onChange={e => setEmail(e.target.value)} required />
-                            </div>
-                            <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="password" className=' signin-label pb-1'>
-                                    Password
-                                </label>
-                                <input type="password" value={password} name='password' placeholder='*******' className='singin-holder outline-0 rounded-none form-control py-2 px-4 border' onChange={e => setPassword(e.target.value)} required />
-                            </div>
-                            <button className='signin-btn' type='submit'>
-                                Login
-                            </button>
-                            <p className='text-centr text-[15px] text-[blue] pt-[6px]'><Link href={'/signup'}>Don't have an account? signup</Link></p>
-                        </form>
-                        <h1 className='signin-opt text-2xl'>or</h1>
+            {loader && <Load />}
+            <div className='authContainer nav-obscure-view'>
+                <div className='signCard'  >
+                    <form className='sign-form' onSubmit={handleSubmit}>
+                        <div className=' mb-3 flex flex-col'>
+                            <h1 className='signin-label text-3xl m-auto'>Sign in</h1>
+                            <label htmlFor="email" className=' signin-label pb-1'>
+                                Email
+                            </label>
+                            <input type="email" value={email} name='email' placeholder='Enter email...' className='singin-holder outline-0 rounded-none form-control py-2 px-4 border' onChange={e => setEmail(e.target.value)} required />
+                        </div>
+                        <div className=' mb-6 flex flex-col'>
+                            <label htmlFor="password" className=' signin-label pb-1'>
+                                Password
+                            </label>
+                            <input type="password" value={password} name='password' placeholder='*******' className='singin-holder outline-0 rounded-none form-control py-2 px-4 border' onChange={e => setPassword(e.target.value)} required />
+                        </div>
+                        <button className='signin-btn' type='submit'>
+                            Login
+                        </button>
+                        <p className='text-centr text-[15px] text-[blue] pt-[6px]'><Link href={'/signup'}>Don't have an account? signup</Link></p>
+                    </form>
+                    <h1 className='signin-opt text-2xl'>or</h1>
 
-                        <button className='signin-btn' onClick={() =>{signIn("google"); setLoader(true)} }>Sign in with <FcGoogle size={30} /> </button>
-                    </div>
+                    <button className='signin-btn' onClick={() => { signIn("google"); setLoader(true) }}>Sign in with <FcGoogle size={30} /> </button>
                 </div>
+            </div>
         </>
     )
 }
