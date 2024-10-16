@@ -22,13 +22,17 @@ const Page = () => {
     console.log(session)
 
     if (session) {
-        let reqPass = null
         let email = null
+        let reqPass = null
         if(typeof window !== 'undefined'){
             email = window.localStorage.getItem('email')
-            reqPass = window.prompt('Enter secret password, keep in mind that it will be use for purchase verification.')
+            // window.localStorage.setItem('email', email)
         }
+        
         async function handleSubmitGoogle(){
+            if(typeof window!== 'undefined'){
+                reqPass = window.prompt('Enter secret password, keep in mind that it will be use for purchase verification.')
+            }
             const notyf = new Notyf({
                 duration: 5000,
                 position: {
@@ -55,7 +59,7 @@ const Page = () => {
                 notyf.error('Error: '+error)   
             }
         }
-        handleSubmitGoogle()
+        !email && handleSubmitGoogle()
 
         return (
             <>
