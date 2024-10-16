@@ -49,6 +49,7 @@ const Page = () => {
                  if(res.error){
                      notyf.error('Error: '+res.error)
                  }
+                 notyf.success('Welcome '+session.user.email)
                 
             } catch (error) {
                 notyf.error('Error: '+error)   
