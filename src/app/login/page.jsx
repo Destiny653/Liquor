@@ -55,10 +55,10 @@ const Page = () => {
     if (session) {
         let email = null
         let googlePass = null
-        if(typeof window !== 'undefined'){
-             email = localStorage.getItem('email')
+        // if(typeof window !== 'undefined'){
+            //  email = localStorage.getItem('email')
              googlePass = prompt('Enter secret password, keep in mind, this will be used for purchase verification.')
-        }
+        // }
         console.log(googlePass);
 
         if (!email) {
