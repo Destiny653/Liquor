@@ -15,17 +15,17 @@ const Page = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [loader, setLoader] = useState(false);
+    const [getEmail, setGetEmail] = useState('')
 
 
 
     const { data: session } = useSession()
     console.log(session)
 
-    if (session) {
-        let newEmail = null
-        let reqPass = null
+    if (session) { 
+        let reqPass = null;
         if (typeof window !== 'undefined') {
-            newEmail = window.localStorage.getItem('email')
+            setGetEmail(window.localStorage.getItem('email'))
         }
 
         async function handleSubmitGoogle() {
@@ -59,7 +59,7 @@ const Page = () => {
                 notyf.error('Error: ' + error)
             }
         }
-        if (!newEmail) {
+        if (!getEmail) {
             handleSubmitGoogle()
         }
 
