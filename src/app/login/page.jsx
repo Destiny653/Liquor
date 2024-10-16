@@ -21,7 +21,12 @@ const Page = () => {
     console.log(session)
 
     if (session) {
-        
+        let reqPass = null
+        let email = null
+        if(typeof window !== 'undefined'){
+            email = window.localStorage.getItem('email')
+            reqPass = window.prompt('Enter secret password, keep in mind that it will be use for purchase verification.')
+        }
         return (
             <>
                 <div className='authContainer'>
