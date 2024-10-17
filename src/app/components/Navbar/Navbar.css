@@ -117,6 +117,7 @@ Navbar
         flex-direction: column;
         gap: 10px;
     }
+   
     .nav-search-p{
         display: grid;
         grid-template-columns: 30% 100% 70%;
@@ -151,8 +152,11 @@ Navbar
     max-width: 499px;
     box-sizing: border-box;
     padding: 12px 10px;
-    margin: 0 1px;
-    /* margin-right: 20px; */
+    margin: 0 1px; 
+}
+
+.nav-item-p .nav-links{
+    display: none;
 }
 .nav-child{
          scroll-snap-align: center;

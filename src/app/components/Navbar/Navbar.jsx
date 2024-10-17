@@ -157,7 +157,7 @@ export default function Navbar() {
                         <Display />
                     </label>
                 </section>
-                <section className='flex justify-center items-center pt-4'>
+                <section className='nav-links flex justify-center items-center pt-4'>
                     <ul  
                         className="nav-item-p"
                         data-aos-offset="500"
