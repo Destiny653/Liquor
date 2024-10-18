@@ -30,8 +30,9 @@
       transition: all 0.3s ease;
       padding: 8px;
       box-sizing: content-box;
+      cursor: pointer;
    }
-   .active-title{
+   .active-title{ 
       display: none;
       position: absolute;
       top: -10px;
@@ -41,24 +42,14 @@
       padding: 4px 6px;
       color: #fff;
       border-radius: 8px;
-      background-color: #615f5f46;
+      background-color: #615f5f46; 
+      cursor: pointer;
    }
 
-   /* hover effect */
-
-   .active-title:hover { 
-      display: block; 
-      position: absolute;
-      top: -10px;
-      left: 10px;
-      font-size: 12px;
-      width: fit-content; 
-      padding: 4px 6px;
-      color: #fff;
-      border-radius: 8px;
-      background-color: #615f5f46;
+   /* hover effect */ 
+   .active-title:hover{
+      display: block;
    }
-
    .icon:hover{
         color: #000000;
         background-color: #326cb831; 
