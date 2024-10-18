@@ -12,15 +12,47 @@ import { useRouter } from 'next/navigation';
 
 export default function BottomNav() {
     const { msgBtn, setMsgBtn } = useContext(SearchContext)
+    const icons = [
+        {
+            icon: <AiOutlineMessage size={25} />, 
+            title: 'message'
+        },
+        {
+            icon: <HiOutlineShoppingCart size={25} />,
+            path: '/cart',
+            title: 'cart'
+        },
+        {
+            icon: <TfiHome size={28} />,
+            path: '/',
+            title: 'home'
+        },
+        {
+            icon: <IoIosLogIn size={25} />,
+            path: '/signup',
+            title: 'register'
+        },
+        {
+            icon: <BsShop size={25} />,
+            path: '/shop',
+            title:'shop'
+        },
+    ]
     const navigation = useRouter()
+    
     return (
         <div className='icon-parent'>
             {msgBtn && <Contact />}
-            <div onClick={()=>navigation.push('/cart')} className="icon w-[35px] h-[35px] rounded-full flex items-center justify-center"><HiOutlineShoppingCart className="inline msgBtn" size={25} /></div>
-            <div onClick={()=>navigation.push('/shop')} className="icon w-[35px] h-[35px] rounded-full flex items-center justify-center"><BsShop className="inline msgBtn" size={25}/></div>
-            <div onClick={()=>navigation.push('/')} className="icon w-[40px] h-[40px] rounded-full flex items-center justify-center"><TfiHome size={28} /></div>
-            <div onClick={()=>navigation.push('/signup')} className="icon w-[35px] h-[35px] rounded-full flex items-center justify-center"><IoIosLogIn className="inline msgBtn" size={25} /></div>
-            <div onClick={() => !msgBtn ? setMsgBtn(true) : setMsgBtn(false)} className="icon w-[35px] h-[35px] rounded-full flex items-center justify-center"><AiOutlineMessage  className="inline msgBtn" size={25} /></div>
+            {icons.map((icon, index) => (
+                <div key={index}  
+                onClick={()=>{ icon.path && 
+                navigation.push(icon.path); 
+                icon.title == 'message' && (msgBtn ? setMsgBtn(false) : setMsgBtn(true)) }} 
+                className={`icon relative w-[35px] h-[35px] rounded-full flex items-center justify-center`}>
+                    {icon.icon}
+                    <p className='active-title'>{icon.title}</p>
+                </div>
+            ))}
         </div>
     )
 }

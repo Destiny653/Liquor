@@ -53,7 +53,8 @@
    cursor: pointer;
    transition: all 0.2s linear;
 }
-.singin-holder{
+
+.singin-holder {
    font-size: 14px;
 }
 
@@ -76,6 +77,7 @@
    background-color: rgb(36, 44, 17);
    background-color: rgb(173, 139, 25);
 }
+
 .signin-opt::before {
    content: '';
    position: absolute;
@@ -85,6 +87,7 @@
    left: 40px;
    background-color: rgb(173, 139, 25);
 }
+
 .signin-label {
    color: rgb(36, 44, 17);
 }
@@ -110,18 +113,20 @@
 
 @media all and (max-width:700px) {
    .authContainer {
-      padding: 15px;
       box-sizing: border-box;
+      margin-top: 80px;
    }
+
    .signin-btn {
-   border: none;
-   width: 100%; 
-}
+      border: none;
+      width: 100%;
+   }
 
    .signCard {
       width: 100%;
-      padding: 15px;
+      padding: 8px;
       box-sizing: border-box;
+      margin-top: 0;
    }
 
    .sign-form {
