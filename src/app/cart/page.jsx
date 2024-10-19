@@ -64,7 +64,7 @@ export default function Page() {
     return (
         <>
             {isClient && <div className='cart-parent flex w-full justify-center gap-7 m-10 ml-0 box-border px-1 relative nav-obscure-view'>
-                <table className='w-3/4 cart-table table1 '>
+                <table className='w-3/4 cart-table table1 box-border pl-[10px] '>
                     <thead>
                         <tr>
                             <th className='text-left'>Image</th>
@@ -122,7 +122,7 @@ export default function Page() {
 
 
                 <div className='w-1/5 cart-sum box-border mr-4'>
-                    <table className='w-full h-96 border m-0 box-border p-5 sticky left-0 top-[10vh]'>
+                    <table className='w-full h-96 border m-0 box-border p-5 px-[8px] sticky left-0 top-[10vh]'>
                         <thead>
                             <tr>
                                 <th scope='col' colSpan={2}>CART TOTAL</th>
