@@ -14,8 +14,9 @@ const Page = () => {
     const navigation = useRouter();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
-    const [loader, setLoader] = useState(false);
-    const [getEmail, setGetEmail] = useState('')
+    const [loader, setLoader] = useState(false); 
+
+    let  localStorageEmail = null
 
 
 
@@ -25,7 +26,7 @@ const Page = () => {
     if (session) { 
         let reqPass = null;
         if (typeof window !== 'undefined') {
-            setGetEmail(window.localStorage.getItem('email'))
+            localStorageEmail = window.localStorage.getItem('email')
         }
 
         async function handleSubmitGoogle() {
@@ -50,8 +51,11 @@ const Page = () => {
                     },
                     body: JSON.stringify({ email: session.user.email, name: session.user.name, password: reqPass })
                 })
-                if (res.error) {
-                    notyf.error('Error: ' + res.error)
+                const data = await res.json()   
+                console.log(data);
+                
+                if (data.error) {
+                    notyf.error( data.message, "please try using another account or register.")
                 }
                 notyf.success('Welcome ' + session.user.email)
 
@@ -59,7 +63,9 @@ const Page = () => {
                 notyf.error('Error: ' + error)
             }
         }
-        if (!getEmail) {
+        console.log( localStorageEmail);
+        
+        if (!localStorageEmail) {
             handleSubmitGoogle()
         }
 
