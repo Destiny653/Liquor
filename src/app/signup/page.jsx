@@ -29,7 +29,7 @@ export default function Page() {
                 x: 'right',
                 y: 'top'
             }
-        });
+        });  
 
         if (email) {
             // validate email
