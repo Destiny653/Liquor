@@ -15,8 +15,8 @@ export const CartProvider = ({ children }) => {
         let title = currentItem?.title;
         let productModel = currentItem?.productModel;
         let img = currentItem?.img
-        let position = cart.findIndex(value => value.product_id === productID);
-        let quantity = qty ? cartItems[position]?.quantity - 1 : (position < 0 ? 1 : cartItems[position].quantity + 1)
+        let position = cart?.findIndex(value => value.product_id === productID);
+        let quantity = qty ? cartItems[position]?.quantity - 1 : (position < 0 ? 1 : cartItems[position]?.quantity + 1)
 
         if (index || index === 0) {
             cart.splice(position, 1)
@@ -29,10 +29,10 @@ export const CartProvider = ({ children }) => {
                 cart[position].quantity = quantity
             }
         }
-        setCartItems(cart)
         if(typeof window !== 'undefined'){
             localStorage.setItem('cartItems', JSON.stringify(cart));
         }
+        setCartItems(cart)
         //add item to cart or update quantity
 
     }
