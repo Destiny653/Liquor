@@ -56,9 +56,11 @@ const Page = () => {
                 console.log(data);
                 
                 if (data.error) {
+                    setBtnLoader(false)
                     notyf.error( data.message)
                 } 
             } catch (error) {
+                setBtnLoader(false)
                 notyf.error('Error: ' + error)
             }
         }
@@ -120,7 +122,7 @@ const Page = () => {
 
     const Load = () => {
         return (
-            <div className='loader-p flex items-center justify-center w-full h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+            <div className='loader-p flex items-center justify-center h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
                  <div className="loader-p">
                     <section className='loader-i'></section>
                 </div> 
