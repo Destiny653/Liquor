@@ -6,12 +6,12 @@ import './details.css';
 import Image from 'next/image';
 import { CartContext } from '../../../context/CartContext';
 import { useRouter } from 'next/navigation';
-import Qty from '../components/Quantity/quantity'; 
+import Qty from '../components/Quantity/quantity';
 
 
 export default function Page() {
-    const { detailPro, detailArr, api, handlePro } = useContext(SearchContext) 
-        console.log(api)
+    const { detailPro, detailArr, api, handlePro } = useContext(SearchContext)
+    console.log(api)
     const { handleAddToCart } = useContext(CartContext)
     const navigation = useRouter();
     console.log(detailPro);
@@ -38,7 +38,9 @@ export default function Page() {
                         </h1>
                         <h1 className='text-[20px] text-[gold] font-[600] '>${detailPro?.price}</h1>
                         <div className='flex gap-5'>
-                            <button className='px-9 py-2 hover:bg-[#9b1d1d] hover:text-white text-[15px] border  transition-all font-[600] rounded-[4px] nunitoextralight_italic' onClick={() => { handleAddToCart(detailPro); }}>ADD TO CART</button>
+                            <button className='px-9 py-2 hover:bg-[#9b1d1d] hover:text-white text-[15px] border  transition-all font-[600] rounded-[4px] nunitoextralight_italic' onClick={() => { handleAddToCart(detailPro); }}>
+                                <Qty productId={detailPro?._id} />
+                                ADD TO CART</button>
                         </div>
                     </section>
                 </div>
@@ -60,8 +62,8 @@ export default function Page() {
                                 </h1>
                                 <h1 className='text-[15px] font-[600] text-[#f1ce07]'>${item.price}</h1>
                                 <button className='detail-btn-arr qty-p-i px-9 py-2 hover:bg-[#9b1d1d] border hover:text-white text-[11px] font-[500]rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>
-                                <Qty productId={item._id} />
-                                ADD TO CART</button>
+                                    <Qty productId={item._id} />
+                                    ADD TO CART</button>
                             </li>
                         )
                     })

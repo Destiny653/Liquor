@@ -17,10 +17,10 @@ export const POST =  async (req, res, next) =>{
             if(isUserPasswordMatch){
                 return new NextResponse(JSON.stringify({userData:isUser,message:'Succesfully logged in'}) ,{status: 201});
             }else{
-                return new NextResponse(JSON.stringify({message: "Invalid cridentials"}),{status:404})
+                return new NextResponse(JSON.stringify({message: "Your password is incorrect, try using another account."}),{status:404})
             }
         }else{
-            return new NextResponse(JSON.stringify({message: "User does not exist"}),{status:404})
+            return new NextResponse(JSON.stringify({message: "User with email: "+ email+ " does't exist."}),{status:404})
         }
     }catch(e){
         console.log(e);

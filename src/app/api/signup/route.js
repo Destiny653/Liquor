@@ -15,8 +15,8 @@ import { NextResponse } from "next/server";
         try {
             const existUser = await User.findOne({ email });
             if (existUser) {
-                console.log('User already exists');
-                return  NextResponse.json({ error:true, success: false, message: 'User already exists.'}, {status: 400});
+                console.log('User already exists please try using another account.');
+                return  NextResponse.json({ error:true, success: false, message: 'User already exists please try using another account.'}, {status: 400});
             }
             const hashedpassword = await bcrypt.hash(password, 5)
             const newUser = new User({

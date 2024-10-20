@@ -15,6 +15,7 @@ const Page = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [loader, setLoader] = useState(false); 
+    const [btnLoader, setBtnLoader] = useState(false); 
 
     let  localStorageEmail = null
 
@@ -55,10 +56,8 @@ const Page = () => {
                 console.log(data);
                 
                 if (data.error) {
-                    notyf.error( data.message, "please try using another account or register.")
-                }
-                notyf.success('Welcome ' + session.user.email)
-
+                    notyf.error( data.message)
+                } 
             } catch (error) {
                 notyf.error('Error: ' + error)
             }
@@ -77,7 +76,7 @@ const Page = () => {
                         <Image src={session.user.image} alt='user image' className='image' width={2000} height={2000} />
                     </div>
                     <h1 className='text-black '>Signed in as {session.user.email}</h1> <br /> {" "}
-                    <button className='signin-btn' onClick={() => signOut("google")}>Sign out</button>{" "}
+                    <button className='signin-btn active:bg-[#1f1f70]' onClick={() =>{alert('You are currently signed out.'); signOut("google"); typeof window !== 'undefined' && window.localStorage.removeItem('email');}}>Sign out</button>{" "}
                 </div>
             </>
         )
@@ -102,10 +101,15 @@ const Page = () => {
                 },
                 body: JSON.stringify({ email, password })
             })
-            if (res.status === 200) {
-                navigation.push("/");
+            if (res.status === 201) {
+                setBtnLoader(false)
                 notyf.success('Successfully logged in')
+                navigation.push("/");
+                if(typeof window !== 'undefined'){
+                    window.localStorage.setItem('email', email)
+                }
             } else {
+                setBtnLoader(false)
                 notyf.error('User not found')
             }
         } catch (error) {
@@ -116,14 +120,20 @@ const Page = () => {
 
     const Load = () => {
         return (
-            <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
-                <div className="loader-con">
+            <div className='loader-p flex items-center justify-center w-full h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+                 <div className="loader-p">
                     <section className='loader-i'></section>
-                </div>
+                </div> 
             </div>
         )
-    }
-
+    } 
+    const BtnLoad = () => {
+        return ( 
+                <div className="btn-loader-p">
+                    <section className='btn-loader-i'></section>
+                </div> 
+        )
+    } 
 
     return (
         <>
@@ -144,14 +154,14 @@ const Page = () => {
                             </label>
                             <input type="password" value={password} name='password' placeholder='*******' className='singin-holder outline-0 rounded-none form-control py-2 px-4 border' onChange={e => setPassword(e.target.value)} required />
                         </div>
-                        <button className='signin-btn' type='submit'>
-                            Login
+                        <button onClick={()=>setBtnLoader(true)} disabled={btnLoader} className='signin-btn' type='submit'>
+                            {btnLoader  ? <BtnLoad/> : 'Login'}
                         </button>
                         <p className='text-centr text-[15px] text-[blue] pt-[6px]'><Link href={'/signup'}>Don't have an account? signup</Link></p>
                     </form>
                     <h1 className='signin-opt text-2xl'>or</h1>
 
-                    <button className='signin-btn' onClick={() => { signIn("google"); setLoader(true) }}>Sign in with <FcGoogle size={30} /> </button>
+                    <button className='signin-btn active:bg-[#1f1f70]' onClick={() => { signIn("google"); setLoader(true) }}>Sign in with <FcGoogle size={30} /> </button>
                 </div>
             </div>
         </>

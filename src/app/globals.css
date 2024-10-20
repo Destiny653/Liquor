@@ -177,6 +177,40 @@
     }
 }
 
+.btn-loader-p{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;  
+    border: none; 
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-loader-p:disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-loader-i{ 
+    width: 25px;
+    height: 25px;
+    border-radius: 100%;
+    border: 3px solid #fff;
+    border-bottom: 3px solid #000;
+    border-left: 3px solid #000;
+    animation: spin 0.5s infinite linear;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .qty-p-i { 
     position: relative;
     display: flex;
