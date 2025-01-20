@@ -3,8 +3,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import './check.css';
 import { CartContext } from '../../../context/CartContext';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import { Notyf } from 'notyf';
+import { createCoinbasePaymentCharge } from '../api/payment/route';
+import { Link } from 'react-feather-icon';
 
 
 export default function Checkout({ amount }) {
@@ -14,6 +16,8 @@ export default function Checkout({ amount }) {
     const [userRes, setUserRes] = useState('')
     const navigation = useRouter();
     const [loader, setLoader] = useState(false)
+    const [paymentUrl, setPaymentUrl] = useState(null)
+    const [getTotal, setGetTotal] = useState(0)
 
     // const {signIn} = useContext(SearchContext)
     // console.log(signIn);
@@ -39,7 +43,7 @@ export default function Checkout({ amount }) {
                 x: 'right',
                 y: 'top'
             }
-        }); 
+        });
 
         try {
 
@@ -53,16 +57,16 @@ export default function Checkout({ amount }) {
             const data = await res.json();
             console.log(data)
             // in success:false
-            if(res.status == 404){
+            if (res.status == 404) {
                 setLoader(false)
                 notyf.error(data.message)
                 navigation.push('/signup')
-            }else if(data.success){
+            } else if (data.success) {
                 setLoader(false)
-                notyf.success(data.message) 
-            }else{ 
+                notyf.success(data.message)
+            } else {
                 setLoader(false)
-                notyf.error('Error placing order: '+res.statusText) 
+                notyf.error('Error placing order: ' + res.statusText)
             }
         } catch (error) {
             setLoader(false)
@@ -70,15 +74,29 @@ export default function Checkout({ amount }) {
             console.log(error);
         }
     }
+
+    const handlePayment = async (ammount, currency) => {
+        setLoader(true)
+        try {
+            const charge = await createCoinbasePaymentCharge(ammount, currency);
+            setPaymentUrl(charge.data.hosted_url)
+            setLoader(false)
+        } catch (error) {
+            setLoader(false)
+            console.log('Handlepayment Error: ', error.message);
+
+        }
+    }
+
     const Load = () => {
         return (
-          <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
-            <div className="loader-con">
-              <section className='loader-i'></section>
+            <div className='top-0 z-10 fixed bg-[#c6c5ec65] w-full h-[100%] loader-p'>
+                <div className="loader-con">
+                    <section className='loader-i'></section>
+                </div>
             </div>
-          </div>
         )
-      }
+    }
 
 
 
@@ -87,76 +105,76 @@ export default function Checkout({ amount }) {
 
             {/* checkout your card items */}
 
-            <div className='section-con flex justify-center w-full gap-2 pt-6 box-border nav-obscure-view'>
+            <div className='box-border flex justify-center gap-2 pt-6 w-full nav-obscure-view section-con'>
                 {
-                    loader ? <Load/> : console.log('not loading')
-                    
+                    loader ? <Load /> : console.log('not loading')
+
                 }
-                <form onSubmit={handleSubmit} className=' form-section w-2/4 box-border p-5 pt-0 flex gap-3 flex-col'>
-                    <h1 className='roboto text-2xl  font-medium '>Billing details</h1>
-                    <fieldset className='flex input-name gap-4'>
-                        <label className='flex flex-col w-full gap-1' htmlFor="name">
+                <form onSubmit={handleSubmit} className='box-border flex flex-col gap-3 form-section p-5 pt-0 w-2/4'>
+                    <h1 className='font-medium text-2xl roboto'>Billing details</h1>
+                    <fieldset className='flex gap-4 input-name'>
+                        <label className='flex flex-col gap-1 w-full' htmlFor="name">
                             <span>First name*</span>
-                            <input className='px-7 py-2 border' type="text" name='text' value={firstname} onChange={e => setFirstname(e.target.value)} />
+                            <input className='px-6 py-2 border' type="text" name='text' value={firstname} onChange={e => setFirstname(e.target.value)} />
                         </label>
-                        <label className='flex flex-col w-full gap-1' htmlFor="name">
+                        <label className='flex flex-col gap-1 w-full' htmlFor="name">
                             <span>Last name*</span>
-                            <input className='px-7 py-2 border' type="text" name='text' value={lastname} onChange={e => setLastname(e.target.value)} />
+                            <input className='px-6 py-2 border' type="text" name='text' value={lastname} onChange={e => setLastname(e.target.value)} />
                         </label>
                     </fieldset>
                     <label className='flex flex-col gap-1' htmlFor="email">
                         <span>Email</span>
-                        <input className='px-7 py-2 border' type="email" name='text' value={useremail} onChange={e => setUseremail(e.target.value)} />
+                        <input className='px-6 py-2 border' type="email" name='text' value={useremail} onChange={e => setUseremail(e.target.value)} />
                     </label>
                     <label className='flex flex-col gap-1' htmlFor="name">
                         <span>Country/Region*</span>
-                        <input className='px-7 py-2 border' type="text" name='text' placeholder='USA' />
+                        <input className='px-6 py-2 border' type="text" name='text' placeholder='USA' />
                     </label>
                     <label className='flex flex-col gap-1' htmlFor="name">
                         <span>Street address*</span>
-                        <input className='px-7 py-2 border' type="text" name='text' placeholder='House number and street name' />
+                        <input className='px-6 py-2 border' type="text" name='text' placeholder='House number and street name' />
                     </label>
                     <label className='flex flex-col gap-1' htmlFor="name">
                         <span>Town/City*</span>
-                        <input className='px-7 py-2 border' type="text" name='text' placeholder='City' />
+                        <input className='px-6 py-2 border' type="text" name='text' placeholder='City' />
                     </label>
                     <label className='flex flex-col gap-1' htmlFor="name">
                         <span>State*</span>
-                        <input className='px-7 py-2 border' type="text" name='text' placeholder='State' />
+                        <input className='px-6 py-2 border' type="text" name='text' placeholder='State' />
                     </label>
                     <label className='flex flex-col gap-1' htmlFor="name">
                         <span>Zip/Postal code*</span>
-                        <input className='px-7 py-2 border' type="text" name='text' placeholder='Zip code' />
+                        <input className='px-6 py-2 border' type="text" name='text' placeholder='Zip code' />
                     </label>
                     <label className='flex flex-col gap-1' htmlFor="name">
                         <span>Phone number*</span>
-                        <input className='px-7 py-2 border' type="text" name='text' placeholder='Phone number' />
+                        <input className='px-6 py-2 border' type="text" name='text' placeholder='Phone number' />
                     </label>
                     <label className='flex flex-col gap-1' htmlFor="name">
                         <span>Email address*</span>
-                        <input className='px-7 py-2 border' type="text" name='text' placeholder='Email address' />
+                        <input className='px-6 py-2 border' type="text" name='text' placeholder='Email address' />
                     </label>
-                    <label className='flex gap-4 ' htmlFor="checkbox">
+                    <label className='flex gap-4' htmlFor="checkbox">
                         <input type="checkbox" name='checkbox' />
                         <span>Create an account</span>
                     </label>
                     <label className='flex gap-4' htmlFor="checkbox">
                         <input type="checkbox" name='checkbox' />
-                        <span className='text-xl font-medium '>Ship to a different address?</span>
+                        <span className='font-medium text-xl'>Ship to a different address?</span>
                     </label>
                     <label className='flex flex-col gap-2' htmlFor="textarea">
                         <span>Additional information</span>
-                        <textarea className='border px-6' name="textarea" id="textarea" cols="4" rows="4" placeholder='Notes about your order, e.g. special notes for delivery'></textarea>
+                        <textarea className='px-6 border' name="textarea" id="textarea" cols="4" rows="4" placeholder='Notes about your order, e.g. special notes for delivery'></textarea>
                     </label>
-                    <button onClick={()=>{setLoader(true)}} className=' text-lg text-white font-medium  roboto py-2 rounded-xl bg-[#610f0f]' type='submit' >Place order</button>
+                    <button onClick={() => { setLoader(true) }} className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-lg text-white roboto' type='submit' >Mobile Payment</button>
                 </form>
-                <section className=' table-section w-2/4  box-border p-3 '>
-                    <table className='border w-full box-border p-7 mb-3'>
-                        <caption className='roboto text-2xl text-left  font-medium mb-3 '>Your order</caption>
+                <section className='box-border p-3 w-2/4 table-section'>
+                    <table className='box-border mb-3 p-7 border w-full'>
+                        <caption className='mb-3 font-medium text-2xl text-left roboto'>Your order</caption>
                         <thead>
                             <tr>
-                                <th className=' border-b text-left pb-4 ' scope='col'>Product name</th>
-                                <th className=' border-b text-left pb-4 ' scope='col'>Subtotal</th>
+                                <th className='pb-4 border-b text-left' scope='col'>Product name</th>
+                                <th className='pb-4 border-b text-left' scope='col'>Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,6 +183,7 @@ export default function Checkout({ amount }) {
 
                                     let orderPrice = item.price * item.quantity
                                     totalPrice += item.price * item.quantity; // calculate total price 
+                                    setGetTotal(totalPrice)
 
                                     return (
                                         <tr key={item.id}>
@@ -175,7 +194,7 @@ export default function Checkout({ amount }) {
                                 })
                             }
                         </tbody>
-                        <tfoot className='text font-medium'>
+                        <tfoot className='font-medium text'>
                             <tr>
                                 <td>Subtotal</td>
                                 <td>{formatter.format(totalPrice)}</td>
@@ -194,7 +213,17 @@ export default function Checkout({ amount }) {
                             </tr>
                         </tfoot>
                     </table>
-                    <div className='flex flex-col font-medium  gap-4'>
+                    <div className='flex flex-col gap-[10px] w-full'>
+                        {
+                            paymentUrl ?
+                                <Link href={paymentUrl} target='_blank'>
+                                    <button className='bg-[#1b8a37] my-[4px] py-2 font-medium text-lg text-white roboto' >{loader ? 'processing' : 'Validate Payment'}</button>
+                                </Link>
+                                : <button onClick={() => { setLoader(true); handlePayment(formatter.format(getTotal + 70), 'XAF') }} className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-lg text-white roboto' type='submit' >Pay with crypto wallet</button>
+                        }
+                        <button onClick={() => { setLoader(true) }} className='bg-[#610f0f] my-[4px] py-2 font-medium text-lg text-white roboto' type='submit' >Pay with mobile payment</button>
+                    </div>
+                    <div className='flex flex-col gap-4 font-medium'>
                         <label className='flex gap-3' htmlFor="radio">
                             <input type="radio" name='radio' />
                             <span>Cash on delivery</span>
@@ -207,7 +236,7 @@ export default function Checkout({ amount }) {
                             <input type="radio" name='radio' />
                             <span>Credit card</span>
                         </label>
-                    </div> 
+                    </div>
                 </section>
             </div>
         </>
