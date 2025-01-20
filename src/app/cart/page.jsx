@@ -92,7 +92,7 @@ export default function Page() {
                                 return (
                                     <tr key={index}>
                                         <td>
-                                            <Image className='rounded-full cart-img size-24' src={itemInCart?.img} alt='product' height={400} width={400} />
+                                            <img className='rounded-full cart-img size-24' src={itemInCart?.img} alt='product' height={400} width={400} />
                                         </td>
                                         <td className='cart-title-name'>{itemInCart?.title.slice(0, 15)}</td>
                                         <td>{formatter.format(price)}</td>
