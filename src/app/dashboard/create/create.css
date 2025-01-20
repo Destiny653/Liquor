@@ -70,7 +70,7 @@ span{
 @media all and (max-width:391px){}
 =====================================
 */
-@media all and (max-width:391px){
+@media all and (max-width:401px){
      .dashboard-display{
         display: flex;
         flex-direction: column;

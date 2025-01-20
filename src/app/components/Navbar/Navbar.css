@@ -120,7 +120,7 @@ Navbar
 ===================================
  */
 
-@media all and (max-width:391px) {
+@media all and (max-width:401px) {
     #first-nav {
         display: none;
     }
