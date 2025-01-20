@@ -13,9 +13,9 @@ import Qty from '../components/Quantity/quantity';
 
 export default function Page() {
 
-    const { searchVal, searchInp, handlePro} = useContext(SearchContext);
-    const { handleAddToCart } = useContext(CartContext); 
-    
+    const { searchVal, searchInp, handlePro } = useContext(SearchContext);
+    const { handleAddToCart } = useContext(CartContext);
+
     const navigation = useRouter();
     console.log(searchInp);
     console.log(searchVal);
@@ -97,20 +97,33 @@ export default function Page() {
             return <SkeletonArr2 />
         }
         return getItemsForPage(currentPage)?.map((item, index) => (
-            <li key={index} className='shop-arr-i  bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
-                <Image className='shop-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
-                <h1 className='text-[14.5px] font-[600] shop-arr-title'>{item.title}</h1>
-                {/* <p className='shop-arr-content text-[13px] text-center h-[52px]'>{item.content.slice(0,201)}</p> */}
+            <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[19px] shop-arr-i'>
+                {/* {item?.img ? (
+                    <Image
+                        className='shop-arr-img'
+                        src={item.img}
+                        alt={item.title}
+                        width={500}
+                        height={500}
+                        onClick={() => {
+                            handlePro(item);
+                            navigation.push(`/details?title=${item.title.toLowerCase()}`);
+                        }}
+                    />
+                ) : null} */}
+                <img className='shop-arr-img' src={item?.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
+                <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
+                {/* <p className='shop-arr-content h-[52px] text-[13px] text-center'>{item.content.slice(0,201)}</p> */}
                 <h1>
                     <FaStar color='gold' className='inline' />
                     <FaStar color='gold' className='inline' />
                     <FaStar color='gold' className='inline' />
                     <FaStar color='gold' className='inline' />
                 </h1>
-                <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
-                <button className='shop-btn-arr qty-p-i px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>
-                <Qty productId={item._id} />
-                ADD TO CART</button>
+                <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
+                <button className='hover:bg-[#9b1d1d] px-9 py-2 qty-p-i shop-btn-arr border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>
+                    <Qty productId={item._id} />
+                    ADD TO CART</button>
             </li>
         ));
     };
@@ -140,10 +153,10 @@ export default function Page() {
     const filterdPrice = data?.filter((product) => product.price >= minPrice && product.price <= maxPrice)
     console.log(filterdPrice);
     return (
-        <div className='shop-parent relative nav-obscure-view'>
-            <div className='shop-child1 sticky left-0 top-[10vh]'>
+        <div className='relative shop-parent nav-obscure-view'>
+            <div className='top-[10vh] left-0 sticky shop-child1'>
                 <section className='brand'>
-                    <h1 className=' font-[500] text-2xl text-[red]'>Brand</h1>
+                    <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
                     <label htmlFor="radio">
                         <input type="radio" name="brand" value={'regular'} onChange={() => setOptions(choice[6])} />
                         <span>All</span>
@@ -174,7 +187,7 @@ export default function Page() {
                     </label>
                 </section>
                 <section className='shop-filter'>
-                    <h1 className=' font-[500] text-2xl text-[red]'>Filter</h1>
+                    <h1 className='font-[500] text-[red] text-2xl'>Filter</h1>
                     <label htmlFor="check">
                         <input type="checkbox" onChange={() => { setMinPrice(100); SetMaxPrice(150) }} />
                         <ul>
@@ -251,13 +264,13 @@ export default function Page() {
                 </section>
             </div>
             <section className='shop-child2'>
-                <div className='shop-banner '>
-                    <Image className='h-full w-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
-                    <h1 className='shop-brand text-[red] text-[30px] w-fit'>{options}</h1>
+                <div className='shop-banner'>
+                    <Image className='w-full h-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
+                    <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
                 </div>
-                <h1 className='shop-child2-head text-[25px] py-[20px]'>BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE</h1>
+                <h1 className='py-[20px] shop-child2-head text-[25px]'>BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE</h1>
                 <div>
-                    <section className='shop-info border text-[18px] font-[300] p-2'>
+                    <section className='p-2 shop-info border font-[300] text-[18px]'>
                         showing page: {currentPage} / {getTotalPages()} of: {data?.length} products
                     </section>
                     <section>
@@ -266,10 +279,10 @@ export default function Page() {
                 <div className='shop-arr w-full'>
                     {loader ? <SkeletonArr2 /> : displayItems()}
                 </div>
-                <div className='pagination flex items-center justify-center gap-9'>
-                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212] hover:text-[#fff]' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
+                <div className='flex justify-center items-center gap-9 pagination'>
+                    <button className='hover:bg-[#811212] px-8 py-1 border rounded-[7px] hover:text-[#fff]' onClick={prevPage} disabled={currentPage === 1}>Prev</button>
                     <span>{currentPage} of {getTotalPages()}</span>
-                    <button className='border px-8 py-1 rounded-[7px] hover:bg-[#811212] hover:text-[#fff]' onClick={nextPage} disabled={currentPage === getTotalPages()}>Next</button>
+                    <button className='hover:bg-[#811212] px-8 py-1 border rounded-[7px] hover:text-[#fff]' onClick={nextPage} disabled={currentPage === getTotalPages()}>Next</button>
                 </div>
             </section>
         </div>

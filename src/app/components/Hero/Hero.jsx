@@ -70,13 +70,13 @@ export default function Hero() {
 
     return (
         <div className='hero-gen-con'>
-            <ul className='hero-list -[300px] overflow-hidden'>
+            <ul className='overflow-hidden -[300px] hero-list'>
                 <li
                     data-aos="fade-right"
                     data-aos-offset="100"
                     data-aos-duration="1000"
                     className='h-[330px]'>
-                    <Image className='hero-list-img' src="/images/Subscribe.png" alt="hero intro" width={300} height={300} />
+                    <img className='hero-list-img' src="/images/Subscribe.png" alt="hero intro" width={300} height={300} />
                 </li>
                 <li className='h-[330px]'
                     data-aos="fade-down"
@@ -84,7 +84,7 @@ export default function Hero() {
                     data-aos-easing="linear"
                     data-aos-duration="1500"
                 >
-                    <Image className='hero-list-img' src="/images/new.png" alt="hero intro" width={300} height={300} />
+                    <img className='hero-list-img' src="/images/new.png" alt="hero intro" width={300} height={300} />
                 </li>
                 <li className='h-[330px]'
                     data-aos="fade-up"
@@ -92,7 +92,7 @@ export default function Hero() {
                     data-aos-easing="linear"
                     data-aos-duration="1500"
                 >
-                    <Image className='hero-list-img scale-[0.9]' src="/images/gift_basket.png" alt="hero intro" width={300} height={300} />
+                    <img className='hero-list-img scale-[0.9]' src="/images/gift_basket.png" alt="hero intro" width={300} height={300} />
                 </li>
                 <li className='h-[330px]'
                     data-aos="fade-left"
@@ -100,10 +100,10 @@ export default function Hero() {
                     data-aos-easing="linear"
                     data-aos-duration="1500"
                 >
-                    <Image className='hero-list-img' src="/images/img9.png" alt="hero intro" width={300} height={300} />
+                    <img className='hero-list-img' src="/images/img9.png" alt="hero intro" width={300} height={300} />
                 </li>
             </ul>
-            <section className='hero-list2-p box-border'>
+            <section className='box-border hero-list2-p'>
                 <h1 className='text-center hero-t'>SHOP BY SPIRIT</h1>
                 <div>
                     {
@@ -118,9 +118,9 @@ export default function Hero() {
                                                 data-aos-offset="100"
                                                 data-aos-easing="ease-out-cubic"
                                                 data-aos-duration="1500" key={index}>
-                                                <Image className='hero-list-img2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
+                                                <img className='hero-list-img2' src={item.img} alt={item.title} width={300} height={300} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
                                             </li>
-                                            <h3 className='hero-list2-title text-center py-3'>{item.title.slice(0, 10)}</h3>
+                                            <h3 className='py-3 text-center hero-list2-title'>{item.title.slice(0, 10)}</h3>
                                         </div>
                                     ))
                                 }
@@ -128,11 +128,11 @@ export default function Hero() {
                     }
                 </div>
             </section>
-            <div className='hero-high-light text-white text-center'>
-                <h3 className='text-2xl text-[#da9226]'>Personalize it!</h3>
+            <div className='hero-high-light text-center text-white'>
+                <h3 className='text-[#da9226] text-2xl'>Personalize it!</h3>
                 <h1 className='hero-high-light-h1 text-6xl'>CUSTOM ENGRAVING AVAILABLE</h1>
                 <p>Choose from our Engraving Collection and add a special message to send a memorable gift!</p>
-                <button onClick={()=>navigation.push('/shop')} className='border hero-btn border-white'>SHOP NOW</button>
+                <button onClick={()=>navigation.push('/shop')} className='border-white border hero-btn'>SHOP NOW</button>
             </div>
             <div className='hero-best-sellers-p'>
                 <h1 className='hero-title'>BEST SELLERS</h1>
@@ -144,20 +144,20 @@ export default function Hero() {
                             data-aos-easing="linear"
                             data-aos-duration="1500"
                         >
-                            <Image className='hero-sell-img w-full' src="/images/bestsell1.jpg" alt='intro img' width={300} height={300} />
+                            <img className='w-full hero-sell-img' src="/images/bestsell1.jpg" alt='intro img' width={300} height={300} />
                         </li>
                         <li
                             data-aos="fade-down"
                             data-aos-duration="3000"
                         >
-                            <Image className='hero-sell-img w-full' src="/images/bestsell2.jpg" alt='intro img' width={300} height={300} />
+                            <img className='w-full hero-sell-img' src="/images/bestsell2.jpg" alt='intro img' width={300} height={300} />
                         </li>
                         <li
                             data-aos="fade-right"
                             data-aos-easing="linear"
                             data-aos-duration="1500"
                         >
-                            <Image className='hero-sell-img w-full' src="/images/bestsell3.jpg" alt='intro img' width={300} height={300} />
+                            <img className='w-full hero-sell-img' src="/images/bestsell3.jpg" alt='intro img' width={300} height={300} />
                         </li>
                     </ul>
                 </div>
@@ -168,10 +168,10 @@ export default function Hero() {
                             {
                                 data?.slice(4, 16).map((item, index) => (
                                     <>
-                                        <li key={index} className='hero-arr-i bg-[#c0c0c00c] border-[1px] border-[#c0c0c065] box-border py-[19px]'>
-                                            <Image className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() =>{ handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
-                                            <h1 className='text-[14.5px] font-[600] hero-arr-title'>{item.title}</h1>
-                                            <p className='text-[13px] text-center h-[52px]'>{item.content}</p>
+                                        <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[19px] hero-arr-i'>
+                                            <img className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() =>{ handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
+                                            <h1 className='font-[600] text-[14.5px] hero-arr-title'>{item.title}</h1>
+                                            <p className='h-[52px] text-[13px] text-center'>{item.content}</p>
                                             <h1>
                                                 <FaStar color='gold' className='inline' />
                                                 <FaStar color='gold' className='inline' />
@@ -179,8 +179,8 @@ export default function Hero() {
                                                 <FaStar color='gold' className='inline' />
                                             </h1>
                                             <p>From </p>
-                                            <h1 className='text-[15px] font-[600] text-[#f1ce07]'>{formatter.format(item.price)}</h1>
-                                            <button className='hero-btn-arr qty-p-i px-9 py-2 hover:bg-[#9b1d1d] border hover:text-[#fff] text-[11px] font-[500] rounded-[3px] nunitoextralight_italic' onClick={() => { handleAddToCart(item); }}>
+                                            <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
+                                            <button className='hover:bg-[#9b1d1d] px-9 py-2 qty-p-i border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic hero-btn-arr' onClick={() => { handleAddToCart(item); }}>
                                             <Qty productId={item._id}/>
                                             ADD TO CART</button>
                                         </li>
@@ -196,19 +196,19 @@ export default function Hero() {
                     <li className='bg-[]'
                         data-aos="zoom-in-left"
                         data-aos-duration="1500"
-                    ><Image className='w-full hero-gift-img' src="/images/gift3.jpg" alt='gift images' width={700} height={700} /></li>
+                    ><img className='w-full hero-gift-img' src="/images/gift3.jpg" alt='gift images' width={700} height={700} /></li>
                     <li className='bg-[]'
                         data-aos="zoom-out-up"
                         data-aos-offset="100"
                         data-aos-duration="1500"
                         data-aos-easing="ease-in-sine"
-                    ><Image className='w-full hero-gift-img' src="/images/gift1.jpg" alt='gift images' width={700} height={700} /></li>
+                    ><img className='w-full hero-gift-img' src="/images/gift1.jpg" alt='gift images' width={700} height={700} /></li>
                     <li className='bg-[]'
                         data-aos="zoom-in-right"
                         data-aos-easing="linear"
                         data-aos-offset="100"
                         data-aos-duration="1500"
-                    ><Image className='w-full hero-gift-img' src="/images/gift2.jpg" alt='gift images' width={700} height={700} /></li>
+                    ><img className='w-full hero-gift-img' src="/images/gift2.jpg" alt='gift images' width={700} height={700} /></li>
                 </ul>
             </div>
 
