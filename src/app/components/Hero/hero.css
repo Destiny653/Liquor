@@ -244,11 +244,11 @@
 
 /* 
 ===================================
-@media all and (max-width:391px){}
+@media all and (max-width:460px){}
 ===================================
  */
 
-@media all and (max-width:401px) {
+@media all and (max-width:460px) {
     .hero-gen-con{ 
         gap: 30px;
         padding: 0;
