@@ -1,0 +1,29 @@
+.max-screen-msg-btn{
+    display: block;
+}
+.btnActive{
+    padding: 8px 10px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    background-color: #500d0d;
+}
+
+.btnActive .activeMsg {
+    background-color:#0d1450;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* 
+==========================================
+@media all and (max-width:391px){}
+==========================================
+*/
+@media all and (max-width:391px){
+    .max-screen-msg-btn{
+        display: none;
+    }
+}

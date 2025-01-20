@@ -1,0 +1,21 @@
+.displayP{
+    position: absolute;
+    top: 80%;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 5px;
+    background: #292727f3;
+    border: 3px solid rgb(0, 0, 0);
+    box-sizing: border-box;
+    padding: 1% 1% 0 1%;
+    place-items: center;
+    max-width:  100%;
+}
+ 
+.displayT{
+    font-size: 11px;
+    text-transform: lowercase;
+    text-align: center;
+    color: #ffffff;
+} 

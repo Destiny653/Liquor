@@ -1,0 +1,99 @@
+.sub-p {
+    width: 70%;
+    height: 600px;
+    /* box-shadow: 0px 0px 5px 0.09px rgb(161, 129, 24); */
+    border: 1px solid rgb(150, 12, 12);
+    background-color: #f7f7f7;
+    transition: all 0.1s linear;
+    z-index: 1;
+}
+.singup-title{
+    margin-bottom: 10px;
+    text-shadow: 1.5px 2.4px 1px rgb(161, 129, 24);
+} 
+.sub-p:hover {
+    box-shadow: 9px 6px 6px 0.09px rgba(29, 29, 29, 0.185);
+}
+
+.register-img {
+    width: 53%;
+    max-height: min-content;
+    border-radius: 9px;
+    height: 100%;
+}
+
+.btn {
+    width: 100%;
+    padding: 9px;
+    border-radius: 4px;
+    background-color: rgb(146, 24, 24);
+    color: #fff;
+}
+
+.header {
+    right: -63%;
+    top: -40px;
+    color: rgb(36, 44, 17);
+}
+
+/* 
+===================================================
+screen sizing maxwith 1100px
+===================================================
+ */
+
+@media all and (max-width: 1100px) {
+    .register-img {
+        width: 65%;
+    }
+
+    .header {
+        right: -50%;
+        top: -30px;
+    }
+}
+
+/* 
+===================================================
+screen sizing maxwith 880px
+===================================================
+ */
+
+@media all and (max-width: 880px) {
+    .register-img {
+        width: 74%;
+    }
+
+    .header {
+        right: -50%;
+        top: -30px;
+    }
+
+    .sub-p {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0px 7px;
+        margin: 0;
+    }
+}
+
+/* 
+===================================================
+screen sizing maxwith 800px
+===================================================
+ */
+
+@media all and (max-width: 800px) {
+    .register-img {
+        display: none;
+    }
+
+    .header {
+        right: -60%;
+        top: -30px;
+    }
+
+    .form-part {
+        width: 100%;
+    }
+}

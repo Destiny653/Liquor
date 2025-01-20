@@ -1,0 +1,57 @@
+.icon-parent {
+   display: none;
+   background-color: #000;
+   height: 50px;
+   width: 100%;
+}
+
+/*
+==================================
+ @media all and (max-width:391px){} 
+================================== 
+ */
+
+@media all and (max-width:391px) {
+   .icon-parent {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      height: 60px;
+      overflow: visible;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      background-color: #ffffff;
+   }
+
+   .icon {
+      color: #000000;
+      background-color: #ffffff;
+      transition: all 0.3s ease;
+      padding: 8px;
+      box-sizing: content-box;
+      cursor: pointer;
+   }
+   .active-title{ 
+      display: none;
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-size: 12px;
+      width: fit-content; 
+      padding: 4px 6px;
+      color: #fff;
+      border-radius: 8px;
+      background-color: #615f5f46; 
+      cursor: pointer;
+   }
+
+   /* hover effect */ 
+   .active-title:hover{
+      display: block;
+   }
+   .icon:hover{
+        color: #000000;
+        background-color: #326cb831; 
+     }
+}

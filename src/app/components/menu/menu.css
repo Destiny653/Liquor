@@ -1,0 +1,23 @@
+.menu-p{
+    background: rgb(161, 129, 24);
+    color: rgb(36, 44, 17);
+    box-shadow: 2px 0px 6px #0000003b;
+}
+.menu-p ul li{
+    box-sizing: border-box;
+    padding: 5px 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 2px 0px 6px #000000a1;
+    margin: 6px 0px;
+    color: #520a1a;
+    font-weight: 500;
+}
+.menu-title{
+    box-shadow: 2px 0px 6px #000000a1;
+    background: #fff;
+    font-weight: 600;
+    color:  rgb(161, 129, 24);;
+}
+.menu-t {
+    color: #fff;
+}

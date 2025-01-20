@@ -1,0 +1,40 @@
+td {
+    padding: 13px 0px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.192);
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 0;
+}
+.section-con {
+  padding: 0 10px;
+}
+
+/* @media 900px */
+
+@media all and (max-width:900px){
+    .input-name{
+        display: flex;
+        flex-direction: column;
+    }
+}
+ 
+
+
+/* 'media  720px  */
+
+@media all and (max-width:720px){
+    .section-con {
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+.table-section,
+.form-section{
+    width: 100%;
+}

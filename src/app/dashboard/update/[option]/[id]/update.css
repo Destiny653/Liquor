@@ -1,0 +1,18 @@
+.post-gen-p{
+    background: #243c41;
+    color: white;
+    width: 100%;
+    height: 95vh;
+    /* background-image: url('../../../../../public/images/girl.jpg'); */
+}
+.post-content-p{
+    background-color: #9dbff336;
+    box-shadow:inset 0px 0px 40px 40px #c6d2daa9;
+    background-image: url('../../../../../public/images/2139f86bf5b9f5ea7352fb6fdadacf58.jpg');
+}
+.post-img-p {
+    box-shadow:inset 0px 0px 40px 40px #c6d2da;
+}
+span{
+    margin-bottom: 10px;
+}

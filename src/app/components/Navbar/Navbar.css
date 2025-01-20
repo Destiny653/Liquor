@@ -1,0 +1,182 @@
+/*
+==========================================
+Navbar 
+========================================== 
+*/
+.nav-search-p {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 1px 0px 10px #00000044;
+    /* overflow: scroll; */
+}
+
+.nav-user-img {
+    height: 36px;
+    width: 36px;
+    background-color: gray;
+    border-radius: 50%;
+}
+
+.nav-logo {
+    color: rgb(116, 10, 10);
+    ;
+}
+
+.nav-user-img+h2 {
+    color: rgb(36, 44, 17);
+
+}
+
+.nav-search-bar {
+    border: 1.5px solid rgb(143, 20, 20);
+    margin: 15px 0;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.nav-search-bar::placeholder {
+    color: rgb(36, 44, 17);
+    font-weight: 500;
+}
+
+.dashboard-ch {
+    display: none;
+    position: relative;
+    border-radius: 12px;
+    background: #fff;
+    color: #000;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.dashboard-ch li {
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.26);
+    padding: 5px 10px 10px 10px;
+    font-size: 14px;
+}
+
+.dashboard-ch li:hover {
+    background-color: rgba(128, 128, 128, 0.267);
+}
+
+.dashboard-p:hover .dashboard-ch {
+    display: block;
+    position: absolute;
+    right: 30px;
+    transition: all 4s ease;
+}
+
+.nav-item-p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgb(116, 10, 10);
+    text-transform: uppercase;
+    font-size: 14px;
+    width: 100%;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    /* font-weight: 600; */
+    color: #fff;
+}
+
+.dashHoveI {
+    position: relative;
+}
+
+.selectItem {
+    display: none;
+}
+
+.dashHover {
+    position: absolute;
+    display: none;
+    width: 200px;
+    display: flex;
+    right: 10px;
+}
+
+.dashHoveI:hover .dashHover {
+    display: block;
+    height: 200px;
+}
+
+.dashHoveI:hover .selectItem {
+    display: block;
+}
+
+#second-nav {
+    display: none;
+}
+
+/* 
+===================================
+@media all and (max-width:391px){}
+===================================
+ */
+
+@media all and (max-width:391px) {
+    #first-nav {
+        display: none;
+    }
+
+    #second-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-search-p {
+        display: grid;
+        grid-template-columns: 30% 100% 70%;
+    }
+
+    .nav-search-bar {
+        width: 100%;
+        margin: 0;
+    }
+
+    .nav-user-img {
+        margin-bottom: 10px;
+    }
+
+    .dashboard-ch {
+        position: static;
+        display: none;
+    }
+
+    .nav-search-p {
+        display: flex;
+        padding: 0 1px;
+        gap: 10px;
+    }
+
+    .second-nav-ch2 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .nav-item-p { 
+        display: none; 
+    } 
+    .nav-child {
+        scroll-snap-align: center;
+    }
+
+    /* .dashHoveI{
+        display: none;
+     }
+    .selectItem{
+        display: none;
+     }
+    .dashHover{
+        display: none;
+        position: static;
+     } */
+}

@@ -1,15 +1,14 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/Navbar/Navbar";
+import AuthProvider from "../../context/AuthContext";
+import Footer from "./components/Footer/Footer";
+import SearchProvider from "../../context/SearchContext";
+import MsgBtn from "./components/MsgBtn/MsgBtn";
+import { CartProvider } from "../../context/CartContext"; 
+import BottomNav from "./components/BottomNav/BottomNav";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -19,10 +18,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={inter.className}>
+        <AuthProvider>
+            <SearchProvider>
+              <CartProvider>
+                <Navbar />
+                {children}
+                <MsgBtn />
+                <Footer />
+                <BottomNav/>
+              </CartProvider>
+            </SearchProvider>
+        </AuthProvider>
       </body>
     </html>
   );
