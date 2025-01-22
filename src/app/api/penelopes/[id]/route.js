@@ -12,7 +12,7 @@ export async function GET(req, { params }) {
         const post = await  Penelope.findById(id)
         return new NextResponse(JSON.stringify(post), { status: 200 });
     } catch (error) {
-        return new NextResponse('Database Error', { status: 500 })
+        return new NextResponse(JSON.stringify({message:'Error: '+error}), { status: 500 })
     }
 }
 
@@ -42,7 +42,7 @@ export async function PUT(req, { params }) {
         });
         return new NextResponse({ message: 'Product Updated' }, { status: 200 });
     } catch (error) {
-        return new NextResponse('Database Error', { status: 500 })
+        return new NextResponse(JSON.stringify({message:'Error: '+error}), { status: 500 })
     }
 }
 
@@ -77,7 +77,7 @@ export const DELETE = async (req, { params }) => {
         const post = await Penelope.findByIdAndDelete(id);
         return new NextResponse(JSON.stringify(post), {message: 'Post deleted successfully', status: 200 });
     } catch (error) {
-        return new NextResponse('Database Error', {status: 500});
+        return new NextResponse(JSON.stringify({message:'Error: '+error}), {status: 500});
     }
 
 }

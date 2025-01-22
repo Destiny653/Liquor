@@ -1,7 +1,6 @@
 'use client'
 import React, { useContext, useState } from 'react'
-import { signIn, signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
+import { signIn, signOut, useSession } from 'next-auth/react' 
 import './login.css'
 import { FcGoogle } from 'react-icons/fc'
 import { useRouter } from 'next/navigation'
@@ -75,10 +74,10 @@ const Page = () => {
                 <div className='authContainer'>
                     {" "}
                     <div className='profileImage'>
-                        <Image src={session.user.image} alt='user image' className='image' width={2000} height={2000} />
+                        <img src={session ? session.user?.image : null} alt='user image' className='image' width={2000} height={2000} />
                     </div>
-                    <h1 className='text-black '>Signed in as {session.user.email}</h1> <br /> {" "}
-                    <button className='signin-btn active:bg-[#1f1f70]' onClick={() =>{alert('You are currently signed out.'); signOut("google"); typeof window !== 'undefined' && window.localStorage.removeItem('email');}}>Sign out</button>{" "}
+                    <h1 className='text-black'>Signed in as {session.user.email}</h1> <br /> {" "}
+                    <button className='active:bg-[#1f1f70] signin-btn' onClick={() =>{alert('You are currently signed out.'); signOut("google"); typeof window !== 'undefined' && window.localStorage.removeItem('email');}}>Sign out</button>{" "}
                 </div>
             </>
         )
@@ -122,7 +121,7 @@ const Page = () => {
 
     const Load = () => {
         return (
-            <div className='loader-p flex items-center justify-center h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+            <div className='top-0 z-10 fixed flex justify-center items-center bg-[#c6c5ec65] w-full h-[100%] loader-p'>
                  <div className="loader-p">
                     <section className='loader-i'></section>
                 </div> 
@@ -143,27 +142,27 @@ const Page = () => {
             <div className='authContainer nav-obscure-view'>
                 <div className='signCard'  >
                     <form className='sign-form' onSubmit={handleSubmit}>
-                        <div className=' mb-3 flex flex-col'>
-                            <h1 className='signin-label text-3xl m-auto'>Sign in</h1>
-                            <label htmlFor="email" className=' signin-label pb-1'>
+                        <div className='flex flex-col mb-3'>
+                            <h1 className='m-auto text-3xl signin-label'>Sign in</h1>
+                            <label htmlFor="email" className='pb-1 signin-label'>
                                 Email
                             </label>
-                            <input type="email" value={email} name='email' placeholder='Enter email...' className='singin-holder outline-0 rounded-none form-control py-2 px-4 border' onChange={e => setEmail(e.target.value)} required />
+                            <input type="email" value={email} name='email' placeholder='Enter email...' className='form-control px-4 py-2 border rounded-none outline-0 singin-holder' onChange={e => setEmail(e.target.value)} required />
                         </div>
-                        <div className=' mb-6 flex flex-col'>
-                            <label htmlFor="password" className=' signin-label pb-1'>
+                        <div className='flex flex-col mb-6'>
+                            <label htmlFor="password" className='pb-1 signin-label'>
                                 Password
                             </label>
-                            <input type="password" value={password} name='password' placeholder='*******' className='singin-holder outline-0 rounded-none form-control py-2 px-4 border' onChange={e => setPassword(e.target.value)} required />
+                            <input type="password" value={password} name='password' placeholder='*******' className='form-control px-4 py-2 border rounded-none outline-0 singin-holder' onChange={e => setPassword(e.target.value)} required />
                         </div>
                         <button onClick={()=>setBtnLoader(true)} disabled={btnLoader} className='signin-btn' type='submit'>
                             {btnLoader  ? <BtnLoad/> : 'Login'}
                         </button>
-                        <p className='text-centr text-[15px] text-[blue] pt-[6px]'><Link href={'/signup'}>Don't have an account? signup</Link></p>
+                        <p className='pt-[6px] text-[15px] text-[blue] text-centr'><Link href={'/signup'}>Don't have an account? signup</Link></p>
                     </form>
-                    <h1 className='signin-opt text-2xl'>or</h1>
+                    <h1 className='text-2xl signin-opt'>or</h1>
 
-                    <button className='signin-btn active:bg-[#1f1f70]' onClick={() => { signIn("google"); setLoader(true) }}>Sign in with <FcGoogle size={30} /> </button>
+                    <button className='active:bg-[#1f1f70] signin-btn' onClick={() => { signIn("google"); setLoader(true) }}>Sign in with <FcGoogle size={30} /> </button>
                 </div>
             </div>
         </>

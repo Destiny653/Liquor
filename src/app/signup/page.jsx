@@ -4,8 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState, useContext } from 'react';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import './signup.css';
-import Image from 'next/image';
+import './signup.css'; 
 import { SearchContext } from '../../../context/SearchContext';
 
 export default function Page() {
@@ -80,7 +79,7 @@ export default function Page() {
 
     const Load = () => {
         return (
-            <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
+            <div className='top-0 z-10 fixed bg-[#c6c5ec65] w-full h-[100%] loader-p'>
                 <div className="loader-con">
                     <section className='loader-i'></section>
                 </div>
@@ -94,36 +93,36 @@ export default function Page() {
             {
                 loader ? <Load /> :  ""
             }
-            <div className='register-bg flex justify-center items-center box-border py-11'>
+            <div className='box-border flex justify-center items-center py-11 register-bg'>
                 <div className={`sub-p flex justify-evenly gap-8 items-center bg-white box-border p-5 overflow-hidden rounded-[8px] `} >
-                    <div className='register-img w-full overflow-hidden'>
-                        <Image className='h-full w-full' src='/images/royal.jpg' alt='whisky bottle demo' width={500} height={500} />
+                    <div className='w-full overflow-hidden register-img'>
+                        <img className='w-full h-full' src='/images/royal.jpg' alt='whisky bottle demo' width={500} height={500} />
                     </div>
-                    <div className='w-2/4 form-part '>
+                    <div className='form-part w-2/4'>
                         <h2 className={` text-3xl header singup-title font-[600]`}>Sign Up</h2>
                         <form onSubmit={handleSubmit}>
-                            <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="username" className='pb-1 text-[14px] font-[600]'>
+                            <div className='flex flex-col mb-6'>
+                                <label htmlFor="username" className='pb-1 font-[600] text-[14px]'>
                                     Name
                                 </label>
-                                <input type="text" value={username} name='text' placeholder='Enter username...' className='outline-0 form-control py-[6px] rounded-[4px] px-4 border' onChange={e => setUsername(e.target.value)} required />
+                                <input type="text" value={username} name='text' placeholder='Enter username...' className='form-control px-4 py-[6px] border rounded-[4px] outline-0' onChange={e => setUsername(e.target.value)} required />
                             </div>
-                            <div className=' mb-3 flex flex-col'>
-                                <label htmlFor="email" className='pb-1 text-[14px] font-[600]'>
+                            <div className='flex flex-col mb-3'>
+                                <label htmlFor="email" className='pb-1 font-[600] text-[14px]'>
                                     Email
                                 </label>
-                                <input type="email" value={email} name='email' placeholder='Enter email...' className='outline-0 form-control py-[6px] rounded-[4px] px-4 border' onChange={e => setEmail(e.target.value)} required />
+                                <input type="email" value={email} name='email' placeholder='Enter email...' className='form-control px-4 py-[6px] border rounded-[4px] outline-0' onChange={e => setEmail(e.target.value)} required />
                             </div>
-                            <div className=' mb-6 flex flex-col'>
-                                <label htmlFor="password" className='pb-1 text-[14px] font-[600]'>
+                            <div className='flex flex-col mb-6'>
+                                <label htmlFor="password" className='pb-1 font-[600] text-[14px]'>
                                     Password
                                 </label>
-                                <input type="password" value={password} name='password' placeholder='*******' className='outline-0 form-control py-[6px] rounded-[4px] px-4 border' onChange={e => setPassword(e.target.value)} required />
+                                <input type="password" value={password} name='password' placeholder='*******' className='form-control px-4 py-[6px] border rounded-[4px] outline-0' onChange={e => setPassword(e.target.value)} required />
                             </div>
-                            <button type='submit' className='btn btn-success w-80 text-[15px]'>Sign Up</button>
+                            <button type='submit' className='w-80 text-[15px] btn btn-success'>Sign Up</button>
                         </form>
-                        <p className='text-[12px] text-[blue] cursor-pointer hover:underline mb-2 mt-1'>Already have an account?</p>
-                        <button className='btn  btn-default text-[15px]'>
+                        <p className='mt-1 mb-2 text-[12px] text-[blue] hover:underline cursor-pointer'>Already have an account?</p>
+                        <button className='text-[15px] btn btn-default'>
                             <Link href='/login'>Login</Link>
                         </button>
                     </div>

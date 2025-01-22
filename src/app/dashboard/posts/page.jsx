@@ -1,6 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image';
+import React, { useState, useEffect } from 'react' 
 import Link from 'next/link';
 import './posts.css';
 import { FaStar } from "react-icons/fa";
@@ -49,29 +48,29 @@ export default function Page() {
 
     return (
         <>
-                <section className='post-sub-container relative nav-obscure-view'>
+                <section className='relative nav-obscure-view post-sub-container'>
 
-                    <div className='post-detail sticky top-[10vh] right-0'>
-                        <div className='w-full nunitoextralight_italic flex flex-col gap-2'>
-                            <h1 className='text-xl text-[#850303]'>Preview</h1>
+                    <div className='top-[10vh] right-0 sticky post-detail'>
+                        <div className='flex flex-col gap-2 w-full nunitoextralight_italic'>
+                            <h1 className='text-[#850303] text-xl'>Preview</h1>
                             <div className='box-border flex justify-center'>
-                                <Image src={posts && posts[mainindex]?.img} alt='item image' width={300} height={300} />
+                                <img src={posts && posts[mainindex]?.img} alt='item image' width={300} height={300} />
                             </div>
-                            <h1 className='post-detail-t text-xl font-semibold'>{posts[mainindex]?.title}</h1>
-                            <h2 className='font-semibold '>{formatter.format(posts[mainindex]?.price)}</h2>
-                            <p className=' post-pg'>{posts[mainindex]?.content}</p>
+                            <h1 className='font-semibold text-xl post-detail-t'>{posts[mainindex]?.title}</h1>
+                            <h2 className='font-semibold'>{formatter.format(posts[mainindex]?.price)}</h2>
+                            <p className='post-pg'>{posts[mainindex]?.content}</p>
                             <div className='flex justify-center items-center gap-6'>
                               <Link href={`/dashboard/update/${posts[mainindex]?.productModel}/${posts[mainindex]?._id}`}>
-                                <button className=' post-btn bg-black  text-white '>Edit</button>
+                                <button className='bg-black text-white post-btn'>Edit</button>
                               </Link>
-                                <button onClick={() => { deletePost(posts[mainindex]?.productModel,posts[mainindex]?._id); setMainindex(0) }} className='post-btn bg-[#850303] text-white'>Delete</button>
+                                <button onClick={() => { deletePost(posts[mainindex]?.productModel,posts[mainindex]?._id); setMainindex(0) }} className='bg-[#850303] text-white post-btn'>Delete</button>
                             </div>
                         </div>
                     </div>
                     <ul className='post-sub-child'>
-                        <div className='post-opt flex gap-4'>
-                            <h1 className='text-xl text-[#850303]'>All Posts</h1>
-                            <button className=' bg-black  text-white py-2 px-12'>
+                        <div className='flex gap-4 post-opt'>
+                            <h1 className='text-[#850303] text-xl'>All Posts</h1>
+                            <button className='bg-black px-12 py-2 text-white'>
                                 <Link href='/dashboard/create'>Add</Link>
                             </button>
                         </div>
@@ -80,12 +79,12 @@ export default function Page() {
                             {
                                 posts?.map((post, index) => {
                                     return (
-                                        <li key={index} onClick={() => setMainindex(index)} className='post-item flex box-border border p-5 gap-4'>
+                                        <li key={index} onClick={() => setMainindex(index)} className='box-border flex gap-4 p-5 border post-item'>
                                             <div className='box-border overflow-hidden'>
-                                                <Image className='rounded-xl hover:scale-125 ' alt='image of item' src={post?.img} width={300} height={300} />
+                                                <img className='rounded-xl hover:scale-125' alt='image of item' src={post?.img} width={300} height={300} />
                                             </div>
                                             <div className='flex flex-col'>
-                                                <h1 className='text  font-semibold  text-base'>{post?.title}</h1>
+                                                <h1 className='font-semibold text-base text'>{post?.title}</h1>
                                                 <p className='post-pg'>{post.content}</p>
                                                 <h1>
                                                     <FaStar color='gold' className='inline' />
@@ -93,7 +92,7 @@ export default function Page() {
                                                     <FaStar color='gold' className='inline' />
                                                     <FaStar color='gold' className='inline' />
                                                 </h1>
-                                                <span className='nunitoextralight_italic font-semibold'>{formatter.format(post.price)}</span>
+                                                <span className='font-semibold nunitoextralight_italic'>{formatter.format(post.price)}</span>
                                                 <div className='flex items-center gap-2'>
                                                 </div>
                                             </div>

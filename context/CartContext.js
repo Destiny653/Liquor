@@ -1,58 +1,68 @@
-'use client'
-import { createContext, useEffect, useReducer, useState } from "react";
+'use client';
+import { createContext, useEffect, useReducer, useState } from 'react';
 
 export const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([])
+  const [cartItems, setCartItems] = useState([]);
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0)
-    const handleAddToCart = (currentItem, qty, index) => {
-        forceUpdate()
-        let cart = cartItems ?? [];
-        let productID = currentItem?._id;
-        let price = currentItem?.price;
-        let title = currentItem?.title;
-        let productModel = currentItem?.productModel;
-        let img = currentItem?.img
-        let position = cart?.findIndex(value => value.product_id === productID);
-        let quantity = qty ? cartItems[position]?.quantity - 1 : (position < 0 ? 1 : cartItems[position]?.quantity + 1)
+  const saveCartToLocalStorage = (cart) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cartItems', JSON.stringify(cart));
+    }
+  };
 
-        if (index || index === 0) {
-            cart.splice(position, 1)
-        } else {
-            if (quantity <= 0) {
-                cart.splice(position, 1)
-            } else if (position === -1) {
-                cart.push({ product_id: productID, price: price, title: title, img: img, productModel: productModel, quantity: 1 })
-            } else {
-                cart[position].quantity = quantity
-            }
-        }
-        if(typeof window !== 'undefined'){
-            localStorage.setItem('cartItems', JSON.stringify(cart));
-        }
-        setCartItems(cart)
-        //add item to cart or update quantity
+  const handleAddToCart = (currentItem, qty, index) => {
+    forceUpdate();
+    let cart = cartItems ?? [];
+    let position = cart.findIndex((item) => item.product_id === currentItem?._id);
+    let quantity = qty ? cart[position]?.quantity - 1 : position < 0 ? 1 : cart[position]?.quantity + 1;
+    let updatedCart = [...cart];
 
+    if (index || index === 0) {
+      updatedCart.splice(position, 1);
+    } else {
+      if (quantity <= 0) {
+        updatedCart.splice(position, 1);
+      } else if (position === -1) {
+        updatedCart.push({
+          product_id: currentItem?._id,
+          price: currentItem?.price,
+          title: currentItem?.title,
+          img: currentItem?.img,
+          productModel: currentItem?.productModel,
+          quantity: 1,
+        });
+      } else {
+        updatedCart[position].quantity = quantity;
+      }
     }
 
-    const emptyCart = () => {
-        localStorage.removeItem('cartItems');
-    } 
+    saveCartToLocalStorage(updatedCart);
+    setCartItems(updatedCart);
+  };
 
-    useEffect(() => {
-        if(typeof window !== 'undefined'){
-            setCartItems(JSON.parse(localStorage.getItem('cartItems')))
-            forceUpdate(cartItems)
-        }
-    }, [])
+  const emptyCart = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('cartItems');
+    }
+    setCartItems([]);
+  };
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedCart = localStorage.getItem('cartItems');
+      if (storedCart) {
+        setCartItems(JSON.parse(storedCart));
+      }
+      forceUpdate();
+    }
+  }, []);
 
-
-    return (
-        <CartContext.Provider value={{ cartItems, handleAddToCart, emptyCart }}>
-            {children}
-        </CartContext.Provider>
-    )
+  return (
+    <CartContext.Provider value={{ cartItems, handleAddToCart, emptyCart }}>
+      {children}
+    </CartContext.Provider>
+  );
 };

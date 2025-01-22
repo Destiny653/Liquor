@@ -1,7 +1,6 @@
 'use client'
 import React, { useContext, useEffect, useState } from 'react'
-import "./shop.css"
-import Image from 'next/image';
+import "./shop.css" 
 import Link from 'next/link';
 import { SearchContext } from '../../../context/SearchContext';
 import { useRouter } from 'next/navigation';
@@ -99,7 +98,7 @@ export default function Page() {
         return getItemsForPage(currentPage)?.map((item, index) => (
             <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[19px] shop-arr-i'>
                 {/* {item?.img ? (
-                    <Image
+                    <img
                         className='shop-arr-img'
                         src={item.img}
                         alt={item.title}
@@ -265,7 +264,7 @@ export default function Page() {
             </div>
             <section className='shop-child2'>
                 <div className='shop-banner'>
-                    <Image className='w-full h-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
+                    <img className='w-full h-full' src={'/images/shopbanner.jpg'} alt='shop banner image' height={500} width={500} />
                     <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
                 </div>
                 <h1 className='py-[20px] shop-child2-head text-[25px]'>BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE</h1>

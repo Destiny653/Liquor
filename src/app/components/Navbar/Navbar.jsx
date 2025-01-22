@@ -6,8 +6,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useRouter } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
+import { useSession } from 'next-auth/react'; 
 import Display from '../SearchDisplay/Display';
 
 export default function Navbar() {
@@ -98,7 +97,7 @@ export default function Navbar() {
 
     const [query, setQuery] = useState('');
     // setSearchInp(query)
-    handleSearch(query)
+    // handleSearch(query)
     console.log(query);
     const fetchFromAPIs = async (title) => {
         const apis = [
@@ -112,7 +111,7 @@ export default function Navbar() {
 
         // Flatten the array of results and filter based on the title
         const filteredResults = results.flat().filter(product =>
-            product.title.toLowerCase().includes(title.toLowerCase())
+            product?.title?.toLowerCase().includes(title.toLowerCase())
         );
         console.log(filteredResults);
 
@@ -129,35 +128,35 @@ export default function Navbar() {
     return (
         <div  style={{ position: 'fixed', top: '0', width: '99.9%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
             <nav className="bg-white">
-                <section id='first-nav' className="first-nav nav-search-p z-20">
-                    <div className="n-search-1 font-bold text-2xl nav-logo ">LOGO</div>
-                    <label className='n-search-2 relative grid place-items-center w-[60%]'>
+                <section id='first-nav' className="z-20 nav-search-p first-nav">
+                    <div className="n-search-1 font-bold text-2xl nav-logo">LOGO</div>
+                    <label className='relative place-items-center grid w-[60%] n-search-2'>
                         <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
                         <Display />
                     </label>
-                    <section className="nav-search-3 flex justify-center items-center gap-2">
+                    <section className="flex justify-center items-center gap-2 nav-search-3">
                         <div className="nav-user-img">
-                            <Image className='w-full h-full rounded-full ' src={session?.user.image} alt="user-icon" width={100} height={100} />
+                            <img className='rounded-full w-full h-full' src={session? session.user?.image : null} alt="user-icon" width={100} height={100} />
                         </div>
                         <h2>{session?.user.name}</h2>
                     </section>
                 </section>
-                <section id='second-nav' className=" nav-search-p box-border pt-[10px] z-20">
-                    <div className='second-nav-ch2 flex justify-between w-full'>
-                        <div className="n-search-1 font-bold text-2xl nav-logo ">LOGO</div>
-                        <section className="n-search-3 flex justify-center items-center gap-2">
+                <section id='second-nav' className="z-20 box-border pt-[10px] nav-search-p">
+                    <div className='flex justify-between w-full second-nav-ch2'>
+                        <div className="n-search-1 font-bold text-2xl nav-logo">LOGO</div>
+                        <section className="flex justify-center items-center gap-2 n-search-3">
                             <h2>{session?.user.name}</h2>
                             <div className="nav-user-img">
-                                <Image  src={session?.user.image} alt="user-icon" width={100} height={100} className='w-full h-full rounded-full' />
+                                <img  src={session? session.user?.image : null} alt="user-icon" width={100} height={100} className='rounded-full w-full h-full' />
                             </div>
                         </section>
                     </div>
-                    <label className='n-search-2 relative grid place-items-center w-[100%]'>
-                        <input className="nav-search-bar rounded-[25px]" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
+                    <label className='relative place-items-center grid w-[100%] n-search-2'>
+                        <input className="rounded-[25px] nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
                         <Display />
                     </label>
                 </section>
-                <section className='nav-links flex justify-center items-center pt-4'>
+                <section className='flex justify-center items-center pt-4 nav-links'>
                     <ul  
                         className="nav-item-p"
                         data-aos-offset="500"

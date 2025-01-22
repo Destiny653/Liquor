@@ -1,8 +1,7 @@
 'use client';
 import React, { useContext, useEffect, useState } from 'react';
 import './cart.css';
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from 'next/link'; 
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CartContext } from '../../../context/CartContext';
 

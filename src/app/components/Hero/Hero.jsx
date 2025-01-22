@@ -1,5 +1,4 @@
-'use client'
-import Image from 'next/image'
+'use client' ;
 import React, { useContext, useEffect, useState } from 'react'
 import "./hero.css";
 import { FaStar } from 'react-icons/fa';
@@ -111,7 +110,7 @@ export default function Hero() {
                             <ul className='hero-list2'>
                                 {
 
-                                    data?.slice(1, 13).map((item, index) => (
+                                  data &&  data?.slice(1, 13).map((item, index) => (
                                         <div key={item._id} >
                                             <li
                                                 data-aos="flip-left"
@@ -166,8 +165,7 @@ export default function Hero() {
                     loader ? <SkeletonArr /> :
                         <ul className='hero-arr'>
                             {
-                                data?.slice(4, 16).map((item, index) => (
-                                    <>
+                              data &&  data?.slice(4, 16).map((item, index) => (
                                         <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[19px] hero-arr-i'>
                                             <img className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() =>{ handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
                                             <h1 className='font-[600] text-[14.5px] hero-arr-title'>{item.title}</h1>
@@ -184,7 +182,6 @@ export default function Hero() {
                                             <Qty productId={item._id}/>
                                             ADD TO CART</button>
                                         </li>
-                                    </>
                                 ))
 
                             }

@@ -1,5 +1,4 @@
-'use client'
-import Image from "next/image";
+'use client' 
 import Hero from "./components/Hero/Hero";
 import { useEffect, useState } from "react";
 import AOS from 'aos';
@@ -50,7 +49,7 @@ export default function Home() {
   useEffect(() => { 
    const timer = setInterval(()=>{
       setCount((num)=>(num+1)%(4))
-    },2000)
+    },7000)
     return ()=>clearInterval(timer)
   }, [])
 
@@ -61,7 +60,7 @@ export default function Home() {
       setTimeout(() => {
         AOS.init();
         setFade(false)
-      }, 7000);
+      }, 2000);
       setFade(true)
       setCurrentIndex((next) => (next + 1) % hero.length)
     }, interval);
@@ -74,13 +73,13 @@ export default function Home() {
 
 
   return (
-    <div className=" box-border px-[1px] w-full nav-obscure-view">
-      <div className="hero-dis-p mb-[60px] relative">
-        <Image className={`w-full h-full img-transform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
+    <div className="box-border px-[1px] w-full nav-obscure-view">
+      <div className="relative mb-[60px] hero-dis-p">
+        <img className={`w-full h-full img-transform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
         <div className={`details ${fade? 'trans-in' : 'trans-out'}`} >
-          <h1 className="details-h1 text-[27px]">{hero[currentIndex].title}</h1>
-          <p className="details-pg text-[50px] text-center font-[600]">{hero[currentIndex].description}</p>
-          <h1 className="details-h2 text-[27px]">{hero[currentIndex].short}</h1>
+          <h1 className="text-[27px] details-h1">{hero[currentIndex].title}</h1>
+          <p className="font-[600] text-[50px] text-center details-pg">{hero[currentIndex].description}</p>
+          <h1 className="text-[27px] details-h2">{hero[currentIndex].short}</h1>
         </div>
         <div className="indicators" >
           {

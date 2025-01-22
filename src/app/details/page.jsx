@@ -2,8 +2,7 @@
 import React, { useContext, useEffect } from 'react';
 import { SearchContext } from '../../../context/SearchContext';
 import { FaStar } from 'react-icons/fa';
-import './details.css';
-import Image from 'next/image';
+import './details.css'; 
 import { CartContext } from '../../../context/CartContext';
 import { useRouter } from 'next/navigation';
 import Qty from '../components/Quantity/quantity';
@@ -51,7 +50,7 @@ export default function Page() {
                     api?.map((item, index) => {
                         return (
                             <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[10px] detail-arr-i'>
-                                <img className='detail-arr-img' src={item.img} alt={item.title} width={700} height={700} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
+                                <img className='detail-arr-img' src={item?.img} alt={item.title} width={700} height={700} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
                                 <h1 className='font-[600] text-[14px] detail-arr-t'>{item.title}</h1>
                                 {/* <p  className='h-[40px] text-[13px] text-center'>{item.content.slice(0,40)}</p> */}
                                 <h1>
