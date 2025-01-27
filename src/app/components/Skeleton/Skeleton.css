@@ -116,10 +116,10 @@
 } 
 /* 
 ===================================
-@media all and (max-width:391px){}
+@media all and (max-width:561px){}
 ===================================
  */
- @media all and (max-width:401px){
+ @media all and (max-width:561px){
     .skeleton-r-p {
         display: grid;
         grid-template-columns: repeat(3,1fr);
