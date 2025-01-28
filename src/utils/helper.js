@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { transaction_id, BASE_URL } = require('@/utils/constants');
+const { transaction_id, BASE_URL } = require('./constants');
 
 export const makePayment = async(products, totalAmount)=>{ 
 
@@ -15,9 +15,9 @@ export const makePayment = async(products, totalAmount)=>{
             quantity: product.quantity
         }))
 
-    const api_token =process.env.API_TOKEN_LIVE;
-    const api_user = process.env.API_USER;
-    const api_password =process.env.API_PASSWORD;
+    const api_token =" ";
+    const api_user = "";
+    const api_password =" ";
 
     const credentials = btoa(`${api_user}:${api_password}`)
     const authorization = `Basic ${credentials}`

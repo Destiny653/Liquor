@@ -29,6 +29,7 @@
       background-color: #ffffff;
       transition: all 0.3s ease;
       padding: 8px;
+      font-weight: 700;
       box-sizing: content-box;
       cursor: pointer;
    }

@@ -6,7 +6,9 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Notyf } from 'notyf';
 import { Link } from 'react-feather-icon';
-import axios from 'axios';
+import axios from 'axios'; 
+import { makePayment } from '@/utils/helper';
+// import { makePayment } from '../api/payment/route';
 
 export default function Checkout({ amount }) {
     const [firstname, setFirstname] = useState('');
@@ -14,15 +16,18 @@ export default function Checkout({ amount }) {
     const [useremail, setUseremail] = useState('');
     const [loader, setLoader] = useState(false);
     const [paymentUrl, setPaymentUrl] = useState(null);
+    const [payUrl, setPayUrl] = useState(null)
     const navigation = useRouter();
     const { data: session } = useSession();
     const { cartItems } = useContext(CartContext);
+    console.log("Payment here: ", payUrl)
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     const totalPrice = cartItems?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoader(true);
         const email = localStorage.getItem('email');
         const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
         try {
@@ -32,13 +37,15 @@ export default function Checkout({ amount }) {
                 body: JSON.stringify({ email, cartItems })
             });
             const data = await res.json();
-            setLoader(false);
             if (res.status === 404) {
+                setLoader(false);
                 notyf.error(data.message);
                 navigation.push('/signup');
             } else if (data.success) {
+                setLoader(false);
                 notyf.success(data.message);
             } else {
+                setLoader(false)
                 notyf.error('Error placing order: ' + res.statusText);
             }
         } catch (error) {
@@ -76,7 +83,7 @@ export default function Checkout({ amount }) {
     }
 
     console.log("PaymentUrl: ", paymentUrl);
-    
+
 
     const Load = () => (
         <div className='top-0 z-10 fixed bg-[#c6c5ec65] w-full h-[100%] loader-p'>
@@ -141,7 +148,7 @@ export default function Checkout({ amount }) {
                     <span>Additional information</span>
                     <textarea className='px-6 border' cols="4" rows="4" placeholder='Notes about your order'></textarea>
                 </label>
-                <button onClick={() => setLoader(true)} className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-lg text-white roboto' type='submit'>Mobile Payment</button>
+                <button className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-lg text-white roboto' type='submit'>Mobile Payment</button>
             </form>
             <section className='box-border p-3 w-2/4 table-section'>
                 <table className='box-border mb-3 p-7 border w-full'>
@@ -189,13 +196,15 @@ export default function Checkout({ amount }) {
                     {!paymentUrl &&
                         <button onClick={() => payWithCrypto(totalPrice + 70, 'XAF')} className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-lg text-white roboto'>Pay with crypto wallet</button>
                     }
-                    <button onClick={() => setLoader(true)} className='bg-[#610f0f] my-[4px] py-2 font-medium text-lg text-white roboto'>Pay with mobile payment</button>
+                    {
+                        !payUrl ? <button onClick={() => { makePayment(cartItems, totalPrice + 70).then((data) => setPayUrl(data)) }} className='bg-[#610f0f] my-[4px] py-2 font-medium text-lg text-white roboto' >Pay with mobile payment</button>
+                            :
+                            <a href={payUrl} target='_blank'>
+                                <button className='bg-[#1b8a37] my-[4px] py-2 w-full font-medium text-lg text-white outline-0 roboto'>Validate Payment</button>
+                            </a>
+                    }
                 </div>
-                <div className='flex flex-col gap-4 font-medium'>
-                    <label className='flex gap-3' htmlFor="radio">
-                        <input type="radio" name='radio' />
-                        <span>Cash on delivery</span>
-                    </label>
+                <div className='flex flex-col gap-4 font-medium'> 
                     <label className='flex gap-3' htmlFor="radio">
                         <input type="radio" name='radio' />
                         <span>Paypal</span>

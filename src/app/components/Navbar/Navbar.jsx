@@ -6,7 +6,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useRouter } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
-import { useSession } from 'next-auth/react'; 
+import { useSession } from 'next-auth/react';
 import Display from '../SearchDisplay/Display';
 
 export default function Navbar() {
@@ -43,7 +43,7 @@ export default function Navbar() {
         {
             title: 'Checkout',
             path: '/checkout'
-        }, 
+        },
         {
             title: 'Login',
             path: '/login'
@@ -79,16 +79,26 @@ export default function Navbar() {
 
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+    const [currentScroll, setCurrentScroll] = useState(0)
 
     const handleScroll = () => {
         const currentScrollY = window.scrollY;
-        if (currentScrollY > lastScrollY) {
-            setIsVisible(false);
+        setCurrentScroll(currentScrollY)
+
+        if (currentScrollY < 150) {
+            setIsVisible(true)
+            console.log("True")
         } else {
-            setIsVisible(true);
+
+            if (currentScrollY > lastScrollY) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+            setLastScrollY(currentScrollY);
         }
-        setLastScrollY(currentScrollY);
     }
+    console.log(lastScrollY)
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -126,7 +136,7 @@ export default function Navbar() {
 
 
     return (
-        <div  style={{ position: 'fixed', top: '0', width: '99.9%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
+        <div style={{ position: (currentScroll > 150) && 'fixed', top: '0', width: '99.9%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
             <nav className="bg-white">
                 <section id='first-nav' className="z-20 nav-search-p first-nav">
                     <div className="n-search-1 font-bold text-2xl nav-logo">LOGO</div>
@@ -136,7 +146,7 @@ export default function Navbar() {
                     </label>
                     <section className="flex justify-center items-center gap-2 nav-search-3">
                         <div className="nav-user-img">
-                            <img className='rounded-full w-full h-full' src={session? session.user?.image : null} alt="user-icon" width={100} height={100} />
+                            <img className='rounded-full w-full h-full' src={session ? session.user?.image : null} alt="user-icon" width={100} height={100} />
                         </div>
                         <h2>{session?.user.name}</h2>
                     </section>
@@ -147,7 +157,7 @@ export default function Navbar() {
                         <section className="flex justify-center items-center gap-2 n-search-3">
                             <h2>{session?.user.name}</h2>
                             <div className="nav-user-img">
-                                <img  src={session? session.user?.image : null} alt="user-icon" width={100} height={100} className='rounded-full w-full h-full' />
+                                <img src={session ? session.user?.image : null} alt="user-icon" width={100} height={100} className='rounded-full w-full h-full' />
                             </div>
                         </section>
                     </div>
@@ -157,7 +167,7 @@ export default function Navbar() {
                     </label>
                 </section>
                 <section className='flex justify-center items-center pt-4 nav-links'>
-                    <ul  
+                    <ul
                         className="nav-item-p"
                         data-aos-offset="500"
                         data-aos-duration="100"
@@ -171,7 +181,7 @@ export default function Navbar() {
                                     </li>
                                 )
                             })
-                        } 
+                        }
                     </ul>
                 </section>
             </nav>

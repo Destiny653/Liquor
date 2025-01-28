@@ -231,7 +231,7 @@
     top: -4%;
 }
 .nav-obscure-view{
-    margin-top: 10%;
+    margin-top: 3%;
 }
 
 /* 
@@ -243,10 +243,8 @@
  @media all and (max-width: 460px){
     .img-transform { 
         height: 160px;
-    }
-    .nav-obscure-view{
-        margin-top: 40%;
-    }
+    } 
+    
     .hero-dis-p{
         display: flex;
         flex-direction: column;
