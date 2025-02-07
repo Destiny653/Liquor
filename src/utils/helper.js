@@ -15,9 +15,9 @@ export const makePayment = async(products, totalAmount)=>{
             quantity: product.quantity
         }))
 
-    const api_token =" ";
-    const api_user = "";
-    const api_password =" ";
+    const api_token ="live_cDWU3YC0GMKlSZOKOgOoKsHecZI9JCKRIWZq2IXu";
+    const api_user = "a27ede04-bcef-4f1e-8cc8-82b05733c387";
+    const api_password ="e01cdab1-b872-461c-b571-677e0af66794";
 
     const credentials = btoa(`${api_user}:${api_password}`)
     const authorization = `Basic ${credentials}`
