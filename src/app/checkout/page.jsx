@@ -148,9 +148,9 @@ export default function Checkout({ amount }) {
                     <span>Additional information</span>
                     <textarea className='px-6 border' cols="4" rows="4" placeholder='Notes about your order'></textarea>
                 </label>
-                <button className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-lg text-white roboto' type='submit'>Mobile Payment</button>
+                <button className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-white text-lg roboto' type='submit'>Mobile Payment</button>
             </form>
-            <section className='box-border p-3 w-2/4 table-section'>
+            <section className='table-section box-border p-3 w-2/4'>
                 <table className='box-border mb-3 p-7 border w-full'>
                     <caption className='mb-3 font-medium text-2xl text-left roboto'>Your order</caption>
                     <thead>
@@ -189,18 +189,24 @@ export default function Checkout({ amount }) {
                 <div className='flex flex-col gap-[10px] w-full'>
                     {
                         paymentUrl && (
-                            <a href={paymentUrl} target='_blank'>
-                                <button className='bg-[#1b8a37] my-[4px] py-2 w-full font-medium text-lg text-white outline-0 roboto'>Validate Payment</button>
+                            <a href={paymentUrl}
+                            className='bg-[#1b8a37] my-[4px] py-2 outline-0 w-full font-medium text-white text-lg roboto'
+                             target='_blank'>
+                                Validate Payment
+                                {/* <button className='bg-[#1b8a37] my-[4px] py-2 outline-0 w-full font-medium text-white text-lg roboto'>Validate Payment</button> */}
                             </a>
                         )}
                     {!paymentUrl &&
-                        <button onClick={() => payWithCrypto(totalPrice + 70, 'XAF')} className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-lg text-white roboto'>Pay with crypto wallet</button>
+                        <button onClick={() => payWithCrypto(totalPrice + 70, 'XAF')} className='bg-[#1d1b8a] my-[4px] py-2 font-medium text-white text-lg roboto'>Pay with crypto wallet</button>
                     }
                     {
-                        !payUrl ? <button onClick={() => { makePayment(cartItems, totalPrice + 70).then((data) => setPayUrl(data)) }} className='bg-[#610f0f] my-[4px] py-2 font-medium text-lg text-white roboto' >Pay with mobile payment</button>
+                        !payUrl ? <button onClick={() => { makePayment(cartItems, totalPrice + 70).then((data) => setPayUrl(data)) }} className='bg-[#610f0f] my-[4px] py-2 font-medium text-white text-lg roboto' >Pay with mobile payment</button>
                             :
-                            <a href={payUrl} target='_blank'>
-                                <button className='bg-[#1b8a37] my-[4px] py-2 w-full font-medium text-lg text-white outline-0 roboto'>Validate Payment</button>
+                            <a href={payUrl} target='_blank'
+                            className='bg-[#1b8a37] my-[4px] py-2 outline-0 w-full font-medium text-white text-lg roboto'
+                            >
+                                Validate Payment
+                                {/* <button className='bg-[#1b8a37] my-[4px] py-2 outline-0 w-full font-medium text-white text-lg roboto'>Validate Payment</button> */}
                             </a>
                     }
                 </div>
