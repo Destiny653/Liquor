@@ -1,16 +1,15 @@
-'use client'
-import React, { useContext, useEffect, useState } from 'react'
-import "./shop.css" 
-import Link from 'next/link';
-import { SearchContext } from '../../../context/SearchContext';
+ 'use client';
+import React, { useContext, useEffect, useState, useCallback, useMemo } from 'react';
+import "./shop.css";
 import { useRouter } from 'next/navigation';
+import { SearchContext } from '../../../context/SearchContext';
 import { CartContext } from '../../../context/CartContext';
 import { FaStar } from 'react-icons/fa';
 import { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton';
 import Qty from '../components/Quantity/quantity';
 
 const PriceFilter = ({ onFilterChange }) => {
-  const priceRanges = [
+  const priceRanges = useMemo(() => [
     { label: '$100 - $250', min: 100, max: 250, count: 400 },
     { label: '$250 - $300', min: 250, max: 300, count: 100 },
     { label: '$300 - $450', min: 300, max: 450, count: 100 },
@@ -19,11 +18,11 @@ const PriceFilter = ({ onFilterChange }) => {
     { label: '$700 - $950', min: 700, max: 950, count: 290 },
     { label: '$950 - $1000', min: 950, max: 1000, count: 300 },
     { label: '$1000 and above', min: 1000, max: 30000, count: 200 },
-  ];
+  ], []);
 
   const [selectedRange, setSelectedRange] = useState(null);
 
-  const handleRangeChange = (min, max) => {
+  const handleRangeChange = useCallback((min, max) => {
     if (selectedRange?.min === min && selectedRange?.max === max) {
       setSelectedRange(null);
       onFilterChange(0, 30000);
@@ -31,7 +30,7 @@ const PriceFilter = ({ onFilterChange }) => {
       setSelectedRange({ min, max });
       onFilterChange(min, max);
     }
-  };
+  }, [selectedRange, onFilterChange]);
 
   return (
     <section className="shop-filter">
@@ -59,81 +58,78 @@ export default function Page() {
   const { handleAddToCart } = useContext(CartContext);
   const navigation = useRouter();
   
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState(null);
   const [options, setOptions] = useState('All Brands');
-  const [brand, setBrand] = useState([]);
   const [loader, setLoader] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   
   const itemsPerPage = 12;
-  const choice = ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'];
-  const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+  const choice = useMemo(() => ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'], []);
+  const formatter = useMemo(() => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }), []);
 
-  const handleFilterChange = (min, max) => {
+  const getApiEndpoints = useCallback((selectedOption) => {
+    const endpoints = {
+      'baltons': ['/api/baltons'],
+      'wellers': ['/api/wellers'],
+      'buffalos': ['/api/buffalos'],
+      'pappies': ['/api/pappies'],
+      'penelopes': ['/api/penelopes'],
+      'yamazakis': ['/api/yamazakis'],
+      'All Brands': [
+        '/api/posts',
+        '/api/baltons',
+        '/api/wellers',
+        '/api/buffalos',
+        '/api/pappies',
+        '/api/penelopes',
+        '/api/yamazakis',
+      ],
+    };
+    return endpoints[selectedOption] || endpoints['All Brands'];
+  }, []);
+
+  const handleFilterChange = useCallback((min, max) => {
     if (data) {
       const filtered = data.filter((product) => 
         product.price >= min && product.price <= max
       );
       setFilteredData(filtered);
-      setCurrentPage(1); // Reset to first page when filter changes
+      setCurrentPage(1);
     }
-  };
+  }, [data]);
 
   useEffect(() => {
-    const getData = async (title) => {
-      switch (options) {
-        case 'baltons':
-          setBrand(['/api/baltons']);
-          break;
-        case 'wellers':
-          setBrand(['/api/wellers']);
-          break;
-        case 'buffalos':
-          setBrand(['/api/buffalos']);
-          break;
-        case 'pappies':
-          setBrand(['/api/pappies']);
-          break;
-        case 'penelopes':
-          setBrand(['/api/penelopes']);
-          break;
-        case 'yamazakis':
-          setBrand(['/api/yamazakis']);
-          break;
-        default:
-          setBrand([
-            '/api/posts',
-            '/api/baltons',
-            '/api/wellers',
-            '/api/buffalos',
-            '/api/pappies',
-            '/api/penelopes',
-            '/api/yamazakis',
-          ]);
+    const fetchData = async () => {
+      setLoader(true);
+      try {
+        const endpoints = getApiEndpoints(options);
+        const fetchPromises = endpoints.map(api => fetch(api).then(res => res.json()));
+        const results = await Promise.all(fetchPromises);
+        const flattenedResults = results.flat();
+        
+        const filteredResults = flattenedResults.filter(product =>
+          product.title?.toLowerCase().includes(searchInp?.toLowerCase() || '')
+        );
+
+        setData(filteredResults);
+        setFilteredData(null);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoader(false);
       }
+    };
 
-      const fetchPromises = brand.map(api => fetch(api).then(res => res.json()));
-      const results = await Promise.all(fetchPromises);
-      const filteredResults = results.flat().filter(product =>
-        product.title?.toLowerCase().includes(title?.toLowerCase())
-      );
-      setLoader(false);
-      return filteredResults;
-    }
+    fetchData();
+  }, [searchInp, options, getApiEndpoints]);
 
-    getData(searchInp).then(results => {
-      setData(results);
-      setFilteredData(null); // Reset filtered data when new data is loaded
-    });
-  }, [searchInp, searchVal, options, brand]);
-
-  const getTotalPages = () => {
+  const getTotalPages = useCallback(() => {
     const itemsToDisplay = filteredData || data;
     return Math.ceil((itemsToDisplay?.length || 0) / itemsPerPage);
-  };
+  }, [filteredData, data]);
 
-  const displayItems = () => {
+  const displayItems = useCallback(() => {
     const itemsToDisplay = filteredData || data;
     const totalPages = getTotalPages();
     
@@ -145,9 +141,9 @@ export default function Page() {
     const endIndex = currentPage * itemsPerPage;
     
     return itemsToDisplay?.slice(startIndex, endIndex)?.map((item, index) => (
-      <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[19px] shop-arr-i'>
+      <li key={item._id || index} className='box-border bg-[#c0c0c00c] shop-arr-i py-[19px] border-[#c0c0c065] border-[1px]'>
         <img 
-          className='shop-arr-img' 
+          className='shop-arr-img cursor-pointer' 
           src={item?.img} 
           alt={item.title} 
           width={500} 
@@ -158,35 +154,34 @@ export default function Page() {
           }} 
         />
         <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
-        <h1>
-          <FaStar color='gold' className='inline' />
-          <FaStar color='gold' className='inline' />
-          <FaStar color='gold' className='inline' />
-          <FaStar color='gold' className='inline' />
+        <h1 className='flex'>
+          {[...Array(4)].map((_, i) => (
+            <FaStar key={i} color='gold' />
+          ))}
         </h1>
         <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
         <button 
-          className='hover:bg-[#9b1d1d] px-9 py-2 qty-p-i shop-btn-arr border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic' 
-          onClick={() => { handleAddToCart(item); }}
+          className='hover:bg-[#9b1d1d] qty-p-i shop-btn-arr px-9 py-2 border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic' 
+          onClick={() => handleAddToCart(item)}
         >
           <Qty productId={item._id} />
           ADD TO CART
         </button>
       </li>
     ));
-  };
+  }, [filteredData, data, currentPage, formatter, handlePro, navigation, handleAddToCart]);
 
-  const nextPage = () => {
+  const nextPage = useCallback(() => {
     if (currentPage < getTotalPages()) {
-      setCurrentPage(currentPage + 1);
+      setCurrentPage(prev => prev + 1);
     }
-  };
+  }, [currentPage, getTotalPages]);
 
-  const prevPage = () => {
+  const prevPage = useCallback(() => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      setCurrentPage(prev => prev - 1);
     }
-  };
+  }, [currentPage]);
 
   return (
     <div className='relative shop-parent nav-obscure-view'>
@@ -216,14 +211,14 @@ export default function Page() {
           <img 
             className='w-full h-full' 
             src='/images/shopbanner.jpg' 
-            alt='shop banner image' 
+            alt='shop banner' 
             height={500} 
             width={500} 
           />
           <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
         </div>
         
-        <h1 className='py-[20px] shop-child2-head text-[25px]'>
+        <h1 className='shop-child2-head py-[20px] text-[25px]'>
           BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE
         </h1>
         
@@ -239,7 +234,7 @@ export default function Page() {
 
         <div className='flex justify-center items-center gap-9 pagination'>
           <button 
-            className='hover:bg-[#811212] px-8 py-1 border rounded-[7px] hover:text-[#fff]' 
+            className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
             onClick={prevPage} 
             disabled={currentPage === 1}
           >
@@ -247,7 +242,7 @@ export default function Page() {
           </button>
           <span>{currentPage} of {getTotalPages()}</span>
           <button 
-            className='hover:bg-[#811212] px-8 py-1 border rounded-[7px] hover:text-[#fff]' 
+            className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
             onClick={nextPage} 
             disabled={currentPage === getTotalPages()}
           >
