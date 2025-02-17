@@ -1,5 +1,5 @@
  'use client';
-import React, { useContext, useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useContext, useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import "./shop.css";
 import { useRouter } from 'next/navigation';
 import { SearchContext } from '../../../context/SearchContext';
@@ -7,6 +7,30 @@ import { CartContext } from '../../../context/CartContext';
 import { FaStar } from 'react-icons/fa';
 import { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton';
 import Qty from '../components/Quantity/quantity';
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error:', error);
+    console.error('Error Info:', errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
 
 const PriceFilter = ({ onFilterChange }) => {
   const priceRanges = useMemo(() => [
@@ -53,6 +77,36 @@ const PriceFilter = ({ onFilterChange }) => {
   );
 };
 
+const ProductCard = React.memo(({ item, formatter, handlePro, navigation, handleAddToCart }) => (
+  <li className='box-border bg-[#c0c0c00c] shop-arr-i py-[19px] border-[#c0c0c065] border-[1px]'>
+    <img 
+      className='shop-arr-img cursor-pointer' 
+      src={item?.img} 
+      alt={item.title} 
+      width={500} 
+      height={500} 
+      onClick={() => { 
+        handlePro(item); 
+        navigation.push(`/details?title=${item.title.toLowerCase()}`);
+      }} 
+    />
+    <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
+    <h1 className='flex'>
+      {[...Array(4)].map((_, i) => (
+        <FaStar key={i} color='gold' />
+      ))}
+    </h1>
+    <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
+    <button 
+      className='hover:bg-[#9b1d1d] qty-p-i shop-btn-arr px-9 py-2 border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic' 
+      onClick={() => handleAddToCart(item)}
+    >
+      <Qty productId={item._id} />
+      ADD TO CART
+    </button>
+  </li>
+));
+
 export default function Page() {
   const { searchVal, searchInp, handlePro } = useContext(SearchContext);
   const { handleAddToCart } = useContext(CartContext);
@@ -68,72 +122,110 @@ export default function Page() {
   const choice = useMemo(() => ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'], []);
   const formatter = useMemo(() => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }), []);
 
+  const endpoints = useMemo(() => ({
+    'baltons': ['/api/baltons'],
+    'wellers': ['/api/wellers'],
+    'buffalos': ['/api/buffalos'],
+    'pappies': ['/api/pappies'],
+    'penelopes': ['/api/penelopes'],
+    'yamazakis': ['/api/yamazakis'],
+    'All Brands': [
+      '/api/posts',
+      '/api/baltons',
+      '/api/wellers',
+      '/api/buffalos',
+      '/api/pappies',
+      '/api/penelopes',
+      '/api/yamazakis',
+    ],
+  }), []);
+
   const getApiEndpoints = useCallback((selectedOption) => {
-    const endpoints = {
-      'baltons': ['/api/baltons'],
-      'wellers': ['/api/wellers'],
-      'buffalos': ['/api/buffalos'],
-      'pappies': ['/api/pappies'],
-      'penelopes': ['/api/penelopes'],
-      'yamazakis': ['/api/yamazakis'],
-      'All Brands': [
-        '/api/posts',
-        '/api/baltons',
-        '/api/wellers',
-        '/api/buffalos',
-        '/api/pappies',
-        '/api/penelopes',
-        '/api/yamazakis',
-      ],
-    };
     return endpoints[selectedOption] || endpoints['All Brands'];
-  }, []);
+  }, [endpoints]);
 
   const handleFilterChange = useCallback((min, max) => {
-    if (data) {
-      const filtered = data.filter((product) => 
-        product.price >= min && product.price <= max
-      );
-      setFilteredData(filtered);
-      setCurrentPage(1);
-    }
+    if (!data || data.length === 0) return;
+    
+    const filtered = data.filter((product) => 
+      product.price >= min && product.price <= max
+    );
+    setFilteredData(filtered);
+    setCurrentPage(1);
+  }, [data]);
+
+  const debouncedSearch = useCallback((searchTerm, currentData) => {
+    if (!searchTerm) return currentData;
+    return currentData.filter(product =>
+      product.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   }, []);
 
+  // Debug logging effect
   useEffect(() => {
+    console.log('Current data:', data);
+    console.log('Filtered data:', filteredData);
+    console.log('Loading state:', loader);
+  }, [data, filteredData, loader]);
+
+  // Main data fetching effect
+  useEffect(() => {
+    let isSubscribed = true;
+
     const fetchData = async () => {
       setLoader(true);
       try {
-        const endpoints = getApiEndpoints(options);
-        const fetchPromises = endpoints.map(api => fetch(api).then(res => res.json()));
-        const results = await Promise.all(fetchPromises);
-        const flattenedResults = results.flat();
-        
-        const filteredResults = flattenedResults.filter(product =>
-          product.title?.toLowerCase().includes(searchInp?.toLowerCase() || '')
+        const currentEndpoints = getApiEndpoints(options);
+        const fetchPromises = currentEndpoints.map(api => 
+          fetch(api)
+            .then(res => {
+              if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+              return res.json();
+            })
         );
 
-        setData(filteredResults);
-        setFilteredData(null);
+        const results = await Promise.all(fetchPromises);
+        const flattenedResults = results.flat();
+
+        if (isSubscribed) {
+          const searchFiltered = debouncedSearch(searchInp, flattenedResults);
+          setData(searchFiltered);
+          setFilteredData(null);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
+        if (isSubscribed) {
+          setData([]);
+          setFilteredData(null);
+        }
       } finally {
-        setLoader(false);
+        if (isSubscribed) {
+          setLoader(false);
+        }
       }
     };
 
+    // Execute fetchData immediately for initial load
     fetchData();
-  }, [searchInp, options, getApiEndpoints]);
 
-  const getTotalPages = useCallback(() => {
+    // Set up debounced updates for subsequent changes
+    const timeoutId = setTimeout(fetchData, 300);
+
+    return () => {
+      isSubscribed = false;
+      clearTimeout(timeoutId);
+    };
+  }, [searchInp, options, getApiEndpoints, debouncedSearch]);
+
+  const getTotalPages = useMemo(() => {
     const itemsToDisplay = filteredData || data;
     return Math.ceil((itemsToDisplay?.length || 0) / itemsPerPage);
-  }, [filteredData, data]);
+  }, [filteredData, data, itemsPerPage]);
 
-  const displayItems = useCallback(() => {
+  const displayItems = useMemo(() => {
     const itemsToDisplay = filteredData || data;
-    const totalPages = getTotalPages();
     
-    if (currentPage < 1 || currentPage > totalPages) {
+    if (currentPage < 1 || currentPage > getTotalPages || loader || !itemsToDisplay?.length) {
       return <SkeletonArr2 />;
     }
     
@@ -141,115 +233,92 @@ export default function Page() {
     const endIndex = currentPage * itemsPerPage;
     
     return itemsToDisplay?.slice(startIndex, endIndex)?.map((item, index) => (
-      <li key={item._id || index} className='box-border bg-[#c0c0c00c] shop-arr-i py-[19px] border-[#c0c0c065] border-[1px]'>
-        <img 
-          className='shop-arr-img cursor-pointer' 
-          src={item?.img} 
-          alt={item.title} 
-          width={500} 
-          height={500} 
-          onClick={() => { 
-            handlePro(item); 
-            navigation.push(`/details?title=${item.title.toLowerCase()}`);
-          }} 
-        />
-        <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
-        <h1 className='flex'>
-          {[...Array(4)].map((_, i) => (
-            <FaStar key={i} color='gold' />
-          ))}
-        </h1>
-        <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
-        <button 
-          className='hover:bg-[#9b1d1d] qty-p-i shop-btn-arr px-9 py-2 border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic' 
-          onClick={() => handleAddToCart(item)}
-        >
-          <Qty productId={item._id} />
-          ADD TO CART
-        </button>
-      </li>
+      <ProductCard
+        key={item._id || index}
+        item={item}
+        formatter={formatter}
+        handlePro={handlePro}
+        navigation={navigation}
+        handleAddToCart={handleAddToCart}
+      />
     ));
-  }, [filteredData, data, currentPage, formatter, handlePro, navigation, handleAddToCart]);
+  }, [filteredData, data, currentPage, getTotalPages, loader, formatter, handlePro, navigation, handleAddToCart]);
 
-  const nextPage = useCallback(() => {
-    if (currentPage < getTotalPages()) {
-      setCurrentPage(prev => prev + 1);
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage >= 1 && newPage <= getTotalPages) {
+      setCurrentPage(newPage);
     }
-  }, [currentPage, getTotalPages]);
-
-  const prevPage = useCallback(() => {
-    if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
-    }
-  }, [currentPage]);
+  }, [getTotalPages]);
 
   return (
-    <div className='relative shop-parent nav-obscure-view'>
-      <div className='top-[10vh] left-0 sticky shop-child1'>
-        <section className='brand'>
-          <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
-          {choice.map((brandName, index) => (
-            <label key={index} htmlFor={`radio-${index}`}>
-              <input 
-                type="radio" 
-                id={`radio-${index}`}
-                name="brand" 
-                value={brandName.toLowerCase()} 
-                onChange={() => setOptions(brandName)}
-                checked={options === brandName}
-              />
-              <span>{brandName === 'All Brands' ? 'All' : brandName.charAt(0).toUpperCase() + brandName.slice(1, -1)}</span>
-            </label>
-          ))}
-        </section>
-        
-        <PriceFilter onFilterChange={handleFilterChange} />
-      </div>
-
-      <section className='shop-child2'>
-        <div className='shop-banner'>
-          <img 
-            className='w-full h-full' 
-            src='/images/shopbanner.jpg' 
-            alt='shop banner' 
-            height={500} 
-            width={500} 
-          />
-          <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
-        </div>
-        
-        <h1 className='shop-child2-head py-[20px] text-[25px]'>
-          BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE
-        </h1>
-        
-        <div>
-          <section className='p-2 shop-info border font-[300] text-[18px]'>
-            showing page: {currentPage} / {getTotalPages()} of: {(filteredData || data)?.length} products
+    <ErrorBoundary>
+      <div className='relative shop-parent nav-obscure-view'>
+        <div className='top-[10vh] left-0 sticky shop-child1'>
+          <section className='brand'>
+            <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
+            {choice.map((brandName, index) => (
+              <label key={index} htmlFor={`radio-${index}`}>
+                <input 
+                  type="radio" 
+                  id={`radio-${index}`}
+                  name="brand" 
+                  value={brandName.toLowerCase()} 
+                  onChange={() => setOptions(brandName)}
+                  checked={options === brandName}
+                />
+                <span>{brandName === 'All Brands' ? 'All' : brandName.charAt(0).toUpperCase() + brandName.slice(1, -1)}</span>
+              </label>
+            ))}
           </section>
+          
+          <PriceFilter onFilterChange={handleFilterChange} />
         </div>
 
-        <div className='shop-arr w-full'>
-          {loader ? <SkeletonArr2 /> : displayItems()}
-        </div>
+        <section className='shop-child2'>
+          <div className='shop-banner'>
+            <img 
+              className='w-full h-full' 
+              src='/images/shopbanner.jpg' 
+              alt='shop banner' 
+              height={500} 
+              width={500} 
+            />
+            <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
+          </div>
+          
+          <h1 className='shop-child2-head py-[20px] text-[25px]'>
+            BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE
+          </h1>
+          
+          <div>
+            <section className='p-2 shop-info border font-[300] text-[18px]'>
+              showing page: {currentPage} / {getTotalPages} of: {(filteredData || data)?.length} products
+            </section>
+          </div>
 
-        <div className='flex justify-center items-center gap-9 pagination'>
-          <button 
-            className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
-            onClick={prevPage} 
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-          <span>{currentPage} of {getTotalPages()}</span>
-          <button 
-            className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
-            onClick={nextPage} 
-            disabled={currentPage === getTotalPages()}
-          >
-            Next
-          </button>
-        </div>
-      </section>
-    </div>
+          <div className='shop-arr w-full'>
+            {displayItems}
+          </div>
+
+          <div className='flex justify-center items-center gap-9 pagination'>
+            <button 
+              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
+              onClick={() => handlePageChange(currentPage - 1)} 
+              disabled={currentPage === 1}
+            >
+              Prev
+            </button>
+            <span>{currentPage} of {getTotalPages}</span>
+            <button 
+              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
+              onClick={() => handlePageChange(currentPage + 1)} 
+              disabled={currentPage === getTotalPages}
+            >
+              Next
+            </button>
+          </div>
+        </section>
+      </div>
+    </ErrorBoundary>
   );
 }
