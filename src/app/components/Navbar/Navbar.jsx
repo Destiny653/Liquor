@@ -27,11 +27,7 @@ export default function Navbar() {
         {
             title: 'Home',
             path: '/'
-        },
-        {
-            title: 'About',
-            path: '/about'
-        },
+        }, 
         {
             title: 'Shop',
             path: '/shop'
@@ -39,23 +35,11 @@ export default function Navbar() {
         {
             title: 'Cart',
             path: '/cart'
-        },
-        {
-            title: 'Checkout',
-            path: '/checkout'
-        },
+        }, 
         {
             title: 'Login',
             path: '/login'
-        },
-        {
-            title: 'Register',
-            path: '/signup'
-        },
-        {
-            title: 'Dashboard',
-            path: '/dashboard/posts'
-        }
+        }, 
     ]
     const navstyle = {
         display: 'flex',
@@ -166,7 +150,7 @@ export default function Navbar() {
                         <Display />
                     </label>
                 </section>
-                <section className='flex justify-center items-center pt-4 nav-links'>
+                <section className='flex gap-[15px] pt-4 nav-links'>
                     <ul
                         className="nav-item-p"
                         data-aos-offset="500"

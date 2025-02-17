@@ -71,18 +71,23 @@ Navbar
 }
 
 .nav-item-p {
-    display: flex;
-    justify-content: space-between;
+    display: flex; 
+    gap: 20px;
+    justify-content: right;
     align-items: center;
-    padding: 10px 20px;
-    background-color: rgb(116, 10, 10);
-    text-transform: uppercase;
+    padding: 10px 40px;
+    /* background-color: rgb(116, 10, 10); */ 
     font-size: 14px;
+    font-weight: 600;
     width: 100%;
     overflow-x: scroll;
     scrollbar-width: none;
     /* font-weight: 600; */
-    color: #fff;
+    color: #000;
+}
+
+.nav-item-p li:hover {
+    color: rgb(151, 12, 12);
 }
 
 .dashHoveI {
