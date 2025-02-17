@@ -60,7 +60,7 @@ export default function Home() {
       setTimeout(() => {
         AOS.init();
         setFade(false)
-      }, 2000);
+      }, 7000);
       setFade(true)
       setCurrentIndex((next) => (next + 1) % hero.length)
     }, interval);

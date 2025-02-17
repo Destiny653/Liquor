@@ -97,7 +97,7 @@ export default function Page() {
       setFilteredData(filtered);
       setCurrentPage(1);
     }
-  }, [data]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
