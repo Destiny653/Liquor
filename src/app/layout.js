@@ -5,7 +5,7 @@ import AuthProvider from "../../context/AuthContext";
 import Footer from "./components/Footer/Footer";
 import SearchProvider from "../../context/SearchContext";
 import MsgBtn from "./components/MsgBtn/MsgBtn";
-import { CartProvider } from "../../context/CartContext"; 
+import { CartProvider } from "../../context/CartContext";
 import BottomNav from "./components/BottomNav/BottomNav";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,17 +18,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <AuthProvider>
-            <SearchProvider>
-              <CartProvider>
-                <Navbar />
-                {children}
-                <MsgBtn />
-                <Footer />
-                <BottomNav/>
-              </CartProvider>
-            </SearchProvider>
+          <SearchProvider>
+            <CartProvider>
+              <Navbar />
+              {children}
+              <MsgBtn />
+              <Footer />
+              <BottomNav />
+            </CartProvider>
+          </SearchProvider>
         </AuthProvider>
       </body>
     </html>

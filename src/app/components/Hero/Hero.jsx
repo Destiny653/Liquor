@@ -1,4 +1,4 @@
-'use client' ;
+'use client';
 import React, { useContext, useEffect, useState } from 'react'
 import "./hero.css";
 import { FaStar } from 'react-icons/fa';
@@ -8,14 +8,14 @@ import { SearchContext } from '../../../../context/SearchContext';
 import { useRouter } from 'next/navigation';
 import { CartContext } from '../../../../context/CartContext';
 import SkeletonR, { SkeletonArr } from '../Skeleton/Skeleton';
-import { Notyf } from 'notyf'; 
+import { Notyf } from 'notyf';
 import Qty from '../Quantity/quantity';
 
 
 
 export default function Hero() {
     const [data, setData] = useState(null)
-    const { handlePro} = useContext(SearchContext)
+    const { handlePro } = useContext(SearchContext)
     const { handleAddToCart } = useContext(CartContext)
     const navigation = useRouter();
     const [loader, setLoader] = useState(false)
@@ -48,9 +48,15 @@ export default function Hero() {
                     console.log('failed to fetch data');
                     notyf.error('Network error, please refresh your browser.');
                     setLoader(false)
+                    return;
                 }
 
-                setData(await res.json())
+                const jsonData = await res.json();
+                if (Array.isArray(jsonData)) {
+                    setData(jsonData);
+                } else {
+                    setData([]);
+                }
                 setLoader(false)
 
             } catch (error) {
@@ -62,9 +68,9 @@ export default function Hero() {
     }, [])
 
     // return localCartItems.reduce((acc, item) => item.brand === brand? acc + item.quantity : acc, 0);
- 
 
-    console.log(data); 
+
+    console.log(data);
     const brand = 'posts'
 
     return (
@@ -110,7 +116,7 @@ export default function Hero() {
                             <ul className='hero-list2'>
                                 {
 
-                                  data &&  data?.slice(1, 13).map((item, index) => (
+                                    data && data?.slice(1, 13).map((item, index) => (
                                         <div key={item._id} >
                                             <li
                                                 data-aos="flip-left"
@@ -131,7 +137,7 @@ export default function Hero() {
                 <h3 className='text-[#da9226] text-2xl'>Personalize it!</h3>
                 <h1 className='hero-high-light-h1 text-6xl'>CUSTOM ENGRAVING AVAILABLE</h1>
                 <p>Choose from our Engraving Collection and add a special message to send a memorable gift!</p>
-                <button onClick={()=>navigation.push('/shop')} className='border-white border hero-btn'>SHOP NOW</button>
+                <button onClick={() => navigation.push('/shop')} className='border-white border hero-btn'>SHOP NOW</button>
             </div>
             <div className='hero-best-sellers-p'>
                 <h1 className='hero-title'>BEST SELLERS</h1>
@@ -165,23 +171,23 @@ export default function Hero() {
                     loader ? <SkeletonArr /> :
                         <ul className='hero-arr'>
                             {
-                              data &&  data?.slice(4, 16).map((item, index) => (
-                                        <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[19px] hero-arr-i'>
-                                            <img className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() =>{ handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
-                                            <h1 className='font-[600] text-[14.5px] hero-arr-title'>{item.title}</h1>
-                                            <p className='h-[52px] text-[13px] text-center'>{item.content}</p>
-                                            <h1>
-                                                <FaStar color='gold' className='inline' />
-                                                <FaStar color='gold' className='inline' />
-                                                <FaStar color='gold' className='inline' />
-                                                <FaStar color='gold' className='inline' />
-                                            </h1>
-                                            <p>From </p>
-                                            <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
-                                            <button className='hover:bg-[#9b1d1d] px-9 py-2 qty-p-i border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic hero-btn-arr' onClick={() => { handleAddToCart(item); }}>
-                                            <Qty productId={item._id}/>
+                                data && data?.slice(4, 16).map((item, index) => (
+                                    <li key={index} className='box-border border-[#c0c0c065] border-[1px] bg-[#c0c0c00c] py-[19px] hero-arr-i'>
+                                        <img className='hero-arr-img' src={item.img} alt={item.title} width={500} height={500} onClick={() => { handlePro(item); navigation.push(`/details?title=${item.title.toLowerCase()}`) }} />
+                                        <h1 className='font-[600] text-[14.5px] hero-arr-title'>{item.title}</h1>
+                                        <p className='h-[52px] text-[13px] text-center'>{item.content}</p>
+                                        <h1>
+                                            <FaStar color='gold' className='inline' />
+                                            <FaStar color='gold' className='inline' />
+                                            <FaStar color='gold' className='inline' />
+                                            <FaStar color='gold' className='inline' />
+                                        </h1>
+                                        <p>From </p>
+                                        <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
+                                        <button className='hover:bg-[#9b1d1d] px-9 py-2 qty-p-i border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic hero-btn-arr' onClick={() => { handleAddToCart(item); }}>
+                                            <Qty productId={item._id} />
                                             ADD TO CART</button>
-                                        </li>
+                                    </li>
                                 ))
 
                             }
