@@ -1,95 +1,217 @@
-'use client' 
+'use client'
 import Hero from "./components/Hero/Hero";
 import { useEffect, useState } from "react";
-import AOS from 'aos';
+import { useRouter } from "next/navigation";
+import { FiArrowRight, FiAward, FiTruck, FiShield, FiGift } from "react-icons/fi";
+import Link from "next/link";
 
 export default function Home() {
+  const navigation = useRouter();
 
-
-  // useEffect(() => {
-  //   AOS.init();
-  // }, [])
-
-
-  const hero = [
+  // Hero banner data
+  const heroes = [
     {
       title: "Introducing",
-      description: "ANGEL'S ENVY",
+      subtitle: "ANGEL'S ENVY",
+      description: "Port Wine Barrel Finished Bourbon",
       image: "/images/banner3.jpg",
-      btn: "Shop Now"
     },
     {
       title: "Limited Quantities",
-      description: "W.L. WELLER",
-      short: "Get it while supplies last!",
+      subtitle: "W.L. WELLER",
+      description: "Get it while supplies last!",
       image: "/images/banner2.jpg",
-      btn: "Shop Now"
     },
     {
       title: "PGA CHAMPIONSHIP",
-      description: "LIMITED EDITION",
-      short: "OFFICIAL BOURBON",
+      subtitle: "LIMITED EDITION",
+      description: "Official Bourbon Partner",
       image: "/images/banner4.jpg",
-      btn: "Shop Now"
-
     },
     {
-      title: "Pappy Van Winkle",
-      description: `RARE PAPPY COLLECTION`,
-      short: "Dilivered to your door",
+      title: "Rare Collection",
+      subtitle: "PAPPY VAN WINKLE",
+      description: "Delivered to your door",
       image: "/images/banner1.jpg",
-      btn: "Shop Now"
     },
-  ]
-  const interval = 8000
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [count, setCount] = useState(0)
-  const [fade, setFade] = useState(true)
-  
-  useEffect(() => { 
-   const timer = setInterval(()=>{
-      setCount((num)=>(num+1)%(4))
-    },7000)
-    return ()=>clearInterval(timer)
-  }, [])
+  ];
 
-  console.log(count);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Auto-rotate hero banners
   useEffect(() => {
     const timer = setInterval(() => {
+      setIsTransitioning(true);
       setTimeout(() => {
-        AOS.init();
-        setFade(false)
-      }, 7000);
-      setFade(true)
-      setCurrentIndex((next) => (next + 1) % hero.length)
-    }, interval);
+        setCurrentIndex((prev) => (prev + 1) % heroes.length);
+        setIsTransitioning(false);
+      }, 500);
+    }, 6000);
 
     return () => clearInterval(timer);
+  }, [heroes.length]);
 
-  }, [hero.length, interval, AOS])
+  // Features data
+  const features = [
+    {
+      icon: <FiTruck />,
+      title: "Free Shipping",
+      description: "On orders over $500"
+    },
+    {
+      icon: <FiAward />,
+      title: "Authenticity Guaranteed",
+      description: "100% genuine products"
+    },
+    {
+      icon: <FiShield />,
+      title: "Secure Packaging",
+      description: "Safe & protected delivery"
+    },
+    {
+      icon: <FiGift />,
+      title: "Gift Wrapping",
+      description: "Premium presentation"
+    }
+  ];
 
-  console.log(currentIndex);
-
+  // Brand showcase data
+  const brands = [
+    { name: "Pappy Van Winkle", slug: "pappies", image: "/images/bestsell1.jpg" },
+    { name: "W.L. Weller", slug: "wellers", image: "/images/bestsell2.jpg" },
+    { name: "Buffalo Trace", slug: "buffalos", image: "/images/bestsell3.jpg" },
+    { name: "Yamazaki", slug: "yamazakis", image: "/images/gift1.jpg" },
+    { name: "Penelope", slug: "penelopes", image: "/images/gift2.jpg" },
+    { name: "Baltons", slug: "baltons", image: "/images/gift3.jpg" },
+  ];
 
   return (
-    <div className="box-border px-[1px] w-full nav-obscure-view">
-      <div className="relative mb-[60px] hero-dis-p">
-        <img className={`w-full h-full img-transform ${fade ? 'fade-in' : 'fade-out'}`} src={hero[currentIndex].image} alt="Hero image display" height={10000} width={10000} />
-        <div className={`details ${fade? 'trans-in' : 'trans-out'}`} >
-          <h1 className="text-[27px] details-h1">{hero[currentIndex].title}</h1>
-          <p className="font-[600] text-[50px] text-center details-pg">{hero[currentIndex].description}</p>
-          <h1 className="text-[27px] details-h2">{hero[currentIndex].short}</h1>
+    <main className="home-page">
+      {/* Hero Banner Section */}
+      <section className="hero-banner">
+        <div className="hero-slides">
+          {heroes.map((hero, index) => (
+            <div
+              key={index}
+              className={`hero-slide ${index === currentIndex ? 'active' : ''} ${isTransitioning ? 'transitioning' : ''}`}
+              style={{ backgroundImage: `url(${hero.image})` }}
+            >
+              <div className="hero-overlay"></div>
+              <div className="hero-content">
+                <span className="hero-label">{hero.title}</span>
+                <h1 className="hero-title">{hero.subtitle}</h1>
+                <p className="hero-description">{hero.description}</p>
+                <button
+                  className="hero-cta"
+                  onClick={() => navigation.push('/shop')}
+                >
+                  Shop Now
+                  <FiArrowRight className="cta-arrow" />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="indicators" >
-          {
-            hero.map((_, index) => (
-              <div key={index} onClick={() => setCurrentIndex(index)} className={`indicator ${index === currentIndex ? 'active' : ''}`}></div>
-            ))
-          }
+
+        {/* Hero Indicators */}
+        <div className="hero-indicators">
+          {heroes.map((_, index) => (
+            <button
+              key={index}
+              className={`indicator ${index === currentIndex ? 'active' : ''}`}
+              onClick={() => {
+                setIsTransitioning(true);
+                setTimeout(() => {
+                  setCurrentIndex(index);
+                  setIsTransitioning(false);
+                }, 300);
+              }}
+            />
+          ))}
         </div>
-      </div>
+
+        {/* Scroll Indicator */}
+        <div className="scroll-indicator">
+          <div className="scroll-mouse">
+            <div className="scroll-wheel"></div>
+          </div>
+          <span>Scroll to Explore</span>
+        </div>
+      </section>
+
+      {/* Features Bar */}
+      <section className="features-bar">
+        <div className="features-container">
+          {features.map((feature, index) => (
+            <div key={index} className="feature-item">
+              <div className="feature-icon">{feature.icon}</div>
+              <div className="feature-text">
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Brand Showcase */}
+      <section className="brands-section">
+        <div className="section-header">
+          <span className="section-label">Premium Selection</span>
+          <h2 className="section-title">Shop by Brand</h2>
+          <p className="section-description">
+            Explore our curated collection of the world's finest spirits
+          </p>
+        </div>
+        <div className="brands-grid">
+          {brands.map((brand, index) => (
+            <Link
+              key={index}
+              href={`/shop?brand=${brand.slug}`}
+              className="brand-card"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="brand-image">
+                <img src={brand.image} alt={brand.name} />
+                <div className="brand-overlay"></div>
+              </div>
+              <div className="brand-info">
+                <h3>{brand.name}</h3>
+                <span className="brand-cta">
+                  Explore Collection
+                  <FiArrowRight />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Hero Component (Products Section) */}
       <Hero />
-    </div>
+
+      {/* CTA Banner */}
+      <section className="cta-banner">
+        <div className="cta-content">
+          <span className="cta-label">Personalize It!</span>
+          <h2 className="cta-title">Custom Engraving Available</h2>
+          <p className="cta-description">
+            Choose from our Engraving Collection and add a special message to send a memorable gift!
+          </p>
+          <button
+            className="cta-button"
+            onClick={() => navigation.push('/shop')}
+          >
+            Shop Engraving Collection
+            <FiArrowRight />
+          </button>
+        </div>
+        <div className="cta-decoration">
+          <div className="deco-circle"></div>
+          <div className="deco-circle"></div>
+        </div>
+      </section>
+    </main>
   );
 }

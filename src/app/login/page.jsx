@@ -1,6 +1,6 @@
 'use client'
-import React, { useContext, useState } from 'react'
-import { signIn, signOut, useSession } from 'next-auth/react' 
+import React, { useState } from 'react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import './login.css'
 import { FcGoogle } from 'react-icons/fc'
 import { useRouter } from 'next/navigation'
@@ -13,17 +13,15 @@ const Page = () => {
     const navigation = useRouter();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
-    const [loader, setLoader] = useState(false); 
-    const [btnLoader, setBtnLoader] = useState(false); 
+    const [loader, setLoader] = useState(false);
+    const [btnLoader, setBtnLoader] = useState(false);
 
-    let  localStorageEmail = null
-
-
+    let localStorageEmail = null
 
     const { data: session } = useSession()
     console.log(session)
 
-    if (session) { 
+    if (session) {
         let reqPass = null;
         if (typeof window !== 'undefined') {
             localStorageEmail = window.localStorage.getItem('email')
@@ -32,7 +30,7 @@ const Page = () => {
         async function handleSubmitGoogle() {
             if (typeof window !== 'undefined') {
                 window.localStorage.setItem('email', session.user.email)
-                reqPass = window.prompt('Enter secret password, keep in mind that it will be use for purchase verification.')
+                reqPass = window.prompt('Enter secret password, keep in mind that it will be used for purchase verification.')
             }
             const notyf = new Notyf({
                 duration: 5000,
@@ -51,35 +49,53 @@ const Page = () => {
                     },
                     body: JSON.stringify({ email: session.user.email, name: session.user.name, password: reqPass })
                 })
-                const data = await res.json()   
+                const data = await res.json()
                 console.log(data);
-                
+
                 if (data.error) {
                     setBtnLoader(false)
-                    notyf.error( data.message)
-                } 
+                    notyf.error(data.message)
+                }
             } catch (error) {
                 setBtnLoader(false)
                 notyf.error('Error: ' + error)
             }
         }
-        console.log( localStorageEmail);
-        
+        console.log(localStorageEmail);
+
         if (!localStorageEmail) {
             handleSubmitGoogle()
         }
 
+        // Logged in state
         return (
-            <>
-                <div className='authContainer'>
-                    {" "}
-                    <div className='profileImage'>
-                        <img src={session ? session.user?.image : null} alt='user image' className='image' width={2000} height={2000} />
+            <div className='auth-page'>
+                <div className='auth-container'>
+                    <div className='auth-card'>
+                        <div className='profile-card'>
+                            <div className='profile-image-wrapper'>
+                                <img
+                                    src={session ? session.user?.image : '/images/default-avatar.png'}
+                                    alt='Profile'
+                                    className='profile-image'
+                                />
+                            </div>
+                            <h2 className='profile-name'>{session.user?.name || 'Welcome'}</h2>
+                            <p className='profile-email'>Signed in as {session.user.email}</p>
+                            <button
+                                className='auth-signout-btn'
+                                onClick={() => {
+                                    alert('You are currently signed out.');
+                                    signOut("google");
+                                    typeof window !== 'undefined' && window.localStorage.removeItem('email');
+                                }}
+                            >
+                                Sign Out
+                            </button>
+                        </div>
                     </div>
-                    <h1 className='text-black'>Signed in as {session.user.email}</h1> <br /> {" "}
-                    <button className='active:bg-[#1f1f70] signin-btn' onClick={() =>{alert('You are currently signed out.'); signOut("google"); typeof window !== 'undefined' && window.localStorage.removeItem('email');}}>Sign out</button>{" "}
                 </div>
-            </>
+            </div>
         )
     };
 
@@ -106,7 +122,7 @@ const Page = () => {
                 setBtnLoader(false)
                 notyf.success('Successfully logged in')
                 navigation.push("/");
-                if(typeof window !== 'undefined'){
+                if (typeof window !== 'undefined') {
                     window.localStorage.setItem('email', email)
                 }
             } else {
@@ -119,50 +135,106 @@ const Page = () => {
         }
     };
 
-    const Load = () => {
-        return (
-            <div className='top-0 z-10 fixed flex justify-center items-center bg-[#c6c5ec65] w-full h-[100%] loader-p'>
-                 <div className="loader-p">
-                    <section className='loader-i'></section>
-                </div> 
-            </div>
-        )
-    } 
-    const BtnLoad = () => {
-        return ( 
-                <div className="btn-loader-p">
-                    <section className='btn-loader-i'></section>
-                </div> 
-        )
-    } 
+    const Loader = () => (
+        <div className='auth-loader-overlay'>
+            <div className='auth-loader'></div>
+        </div>
+    );
+
+    const BtnLoader = () => (
+        <div className='btn-loader'></div>
+    );
 
     return (
         <>
-            {loader && <Load />}
-            <div className='authContainer nav-obscure-view'>
-                <div className='signCard'  >
-                    <form className='sign-form' onSubmit={handleSubmit}>
-                        <div className='flex flex-col mb-3'>
-                            <h1 className='m-auto text-3xl signin-label'>Sign in</h1>
-                            <label htmlFor="email" className='pb-1 signin-label'>
-                                Email
-                            </label>
-                            <input type="email" value={email} name='email' placeholder='Enter email...' className='form-control px-4 py-2 border rounded-none outline-0 singin-holder' onChange={e => setEmail(e.target.value)} required />
+            {loader && <Loader />}
+            <div className='auth-page'>
+                <div className='auth-container'>
+                    <div className='auth-card'>
+                        {/* Header */}
+                        <div className='auth-header'>
+                            <div className='auth-logo'>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M8 2h8l4 10H4L8 2z"></path>
+                                    <path d="M12 12v6"></path>
+                                    <path d="M8 22h8"></path>
+                                    <path d="M12 18c2 0 4-1 4-3"></path>
+                                </svg>
+                            </div>
+                            <h1 className='auth-title'>Welcome Back</h1>
+                            <p className='auth-subtitle'>Sign in to continue to LiquorLuxx</p>
                         </div>
-                        <div className='flex flex-col mb-6'>
-                            <label htmlFor="password" className='pb-1 signin-label'>
-                                Password
-                            </label>
-                            <input type="password" value={password} name='password' placeholder='*******' className='form-control px-4 py-2 border rounded-none outline-0 singin-holder' onChange={e => setPassword(e.target.value)} required />
-                        </div>
-                        <button onClick={()=>setBtnLoader(true)} disabled={btnLoader} className='signin-btn' type='submit'>
-                            {btnLoader  ? <BtnLoad/> : 'Login'}
-                        </button>
-                        <p className='pt-[6px] text-[15px] text-[blue] text-centr'><Link href={'/signup'}>Don't have an account? signup</Link></p>
-                    </form>
-                    <h1 className='text-2xl signin-opt'>or</h1>
 
-                    <button className='active:bg-[#1f1f70] signin-btn' onClick={() => { signIn("google"); setLoader(true) }}>Sign in with <FcGoogle size={30} /> </button>
+                        {/* Form */}
+                        <form className='auth-form' onSubmit={handleSubmit}>
+                            <div className='form-group'>
+                                <label htmlFor="email" className='form-label'>
+                                    Email Address
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={email}
+                                    name='email'
+                                    placeholder='Enter your email'
+                                    className='form-input'
+                                    onChange={e => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <div className='form-group'>
+                                <label htmlFor="password" className='form-label'>
+                                    Password
+                                </label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    value={password}
+                                    name='password'
+                                    placeholder='Enter your password'
+                                    className='form-input'
+                                    onChange={e => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            <button
+                                onClick={() => setBtnLoader(true)}
+                                disabled={btnLoader}
+                                className='auth-submit-btn'
+                                type='submit'
+                            >
+                                {btnLoader ? <BtnLoader /> : 'Sign In'}
+                            </button>
+                        </form>
+
+                        {/* Divider */}
+                        <div className='auth-divider'>
+                            <span className='auth-divider-line'></span>
+                            <span className='auth-divider-text'>or</span>
+                            <span className='auth-divider-line'></span>
+                        </div>
+
+                        {/* Google Sign In */}
+                        <button
+                            className='auth-google-btn'
+                            onClick={() => { signIn("google"); setLoader(true) }}
+                        >
+                            <FcGoogle size={24} />
+                            Continue with Google
+                        </button>
+
+                        {/* Footer */}
+                        <div className='auth-footer'>
+                            <p className='auth-footer-text'>
+                                Don't have an account?{' '}
+                                <Link href='/signup' className='auth-footer-link'>
+                                    Create Account
+                                </Link>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

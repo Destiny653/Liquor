@@ -1,93 +1,64 @@
-import React from 'react'
+import React from 'react';
 import './Skeleton.css';
 
+// Circular skeleton for spirit cards
 export default function SkeletonR() {
     return (
-        <section className='skeleton-r-p'>
-            <div className='ske-r1 flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
-            <div className='flex flex-col items-center gap-[11px]'>
-                <div className="skeleton-r "></div>
-                <p className='skeleton-prg'></p>
-            </div>
+        <section className='skeleton-spirits'>
+            {[...Array(6)].map((_, index) => (
+                <div key={index} className='skeleton-spirit-item'>
+                    <div className="skeleton-circle"></div>
+                    <div className='skeleton-text'></div>
+                </div>
+            ))}
         </section>
-    )
+    );
 }
 
+// Product card skeleton grid
 export function SkeletonArr() {
     return (
-        <section className='skeleton-arr-p'>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
-            <div className="skeleton-arr"></div>
+        <section className='skeleton-products'>
+            {[...Array(8)].map((_, index) => (
+                <div key={index} className="skeleton-product-card">
+                    <div className="skeleton-image"></div>
+                    <div className="skeleton-content">
+                        <div className="skeleton-title"></div>
+                        <div className="skeleton-desc"></div>
+                        <div className="skeleton-price"></div>
+                    </div>
+                </div>
+            ))}
         </section>
-    )
+    );
 }
+
+// Shop page skeleton grid
 export function SkeletonArr2() {
     return (
         <>
-            <div className="skeleton-arr2"></div>
-            <div className="skeleton-arr2"></div>
-            <div className="skeleton-arr2"></div>
-            <div className="skeleton-arr2"></div>
-            <div className="skeleton-arr2"></div>
-            <div className="skeleton-arr2"></div>
-            <div className="skeleton-arr2"></div>
-            <div className="skeleton-arr2"></div>
+            {[...Array(8)].map((_, index) => (
+                <div key={index} className="skeleton-product-card">
+                    <div className="skeleton-image"></div>
+                    <div className="skeleton-content">
+                        <div className="skeleton-title"></div>
+                        <div className="skeleton-desc"></div>
+                        <div className="skeleton-price"></div>
+                    </div>
+                </div>
+            ))}
         </>
-    )
+    );
 }
 
+// Full page loader
 export const Load = () => {
     return (
-        <div className='loader-p h-[100%] w-full z-10 bg-[#c6c5ec65] fixed top-0'>
-            <div className="loader-con">
-                <section className='loader-i'></section>
+        <div className='loader-overlay'>
+            <div className="loader-container">
+                <div className="loader-spinner"></div>
+                <p className="loader-text">Loading...</p>
             </div>
         </div>
-    )
-}
-
+    );
+};

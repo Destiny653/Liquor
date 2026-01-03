@@ -1,174 +1,337 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import './Navbar.css';
 import Link from 'next/link';
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
 import { useSession } from 'next-auth/react';
 import Display from '../SearchDisplay/Display';
+import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
 
 export default function Navbar() {
+    const { setSearchVal } = useContext(SearchContext);
+    const { data: session } = useSession();
+    const navigation = useRouter();
 
-    const { setSearchVal, setSearchInp, handleSearch } = useContext(SearchContext)
-    const { data: session } = useSession()
-    console.log(session);
-
-
-    useEffect(() => {
-
-        AOS.init({
-            duration: 500,
-        });
-    }), []
-
-    const nav = [
+    // Brand data for mega menu
+    const brands = [
         {
-            title: 'Home',
-            path: '/'
-        }, 
-        {
-            title: 'Shop',
-            path: '/shop'
+            name: 'Pappy Van Winkle',
+            slug: 'pappies',
+            description: 'The most sought-after bourbon in the world',
+            image: '/images/bestsell1.jpg'
         },
         {
-            title: 'Cart',
-            path: '/cart'
-        }, 
+            name: 'W.L. Weller',
+            slug: 'wellers',
+            description: 'Premium wheated bourbon collection',
+            image: '/images/bestsell2.jpg'
+        },
         {
-            title: 'Login',
-            path: '/login'
-        }, 
-    ]
-    const navstyle = {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '10px',
-        width: '100%',
-        height: '50px',
-        backgroundColor: 'black',
-        color: 'white',
-        fontSize: '18px'
-    };
+            name: 'Buffalo Trace',
+            slug: 'buffalos',
+            description: 'Award-winning Kentucky straight bourbon',
+            image: '/images/bestsell3.jpg'
+        },
+        {
+            name: 'Yamazaki',
+            slug: 'yamazakis',
+            description: 'Japanese whisky excellence',
+            image: '/images/gift1.jpg'
+        },
+        {
+            name: 'Penelope',
+            slug: 'penelopes',
+            description: 'Crafted four-grain bourbon',
+            image: '/images/gift2.jpg'
+        },
+        {
+            name: 'Baltons',
+            slug: 'baltons',
+            description: 'Distinguished single malt selection',
+            image: '/images/gift3.jpg'
+        }
+    ];
 
-    const [option, setOption] = useState('');
-    const navigation = useRouter()
+    const navLinks = [
+        { title: 'Home', path: '/' },
+        { title: 'Shop', path: '/shop', hasMega: true },
+        { title: 'About', path: '/about' },
+        { title: 'Contact', path: '/contact' },
+    ];
 
-    if (option) {
-        navigation.push(`/dashboard/posts`)
-        setOption('')
-    }
-
+    const [isScrolled, setIsScrolled] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
-    const [currentScroll, setCurrentScroll] = useState(0)
+    const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [query, setQuery] = useState('');
+    const megaMenuRef = useRef(null);
+    const megaMenuTimeoutRef = useRef(null);
 
-    const handleScroll = () => {
-        const currentScrollY = window.scrollY;
-        setCurrentScroll(currentScrollY)
+    // Handle scroll behavior
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
 
-        if (currentScrollY < 150) {
-            setIsVisible(true)
-            console.log("True")
-        } else {
+            setIsScrolled(currentScrollY > 50);
 
-            if (currentScrollY > lastScrollY) {
-                setIsVisible(false);
-            } else {
+            if (currentScrollY < 150) {
                 setIsVisible(true);
+            } else {
+                setIsVisible(currentScrollY < lastScrollY);
             }
             setLastScrollY(currentScrollY);
-        }
-    }
-    console.log(lastScrollY)
+        };
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    const [query, setQuery] = useState('');
-    // setSearchInp(query)
-    // handleSearch(query)
-    console.log(query);
+    // Search functionality
     const fetchFromAPIs = async (title) => {
-        const apis = [
-            `/api/posts`
-        ];
-
+        if (!title) return [];
+        const apis = ['/api/posts'];
         const fetchPromises = apis.map(api => fetch(api).then(res => res.json()));
-
         const results = await Promise.all(fetchPromises);
-        console.log(results);
-
-        // Flatten the array of results and filter based on the title
-        const filteredResults = results.flat().filter(product =>
+        return results.flat().filter(product =>
             product?.title?.toLowerCase().includes(title.toLowerCase())
         );
-        console.log(filteredResults);
-
-        return filteredResults;
     };
 
     useEffect(() => {
-        fetchFromAPIs(query).then(results => setSearchVal(results));
-    }, [query]); // Trigger the fetchFromAPIs function when the query changes
+        if (query) {
+            fetchFromAPIs(query).then(results => setSearchVal(results));
+        }
+    }, [query, setSearchVal]);
 
+    // Handle mega menu hover with delay
+    const handleMegaMenuEnter = () => {
+        if (megaMenuTimeoutRef.current) {
+            clearTimeout(megaMenuTimeoutRef.current);
+        }
+        setMegaMenuOpen(true);
+    };
 
+    const handleMegaMenuLeave = () => {
+        megaMenuTimeoutRef.current = setTimeout(() => {
+            setMegaMenuOpen(false);
+        }, 150);
+    };
 
+    // Navigate to shop with brand filter
+    const handleBrandClick = (brandSlug) => {
+        setMegaMenuOpen(false);
+        setMobileMenuOpen(false);
+        navigation.push(`/shop?brand=${brandSlug}`);
+    };
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setMobileMenuOpen(false);
+        setMegaMenuOpen(false);
+    }, []);
 
     return (
-        <div style={{ position: (currentScroll > 150) && 'fixed', top: '0', width: '99.9%', zIndex: '10', transition: 'transform 0.3s ease', transform: isVisible ? 'translateY(0)' : 'translateY(-100%)' }}>
-            <nav className="bg-white">
-                <section id='first-nav' className="z-20 nav-search-p first-nav">
-                    <div className="n-search-1 font-bold text-2xl nav-logo">LOGO</div>
-                    <label className='relative place-items-center grid w-[60%] n-search-2'>
-                        <input className="nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
-                        <Display />
-                    </label>
-                    <section className="flex justify-center items-center gap-2 nav-search-3">
-                        <div className="nav-user-img">
-                            <img className='rounded-full w-full h-full' src={session ? session.user?.image : null} alt="user-icon" width={100} height={100} />
-                        </div>
-                        <h2>{session?.user.name}</h2>
-                    </section>
-                </section>
-                <section id='second-nav' className="z-20 box-border pt-[10px] nav-search-p">
-                    <div className='flex justify-between w-full second-nav-ch2'>
-                        <div className="n-search-1 font-bold text-2xl nav-logo">LOGO</div>
-                        <section className="flex justify-center items-center gap-2 n-search-3">
-                            <h2>{session?.user.name}</h2>
-                            <div className="nav-user-img">
-                                <img src={session ? session.user?.image : null} alt="user-icon" width={100} height={100} className='rounded-full w-full h-full' />
-                            </div>
-                        </section>
+        <>
+            <header
+                className={`navbar-wrapper ${isScrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : 'hidden'}`}
+            >
+                {/* Top Bar */}
+                <div className="top-bar">
+                    <div className="top-bar-content">
+                        <span className="top-bar-text">
+                            🥃 Free Shipping on Orders Over $500 | Premium Selection Guaranteed
+                        </span>
                     </div>
-                    <label className='relative place-items-center grid w-[100%] n-search-2'>
-                        <input className="rounded-[25px] nav-search-bar" type="text" name="text" placeholder="What our you looking for?" value={query} onChange={(e) => setQuery(e.target.value)} />
-                        <Display />
-                    </label>
-                </section>
-                <section className='flex gap-[15px] pt-4 nav-links'>
-                    <ul
-                        className="nav-item-p"
-                        data-aos-offset="500"
-                        data-aos-duration="100"
-                        data-aos="fade-down"
-                    >
-                        {
-                            nav.map((item, index) => {
-                                return (
-                                    <li className='nav-child' key={index}>
-                                        <Link href={item.path}>{item.title}</Link>
-                                    </li>
-                                )
-                            })
-                        }
+                </div>
+
+                {/* Main Navigation */}
+                <nav className="main-nav">
+                    <div className="nav-container">
+                        {/* Logo */}
+                        <Link href="/" className="nav-logo">
+                            <span className="logo-text">LIQUOR</span>
+                            <span className="logo-accent">LUXX</span>
+                        </Link>
+
+                        {/* Desktop Navigation Links */}
+                        <ul className="nav-links-desktop">
+                            {navLinks.map((link, index) => (
+                                <li
+                                    key={index}
+                                    className={`nav-link-item ${link.hasMega ? 'has-mega' : ''}`}
+                                    onMouseEnter={link.hasMega ? handleMegaMenuEnter : undefined}
+                                    onMouseLeave={link.hasMega ? handleMegaMenuLeave : undefined}
+                                >
+                                    <Link href={link.path} className="nav-link">
+                                        {link.title}
+                                        {link.hasMega && <FiChevronDown className={`chevron ${megaMenuOpen ? 'rotate' : ''}`} />}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/* Right Side Actions */}
+                        <div className="nav-actions">
+                            {/* Search */}
+                            <div className={`search-container ${searchOpen ? 'open' : ''}`}>
+                                <button
+                                    className="nav-action-btn search-toggle"
+                                    onClick={() => setSearchOpen(!searchOpen)}
+                                    aria-label="Search"
+                                >
+                                    <FiSearch />
+                                </button>
+                                <div className="search-dropdown">
+                                    <input
+                                        type="text"
+                                        placeholder="Search premium spirits..."
+                                        value={query}
+                                        onChange={(e) => setQuery(e.target.value)}
+                                        className="search-input"
+                                    />
+                                    <Display />
+                                </div>
+                            </div>
+
+                            {/* Cart */}
+                            <Link href="/cart" className="nav-action-btn cart-btn">
+                                <FiShoppingCart />
+                                <span className="cart-badge">0</span>
+                            </Link>
+
+                            {/* User */}
+                            <Link href={session ? "/dashboard/posts" : "/login"} className="nav-action-btn user-btn">
+                                {session?.user?.image ? (
+                                    <img
+                                        src={session.user.image}
+                                        alt={session.user.name}
+                                        className="user-avatar"
+                                    />
+                                ) : (
+                                    <FiUser />
+                                )}
+                            </Link>
+
+                            {/* Mobile Menu Toggle */}
+                            <button
+                                className="nav-action-btn mobile-toggle"
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                aria-label="Menu"
+                            >
+                                {mobileMenuOpen ? <FiX /> : <FiMenu />}
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                {/* Mega Menu */}
+                <div
+                    ref={megaMenuRef}
+                    className={`mega-menu ${megaMenuOpen ? 'open' : ''}`}
+                    onMouseEnter={handleMegaMenuEnter}
+                    onMouseLeave={handleMegaMenuLeave}
+                >
+                    <div className="mega-menu-container">
+                        <div className="mega-menu-header">
+                            <h3>Our Premium Brands</h3>
+                            <p>Discover our curated collection of world-class spirits</p>
+                        </div>
+                        <div className="mega-menu-grid">
+                            {brands.map((brand, index) => (
+                                <div
+                                    key={index}
+                                    className="mega-menu-item"
+                                    onClick={() => handleBrandClick(brand.slug)}
+                                    style={{ animationDelay: `${index * 0.05}s` }}
+                                >
+                                    <div className="mega-item-image">
+                                        <img src={brand.image} alt={brand.name} />
+                                        <div className="mega-item-overlay"></div>
+                                    </div>
+                                    <div className="mega-item-content">
+                                        <h4>{brand.name}</h4>
+                                        <p>{brand.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mega-menu-footer">
+                            <Link href="/shop" className="view-all-btn" onClick={() => setMegaMenuOpen(false)}>
+                                View All Products
+                                <span className="btn-arrow">→</span>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {/* Mobile Menu Overlay */}
+            <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`}>
+                <div className="mobile-menu-content">
+                    {/* Mobile Search */}
+                    <div className="mobile-search">
+                        <FiSearch className="mobile-search-icon" />
+                        <input
+                            type="text"
+                            placeholder="Search premium spirits..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                        />
+                    </div>
+
+                    {/* Mobile Nav Links */}
+                    <ul className="mobile-nav-links">
+                        {navLinks.map((link, index) => (
+                            <li key={index}>
+                                <Link
+                                    href={link.path}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    {link.title}
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
-                </section>
-            </nav>
-        </div>
-    )
+
+                    {/* Mobile Brands */}
+                    <div className="mobile-brands">
+                        <h3>Shop by Brand</h3>
+                        <div className="mobile-brands-grid">
+                            {brands.map((brand, index) => (
+                                <button
+                                    key={index}
+                                    className="mobile-brand-btn"
+                                    onClick={() => handleBrandClick(brand.slug)}
+                                >
+                                    {brand.name}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Mobile User Actions */}
+                    <div className="mobile-actions">
+                        <Link href="/cart" className="mobile-action-btn" onClick={() => setMobileMenuOpen(false)}>
+                            <FiShoppingCart />
+                            <span>Cart</span>
+                        </Link>
+                        <Link
+                            href={session ? "/dashboard/posts" : "/login"}
+                            className="mobile-action-btn"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            <FiUser />
+                            <span>{session ? 'Dashboard' : 'Login'}</span>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            {/* Spacer to prevent content from going under fixed navbar */}
+            <div className="navbar-spacer"></div>
+        </>
+    );
 }

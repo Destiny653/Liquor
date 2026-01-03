@@ -1,156 +1,292 @@
-.skeleton-r-p {
-    display: grid;
-    grid-template-columns: repeat(5,1fr);
-    place-items: center;
-    column-gap: 10%;
-    padding: 0 1%;
-    width: 99%;
-}
-.skeleton-r {
-    width: 160px;
-    height: 160px;
-    border-radius: 100%; 
-    position: relative;
-    overflow: hidden;
-    margin-top: 10px;
-    background-color: #d8d8d8e3; 
-    animation: shimmer 1.5s infinite linear;
-}
+/*
+==========================================
+Skeleton Loaders - Premium Dark Theme
+==========================================
+*/
 
-.skeleton-arr-p{
-    display: grid;
-    grid-template-columns: repeat(6,1fr);
-    place-items: center;
-    gap: 5px;
-    box-sizing: border-box;
-    width: 100%;
-    /* padding: 0 7%;  */
-}
-
-.skeleton-arr {
-    width: 100%;
-    height: 370px;
-    border-radius: 6px; 
-    background-color: #d8d8d8e3; 
-    position: relative;
-    overflow: hidden; 
-    box-sizing: border-box;
-    padding: 0.5%;
-    animation: shimmer 1s infinite linear;
-}
-.skeleton-arr2 {
-    width: 100%;
-    height: 370px;
-    border-radius: 6px; 
-    background-color: #d8d8d8e3; 
-    position: relative;
-    overflow: hidden; 
-    animation: shimmer 1s infinite linear;
-}
-.skeleton-prg {
-    width: 150px;
-    height: 25px;
-    background-color: #d8d8d8e3; 
-    position: relative;
-    overflow: hidden;
-    border-radius: 4px;
-    animation: shimmer 1s infinite linear;
-}
-
+/* Shimmer Animation */
 @keyframes shimmer {
     0% {
-        background-color: #ddd;
-    }
-
-    50% {
-        background-color: #bbbbbb;
+        background-position: -200% 0;
     }
 
     100% {
-        background-color: #ddd;
+        background-position: 200% 0;
     }
 }
 
-.skeleton-r::after {
-    content: '';
-    width: 160px;
-    height: 160px; 
-    /* box-shadow: 40px 0 0px #d6d6d67e; */
-    position: absolute;
-    animation: trans 1.3s infinite linear;
+/* Base Skeleton Style */
+.skeleton-base {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
 }
 
-.skeleton-prg::after {
-    content: '';
-    width: 150px;
-    height: 25px;  
-    box-shadow:0 0 40px#f0f0f085;
-    position: absolute;
-    animation: trans 1.3s infinite linear;
+/*
+==========================================
+Spirit Cards Skeleton
+==========================================
+*/
+.skeleton-spirits {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    width: 100%;
 }
 
-.skeleton-arr::after {
-    content: '';
-    width: 400px;
-    height: 400px; 
-    box-shadow:0 0 100px #b6b6b685;
-    position: absolute;
-    animation: trans 1.3s infinite linear;
-}
-.skeleton-arr2::after {
-    content: '';
-    width: 400px;
-    height: 400px; 
-    box-shadow:0 0 100px #b6b6b685;
-    position: absolute;
-    animation: trans 1.3s infinite linear;
+.skeleton-spirit-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
 }
 
-@keyframes trans {
-    0% {
-        transform: translateX(-100px); 
+.skeleton-circle {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border: 2px solid var(--color-border);
+}
+
+.skeleton-text {
+    width: 80%;
+    height: 16px;
+    border-radius: 8px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/*
+==========================================
+Product Cards Skeleton
+==========================================
+*/
+.skeleton-products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    width: 100%;
+}
+
+.skeleton-product-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.skeleton-image {
+    height: 220px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.skeleton-title {
+    height: 20px;
+    width: 80%;
+    border-radius: 4px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-desc {
+    height: 40px;
+    width: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-price {
+    height: 24px;
+    width: 40%;
+    border-radius: 4px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/*
+==========================================
+Full Page Loader
+==========================================
+*/
+.loader-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.loader-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
-    100% {
-        transform: translateX(100%);
+}
+
+.loader-text {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/*
+==========================================
+Legacy Support
+==========================================
+*/
+.skeleton-r-p {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    width: 100%;
+}
+
+.skeleton-r {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-prg {
+    width: 80%;
+    height: 16px;
+    border-radius: 8px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-arr-p {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    width: 100%;
+}
+
+.skeleton-arr,
+.skeleton-arr2 {
+    height: 370px;
+    border-radius: 16px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.03) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border: 1px solid var(--color-border);
+}
+
+/*
+==========================================
+Responsive
+==========================================
+*/
+@media (max-width: 1200px) {
+    .skeleton-spirits {
+        grid-template-columns: repeat(3, 1fr);
     }
-} 
-/* 
-===================================
-@media all and (max-width:561px){}
-===================================
- */
- @media all and (max-width:561px){
-    .skeleton-r-p {
-        display: grid;
-        grid-template-columns: repeat(3,1fr);
-        place-items: center; 
-        width: 100%;
+
+    .skeleton-products,
+    .skeleton-arr-p {
+        grid-template-columns: repeat(3, 1fr);
     }
-    .skeleton-r {
-        width: 100%;
-        height: 95px; 
+}
+
+@media (max-width: 768px) {
+    .skeleton-spirits {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
     }
-    .ske-r1 { 
-        display: none;
+
+    .skeleton-products,
+    .skeleton-arr-p {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
-    .skeleton-arr-p{ 
-        grid-template-columns: repeat(2,1fr); 
+
+    .skeleton-image {
+        height: 180px;
     }
-    .skeleton-prg {
-        width: 90px;
-        height: 25px;
-        background-color: #d8d8d8e3; 
-        position: relative;
-        overflow: hidden;
-        border-radius: 4px;
-        animation: shimmer 1s infinite linear;
+
+    .skeleton-arr,
+    .skeleton-arr2 {
+        height: 300px;
     }
-    .skeleton-arr:nth-child(1),
-    .skeleton-arr:nth-child(2),
-    .skeleton-arr:nth-child(3),
-    .skeleton-arr:nth-child(4),
-    .skeleton-arr:nth-child(5),
-    .skeleton-arr:nth-child(6){
-        display: none;
+}
+
+@media (max-width: 480px) {
+    .skeleton-spirits {
+        grid-template-columns: repeat(2, 1fr);
     }
- }
+
+    .skeleton-products,
+    .skeleton-arr-p {
+        grid-template-columns: 1fr;
+    }
+}

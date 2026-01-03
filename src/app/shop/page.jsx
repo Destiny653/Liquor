@@ -1,7 +1,7 @@
- 'use client';
+'use client';
 import React, { useContext, useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import "./shop.css";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchContext } from '../../../context/SearchContext';
 import { CartContext } from '../../../context/CartContext';
 import { FaStar } from 'react-icons/fa';
@@ -79,16 +79,16 @@ const PriceFilter = ({ onFilterChange }) => {
 
 const ProductCard = React.memo(({ item, formatter, handlePro, navigation, handleAddToCart }) => (
   <li className='box-border bg-[#c0c0c00c] shop-arr-i py-[19px] border-[#c0c0c065] border-[1px]'>
-    <img 
-      className='shop-arr-img cursor-pointer' 
-      src={item?.img} 
-      alt={item.title} 
-      width={500} 
-      height={500} 
-      onClick={() => { 
-        handlePro(item); 
+    <img
+      className='shop-arr-img cursor-pointer'
+      src={item?.img}
+      alt={item.title}
+      width={500}
+      height={500}
+      onClick={() => {
+        handlePro(item);
         navigation.push(`/details?title=${item.title.toLowerCase()}`);
-      }} 
+      }}
     />
     <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
     <h1 className='flex'>
@@ -97,8 +97,8 @@ const ProductCard = React.memo(({ item, formatter, handlePro, navigation, handle
       ))}
     </h1>
     <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
-    <button 
-      className='hover:bg-[#9b1d1d] qty-p-i shop-btn-arr px-9 py-2 border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic' 
+    <button
+      className='hover:bg-[#9b1d1d] qty-p-i shop-btn-arr px-9 py-2 border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic'
       onClick={() => handleAddToCart(item)}
     >
       <Qty productId={item._id} />
@@ -111,16 +111,26 @@ export default function Page() {
   const { searchVal, searchInp, handlePro } = useContext(SearchContext);
   const { handleAddToCart } = useContext(CartContext);
   const navigation = useRouter();
-  
+  const searchParams = useSearchParams();
+
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState(null);
   const [options, setOptions] = useState('All Brands');
   const [loader, setLoader] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const itemsPerPage = 12;
   const choice = useMemo(() => ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'All Brands'], []);
   const formatter = useMemo(() => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }), []);
+
+  // Read brand from URL params on mount and when URL changes
+  useEffect(() => {
+    const brandParam = searchParams.get('brand');
+    if (brandParam && choice.includes(brandParam)) {
+      setOptions(brandParam);
+      setCurrentPage(1);
+    }
+  }, [searchParams, choice]);
 
   const endpoints = useMemo(() => ({
     'baltons': ['/api/baltons'],
@@ -146,8 +156,8 @@ export default function Page() {
 
   const handleFilterChange = useCallback((min, max) => {
     if (!data || data.length === 0) return;
-    
-    const filtered = data.filter((product) => 
+
+    const filtered = data.filter((product) =>
       product.price >= min && product.price <= max
     );
     setFilteredData(filtered);
@@ -176,7 +186,7 @@ export default function Page() {
       setLoader(true);
       try {
         const currentEndpoints = getApiEndpoints(options);
-        const fetchPromises = currentEndpoints.map(api => 
+        const fetchPromises = currentEndpoints.map(api =>
           fetch(api)
             .then(res => {
               if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -224,14 +234,14 @@ export default function Page() {
 
   const displayItems = useMemo(() => {
     const itemsToDisplay = filteredData || data;
-    
+
     if (currentPage < 1 || currentPage > getTotalPages || loader || !itemsToDisplay?.length) {
       return <SkeletonArr2 />;
     }
-    
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = currentPage * itemsPerPage;
-    
+
     return itemsToDisplay?.slice(startIndex, endIndex)?.map((item, index) => (
       <ProductCard
         key={item._id || index}
@@ -258,11 +268,11 @@ export default function Page() {
             <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
             {choice.map((brandName, index) => (
               <label key={index} htmlFor={`radio-${index}`}>
-                <input 
-                  type="radio" 
+                <input
+                  type="radio"
                   id={`radio-${index}`}
-                  name="brand" 
-                  value={brandName.toLowerCase()} 
+                  name="brand"
+                  value={brandName.toLowerCase()}
                   onChange={() => setOptions(brandName)}
                   checked={options === brandName}
                 />
@@ -270,26 +280,26 @@ export default function Page() {
               </label>
             ))}
           </section>
-          
+
           <PriceFilter onFilterChange={handleFilterChange} />
         </div>
 
         <section className='shop-child2'>
           <div className='shop-banner'>
-            <img 
-              className='w-full h-full' 
-              src='/images/shopbanner.jpg' 
-              alt='shop banner' 
-              height={500} 
-              width={500} 
+            <img
+              className='w-full h-full'
+              src='/images/shopbanner.jpg'
+              alt='shop banner'
+              height={500}
+              width={500}
             />
             <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
           </div>
-          
+
           <h1 className='shop-child2-head py-[20px] text-[25px]'>
             BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE
           </h1>
-          
+
           <div>
             <section className='p-2 shop-info border font-[300] text-[18px]'>
               showing page: {currentPage} / {getTotalPages} of: {(filteredData || data)?.length} products
@@ -301,17 +311,17 @@ export default function Page() {
           </div>
 
           <div className='flex justify-center items-center gap-9 pagination'>
-            <button 
-              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
-              onClick={() => handlePageChange(currentPage - 1)} 
+            <button
+              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed'
+              onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
               Prev
             </button>
             <span>{currentPage} of {getTotalPages}</span>
-            <button 
-              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed' 
-              onClick={() => handlePageChange(currentPage + 1)} 
+            <button
+              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed'
+              onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === getTotalPages}
             >
               Next
