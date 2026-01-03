@@ -4,12 +4,17 @@ import './Navbar.css';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
+import { CartContext } from '../../../../context/CartContext';
 import { useSession } from 'next-auth/react';
 import Display from '../SearchDisplay/Display';
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
 
 export default function Navbar() {
     const { setSearchVal } = useContext(SearchContext);
+    const { cartItems } = useContext(CartContext);
+
+    // Calculate total cart items
+    const totalCartItems = cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0;
     const { data: session } = useSession();
     const navigation = useRouter();
 
@@ -199,7 +204,9 @@ export default function Navbar() {
                             {/* Cart */}
                             <Link href="/cart" className="nav-action-btn cart-btn">
                                 <FiShoppingCart />
-                                <span className="cart-badge">0</span>
+                                {totalCartItems > 0 && (
+                                    <span className="cart-badge">{totalCartItems}</span>
+                                )}
                             </Link>
 
                             {/* User */}

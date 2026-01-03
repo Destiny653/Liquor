@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
 import AuthProvider from "../../context/AuthContext";
@@ -7,8 +7,14 @@ import SearchProvider from "../../context/SearchContext";
 import MsgBtn from "./components/MsgBtn/MsgBtn";
 import { CartProvider } from "../../context/CartContext";
 import BottomNav from "./components/BottomNav/BottomNav";
+import CartSlider from "./components/CartSlider/CartSlider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["400", "500", "600", "700"]
+});
 
 export const metadata = {
   title: "LiquorLuxx | Premium Spirits & Rare Bourbon Collection",
@@ -18,12 +24,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className} suppressHydrationWarning={true}>
+      <body className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning={true}>
         <AuthProvider>
           <SearchProvider>
             <CartProvider>
               <Navbar />
               {children}
+              <CartSlider />
               <MsgBtn />
               <Footer />
               <BottomNav />
