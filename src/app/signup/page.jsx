@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState, useContext } from 'react';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import './signup.css'; 
+import './signup.css';
 import { SearchContext } from '../../../context/SearchContext';
 
 export default function Page() {
@@ -21,14 +21,13 @@ export default function Page() {
         e.preventDefault();
         setLoader(true)
 
-        //create an instance of Notyf
         const notyf = new Notyf({
             duration: 3000,
             position: {
                 x: 'right',
                 y: 'top'
             }
-        });  
+        });
 
         if (email) {
             // validate email
@@ -77,57 +76,121 @@ export default function Page() {
         }
     };
 
-    const Load = () => {
-        return (
-            <div className='top-0 z-10 fixed bg-[#c6c5ec65] w-full h-[100%] loader-p'>
-                <div className="loader-con">
-                    <section className='loader-i'></section>
-                </div>
-            </div>
-        )
-    }
+    const Loader = () => (
+        <div className='signup-loader-overlay'>
+            <div className='signup-loader'></div>
+        </div>
+    );
 
+    const BtnLoader = () => (
+        <div className='signup-btn-loader'></div>
+    );
 
     return (
-        <div className='nav-obscure-view'>
-            {
-                loader ? <Load /> :  ""
-            }
-            <div className='box-border flex justify-center items-center py-11 register-bg'>
-                <div className={`sub-p flex justify-evenly gap-8 items-center bg-white box-border p-5 overflow-hidden rounded-[8px] `} >
-                    <div className='w-full overflow-hidden register-img'>
-                        <img className='w-full h-full' src='/images/royal.jpg' alt='whisky bottle demo' width={500} height={500} />
-                    </div>
-                    <div className='form-part w-2/4'>
-                        <h2 className={` text-3xl header singup-title font-[600]`}>Sign Up</h2>
-                        <form onSubmit={handleSubmit}>
-                            <div className='flex flex-col mb-6'>
-                                <label htmlFor="username" className='pb-1 font-[600] text-[14px]'>
-                                    Name
-                                </label>
-                                <input type="text" value={username} name='text' placeholder='Enter username...' className='form-control px-4 py-[6px] border rounded-[4px] outline-0' onChange={e => setUsername(e.target.value)} required />
+        <>
+            {loader && <Loader />}
+            <div className='signup-page'>
+                <div className='signup-container'>
+                    <div className='signup-card'>
+                        {/* Image Section */}
+                        <div className='signup-image-section'>
+                            <img
+                                className='signup-image'
+                                src='/images/royal.jpg'
+                                alt='Premium liquor collection'
+                            />
+                            <div className='signup-image-overlay'></div>
+                            <div className='signup-image-content'>
+                                <div className='signup-image-logo'>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M8 2h8l4 10H4L8 2z"></path>
+                                        <path d="M12 12v6"></path>
+                                        <path d="M8 22h8"></path>
+                                        <path d="M12 18c2 0 4-1 4-3"></path>
+                                    </svg>
+                                </div>
+                                <h2 className='signup-image-title'>LiquorLuxx</h2>
+                                <p className='signup-image-subtitle'>
+                                    Join our exclusive collection of premium spirits and fine wines
+                                </p>
                             </div>
-                            <div className='flex flex-col mb-3'>
-                                <label htmlFor="email" className='pb-1 font-[600] text-[14px]'>
-                                    Email
-                                </label>
-                                <input type="email" value={email} name='email' placeholder='Enter email...' className='form-control px-4 py-[6px] border rounded-[4px] outline-0' onChange={e => setEmail(e.target.value)} required />
+                        </div>
+
+                        {/* Form Section */}
+                        <div className='signup-form-section'>
+                            <div className='signup-header'>
+                                <h1 className='signup-title'>Create Account</h1>
+                                <p className='signup-subtitle'>Start your journey with premium spirits</p>
                             </div>
-                            <div className='flex flex-col mb-6'>
-                                <label htmlFor="password" className='pb-1 font-[600] text-[14px]'>
-                                    Password
-                                </label>
-                                <input type="password" value={password} name='password' placeholder='*******' className='form-control px-4 py-[6px] border rounded-[4px] outline-0' onChange={e => setPassword(e.target.value)} required />
+
+                            <form className='signup-form' onSubmit={handleSubmit}>
+                                <div className='form-group'>
+                                    <label htmlFor="username" className='form-label'>
+                                        Full Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        value={username}
+                                        name='username'
+                                        placeholder='Enter your name'
+                                        className='form-input'
+                                        onChange={e => setUsername(e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor="email" className='form-label'>
+                                        Email Address
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        value={email}
+                                        name='email'
+                                        placeholder='Enter your email'
+                                        className='form-input'
+                                        onChange={e => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor="password" className='form-label'>
+                                        Password
+                                    </label>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        value={password}
+                                        name='password'
+                                        placeholder='Create a strong password'
+                                        className='form-input'
+                                        onChange={e => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                <button
+                                    type='submit'
+                                    className='signup-submit-btn'
+                                    disabled={loader}
+                                >
+                                    {loader ? <BtnLoader /> : 'Create Account'}
+                                </button>
+                            </form>
+
+                            <div className='signup-footer'>
+                                <p className='signup-footer-text'>Already have an account?</p>
+                                <Link href='/login' className='signup-login-btn'>
+                                    Sign In
+                                </Link>
                             </div>
-                            <button type='submit' className='w-80 text-[15px] btn btn-success'>Sign Up</button>
-                        </form>
-                        <p className='mt-1 mb-2 text-[12px] text-[blue] hover:underline cursor-pointer'>Already have an account?</p>
-                        <button className='text-[15px] btn btn-default'>
-                            <Link href='/login'>Login</Link>
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
