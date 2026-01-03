@@ -93,7 +93,7 @@ const ProductCard = React.memo(({ item, formatter, handlePro, navigation, handle
     <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
     <h1 className='flex'>
       {[...Array(4)].map((_, i) => (
-        <FaStar key={i} color='gold' />
+        <FaStar key={i} color='gold' className='text-[15px]' />
       ))}
     </h1>
     <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>

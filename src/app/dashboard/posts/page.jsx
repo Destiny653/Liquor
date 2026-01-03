@@ -71,7 +71,8 @@ export default function PostsPage() {
 
     // Pagination Logic
     const indexOfLastItem = currentPage * itemsPerPage;
-    const items = filteredPosts.slice(indexOfLastItem - itemsPerPage, indexOfLastItem);
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const items = filteredPosts.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -195,152 +196,158 @@ export default function PostsPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <td>
-                                        <div className='dashboard-product-cell'>
-                                            <img
-                                                src={post.img}
-                                                alt={post.title}
-                                                className='dashboard-product-image'
-                                            />
-                                            <div className='dashboard-product-info'>
-                                                <h4>{post.title?.slice(0, 30)}{post.title?.length > 30 ? '...' : ''}</h4>
-                                                <p>{post.productModel || 'Premium Whiskey'}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className='dashboard-price'>
-                                            {formatter.format(post.price)}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div className='dashboard-rating'>
-                                            <FiStar fill='currentColor' size={14} />
-                                            {post.rating || 4.5}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className='dashboard-status active'>
-                                            <span className='dashboard-status-dot'></span>
-                                            In Stock
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div className='dashboard-actions'>
-                                            <button
-                                                className='dashboard-action-btn'
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setSelectedPost(post);
-                                                }}
-                                            >
-                                                <FiEye />
-                                            </button>
-                                            <Link
-                                                href={`/dashboard/update/${post.productModel}/${post._id}`}
-                                                className='dashboard-action-btn edit'
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                <FiEdit2 />
-                                            </Link>
-                                            <button
-                                                className='dashboard-action-btn delete'
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    deletePost(post.productModel, post._id);
-                                                }}
-                                                disabled={deleting}
-                                            >
-                                                <FiTrash2 />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                        ))}
-                            </tbody>
-                        </table>
+                                    {items.map((post, index) => (
+                                        <tr
+                                            key={post._id || index}
+                                            onClick={() => setSelectedPost(post)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <td>
+                                                <div className='dashboard-product-cell'>
+                                                    <img
+                                                        src={post.img}
+                                                        alt={post.title}
+                                                        className='dashboard-product-image'
+                                                    />
+                                                    <div className='dashboard-product-info'>
+                                                        <h4>{post.title?.slice(0, 30)}{post.title?.length > 30 ? '...' : ''}</h4>
+                                                        <p>{post.productModel || 'Premium Whiskey'}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span className='dashboard-price'>
+                                                    {formatter.format(post.price)}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div className='dashboard-rating'>
+                                                    <FiStar fill='currentColor' size={14} />
+                                                    {post.rating || 4.5}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span className='dashboard-status active'>
+                                                    <span className='dashboard-status-dot'></span>
+                                                    In Stock
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div className='dashboard-actions'>
+                                                    <button
+                                                        className='dashboard-action-btn'
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setSelectedPost(post);
+                                                        }}
+                                                    >
+                                                        <FiEye />
+                                                    </button>
+                                                    <Link
+                                                        href={`/dashboard/update/${post.productModel}/${post._id}`}
+                                                        className='dashboard-action-btn edit'
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <FiEdit2 />
+                                                    </Link>
+                                                    <button
+                                                        className='dashboard-action-btn delete'
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            deletePost(post.productModel, post._id);
+                                                        }}
+                                                        disabled={deleting}
+                                                    >
+                                                        <FiTrash2 />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
 
-                    {/* Pagination */}
-                    <div className='dashboard-pagination'>
-                        <span className='dashboard-pagination-info'>
-                            Showing {filteredPosts.length} of {posts.length} products
-                        </span>
-                        <div className='dashboard-pagination-buttons'>
-                            <button
-                                className='dashboard-pagination-btn'
-                                onClick={() => paginate(currentPage - 1)}
-                                disabled={currentPage === 1}
+                            {/* Pagination */}
+                            <div className='dashboard-pagination'>
+                                <span className='dashboard-pagination-info'>
+                                    Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredPosts.length)} of {filteredPosts.length} products
+                                </span>
+                                <div className='dashboard-pagination-buttons'>
+                                    <button
+                                        className='dashboard-pagination-btn'
+                                        onClick={() => paginate(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                    >
+                                        Previous
+                                    </button>
+
+                                    {Array.from({ length: totalPages }, (_, i) => (
+                                        <button
+                                            key={i + 1}
+                                            className={`dashboard-pagination-btn ${currentPage === i + 1 ? 'active' : ''}`}
+                                            onClick={() => paginate(i + 1)}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        className='dashboard-pagination-btn'
+                                        onClick={() => paginate(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className='dashboard-empty'>
+                            <div className='dashboard-empty-icon'>
+                                <FiPackage />
+                            </div>
+                            <h3>No Products Found</h3>
+                            <p>Add your first product to get started</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Preview Panel */}
+                {selectedPost && (
+                    <div className='dashboard-preview'>
+                        <h3 className='dashboard-preview-header'>Product Preview</h3>
+                        <img
+                            src={selectedPost.img}
+                            alt={selectedPost.title}
+                            className='dashboard-preview-image'
+                        />
+                        <h4 className='dashboard-preview-title'>{selectedPost.title}</h4>
+                        <p className='dashboard-preview-price'>{formatter.format(selectedPost.price)}</p>
+                        <p className='dashboard-preview-desc'>
+                            {selectedPost.content?.slice(0, 150)}
+                            {selectedPost.content?.length > 150 ? '...' : ''}
+                        </p>
+
+                        <div className='dashboard-preview-actions'>
+                            <Link
+                                href={`/dashboard/update/${selectedPost.productModel}/${selectedPost._id}`}
+                                className='dashboard-preview-btn primary'
                             >
-                                Previous
-                            </button>
-
-                            {Array.from({ length: totalPages }, (_, i) => (
-                                <button
-                                    key={i + 1}
-                                    className={`dashboard-pagination-btn ${currentPage === i + 1 ? 'active' : ''}`}
-                                    onClick={() => paginate(i + 1)}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
-
+                                <FiEdit2 size={16} />
+                                Edit
+                            </Link>
                             <button
-                                className='dashboard-pagination-btn'
-                                onClick={() => paginate(currentPage + 1)}
-                                disabled={currentPage === totalPages}
+                                className='dashboard-preview-btn danger'
+                                onClick={() => deletePost(selectedPost.productModel, selectedPost._id)}
+                                disabled={deleting}
                             >
-                                Next
+                                <FiTrash2 size={16} />
+                                Delete
                             </button>
                         </div>
                     </div>
-                </>
-                ) : (
-                <div className='dashboard-empty'>
-                    <div className='dashboard-empty-icon'>
-                        <FiPackage />
-                    </div>
-                    <h3>No Products Found</h3>
-                    <p>Add your first product to get started</p>
-                </div>
-                    )}
+                )}
             </div>
-
-            {/* Preview Panel */}
-            {selectedPost && (
-                <div className='dashboard-preview'>
-                    <h3 className='dashboard-preview-header'>Product Preview</h3>
-                    <img
-                        src={selectedPost.img}
-                        alt={selectedPost.title}
-                        className='dashboard-preview-image'
-                    />
-                    <h4 className='dashboard-preview-title'>{selectedPost.title}</h4>
-                    <p className='dashboard-preview-price'>{formatter.format(selectedPost.price)}</p>
-                    <p className='dashboard-preview-desc'>
-                        {selectedPost.content?.slice(0, 150)}
-                        {selectedPost.content?.length > 150 ? '...' : ''}
-                    </p>
-
-                    <div className='dashboard-preview-actions'>
-                        <Link
-                            href={`/dashboard/update/${selectedPost.productModel}/${selectedPost._id}`}
-                            className='dashboard-preview-btn primary'
-                        >
-                            <FiEdit2 size={16} />
-                            Edit
-                        </Link>
-                        <button
-                            className='dashboard-preview-btn danger'
-                            onClick={() => deletePost(selectedPost.productModel, selectedPost._id)}
-                            disabled={deleting}
-                        >
-                            <FiTrash2 size={16} />
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            )}
-        </div>
         </DashboardLayout >
     );
 }

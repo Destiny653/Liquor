@@ -25,7 +25,6 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <SearchProvider>
             <CartProvider>
-              <Navbar />
               <LayoutWrapper>
                 {children}
               </LayoutWrapper>
