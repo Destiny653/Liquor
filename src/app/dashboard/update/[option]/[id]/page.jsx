@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import DashboardLayout from '../../../../components/DashboardLayout';
+import DashboardLayout from '../../../components/DashboardLayout';
 import {
   FiUpload, FiImage, FiDollarSign, FiStar,
   FiFileText, FiPackage, FiArrowLeft, FiCheck, FiSave

@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useContext, useEffect, useState, useCallback, useMemo, useRef, Suspense } from 'react';
 import "./shop.css";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchContext } from '../../../context/SearchContext';
@@ -107,7 +107,35 @@ const ProductCard = React.memo(({ item, formatter, handlePro, navigation, handle
   </li>
 ));
 
-export default function Page() {
+// Shop loading skeleton
+function ShopSkeleton() {
+  return (
+    <div className='relative shop-parent nav-obscure-view'>
+      <div className='top-[10vh] left-0 sticky shop-child1'>
+        <section className='brand'>
+          <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
+        </section>
+      </div>
+      <section className='shop-child2'>
+        <div className='shop-banner'>
+          <img
+            className='w-full h-full'
+            src='/images/shopbanner.jpg'
+            alt='shop banner'
+            height={500}
+            width={500}
+          />
+        </div>
+        <div className='shop-arr w-full'>
+          <SkeletonArr2 />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// Main shop content component that uses useSearchParams
+function ShopContent() {
   const { searchVal, searchInp, handlePro } = useContext(SearchContext);
   const { handleAddToCart } = useContext(CartContext);
   const navigation = useRouter();
@@ -261,74 +289,83 @@ export default function Page() {
   }, [getTotalPages]);
 
   return (
-    <ErrorBoundary>
-      <div className='relative shop-parent nav-obscure-view'>
-        <div className='top-[10vh] left-0 sticky shop-child1'>
-          <section className='brand'>
-            <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
-            {choice.map((brandName, index) => (
-              <label key={index} htmlFor={`radio-${index}`}>
-                <input
-                  type="radio"
-                  id={`radio-${index}`}
-                  name="brand"
-                  value={brandName.toLowerCase()}
-                  onChange={() => setOptions(brandName)}
-                  checked={options === brandName}
-                />
-                <span>{brandName === 'All Brands' ? 'All' : brandName.charAt(0).toUpperCase() + brandName.slice(1, -1)}</span>
-              </label>
-            ))}
-          </section>
+    <div className='relative shop-parent nav-obscure-view'>
+      <div className='top-[10vh] left-0 sticky shop-child1'>
+        <section className='brand'>
+          <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
+          {choice.map((brandName, index) => (
+            <label key={index} htmlFor={`radio-${index}`}>
+              <input
+                type="radio"
+                id={`radio-${index}`}
+                name="brand"
+                value={brandName.toLowerCase()}
+                onChange={() => setOptions(brandName)}
+                checked={options === brandName}
+              />
+              <span>{brandName === 'All Brands' ? 'All' : brandName.charAt(0).toUpperCase() + brandName.slice(1, -1)}</span>
+            </label>
+          ))}
+        </section>
 
-          <PriceFilter onFilterChange={handleFilterChange} />
+        <PriceFilter onFilterChange={handleFilterChange} />
+      </div>
+
+      <section className='shop-child2'>
+        <div className='shop-banner'>
+          <img
+            className='w-full h-full'
+            src='/images/shopbanner.jpg'
+            alt='shop banner'
+            height={500}
+            width={500}
+          />
+          <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
         </div>
 
-        <section className='shop-child2'>
-          <div className='shop-banner'>
-            <img
-              className='w-full h-full'
-              src='/images/shopbanner.jpg'
-              alt='shop banner'
-              height={500}
-              width={500}
-            />
-            <h1 className='shop-brand w-fit text-[30px] text-[red]'>{options}</h1>
-          </div>
+        <h1 className='shop-child2-head py-[20px] text-[25px]'>
+          BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE
+        </h1>
 
-          <h1 className='shop-child2-head py-[20px] text-[25px]'>
-            BUY EXCLUSIVE AND PREMIUM WHISKEY ONLINE
-          </h1>
+        <div>
+          <section className='p-2 shop-info border font-[300] text-[18px]'>
+            showing page: {currentPage} / {getTotalPages} of: {(filteredData || data)?.length} products
+          </section>
+        </div>
 
-          <div>
-            <section className='p-2 shop-info border font-[300] text-[18px]'>
-              showing page: {currentPage} / {getTotalPages} of: {(filteredData || data)?.length} products
-            </section>
-          </div>
+        <div className='shop-arr w-full'>
+          {displayItems}
+        </div>
 
-          <div className='shop-arr w-full'>
-            {displayItems}
-          </div>
+        <div className='flex justify-center items-center gap-9 pagination'>
+          <button
+            className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed'
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+          <span>{currentPage} of {getTotalPages}</span>
+          <button
+            className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed'
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === getTotalPages}
+          >
+            Next
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
 
-          <div className='flex justify-center items-center gap-9 pagination'>
-            <button
-              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed'
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Prev
-            </button>
-            <span>{currentPage} of {getTotalPages}</span>
-            <button
-              className='hover:bg-[#811212] disabled:opacity-50 px-8 py-1 border rounded-[7px] hover:text-[#fff] disabled:cursor-not-allowed'
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === getTotalPages}
-            >
-              Next
-            </button>
-          </div>
-        </section>
-      </div>
+// Main page component with Suspense boundary
+export default function Page() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<ShopSkeleton />}>
+        <ShopContent />
+      </Suspense>
     </ErrorBoundary>
   );
 }

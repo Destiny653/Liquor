@@ -8,12 +8,12 @@ Premium Dashboard Styles
 .dashboard-page {
     min-height: 100vh;
     background: var(--color-bg-primary);
-    padding-top: 100px;
+    padding-top: 0;
 }
 
 .dashboard-container {
     display: flex;
-    min-height: calc(100vh - 100px);
+    min-height: 100vh;
 }
 
 /* Sidebar */
@@ -23,9 +23,9 @@ Premium Dashboard Styles
     border-right: 1px solid var(--color-border);
     padding: 24px 0;
     position: fixed;
-    top: 100px;
+    top: 0;
     left: 0;
-    height: calc(100vh - 100px);
+    height: 100vh;
     overflow-y: auto;
     z-index: 50;
     transition: transform var(--transition-smooth);
@@ -751,12 +751,12 @@ Responsive Styles
 
 @media (max-width: 768px) {
     .dashboard-page {
-        padding-top: 80px;
+        padding-top: 0;
     }
 
     .dashboard-sidebar {
-        top: 80px;
-        height: calc(100vh - 80px);
+        top: 0;
+        height: 100vh;
     }
 
     .dashboard-main {

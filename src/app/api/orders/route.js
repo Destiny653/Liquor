@@ -87,7 +87,7 @@ export const POST = async (req, res) => {
                         id: product_id,
                         model: productModel
                     }
-                    break; 
+                    break;
                 }
             }
 
@@ -185,14 +185,14 @@ export const POST = async (req, res) => {
                 const newItems = verifiedItems.filter(item => !existingOrder.products.some(orderItem => orderItem.productId.equals(item.productId)))
                 await User.findByIdAndUpdate(userId, { $push: { orders: newItems } })
             } else {
-                await User.findByIdAndUpdate(userId, { $push: { orders: verifiedItems } }) 
+                await User.findByIdAndUpdate(userId, { $push: { orders: verifiedItems } })
             }
             return NextResponse.json({ success: true, message: 'Order created successfully' }, { status: 200 });
         }
 
-       return createOrder(user._id, cartItems);
+        return createOrder(user._id, cartItems);
     } catch (error) {
-        console.error(error); 
+        console.error(error);
         return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }
@@ -202,7 +202,7 @@ export const GET = async (req, res) => {
     //  get and populate order with user and product
     await connectDB()
     try {
-        const order = await Order.find().populate({ path: 'user', populate: { path: 'orders' } }).populate({ path: 'products.productId' }).exec();
+        const order = await Order.find().populate({ path: 'user', populate: { path: 'orders' } }).populate({ path: 'orders.products.productId' }).exec();
         console.log(order);
 
         if (!order) {
