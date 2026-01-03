@@ -77,35 +77,37 @@ const PriceFilter = ({ onFilterChange }) => {
   );
 };
 
-const ProductCard = React.memo(({ item, formatter, handlePro, navigation, handleAddToCart }) => (
-  <li className='box-border bg-[#c0c0c00c] shop-arr-i py-[19px] border-[#c0c0c065] border-[1px]'>
-    <img
-      className='shop-arr-img cursor-pointer'
-      src={item?.img}
-      alt={item.title}
-      width={500}
-      height={500}
-      onClick={() => {
-        handlePro(item);
-        navigation.push(`/details?title=${item.title.toLowerCase()}`);
-      }}
-    />
-    <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
-    <h1 className='flex'>
-      {[...Array(4)].map((_, i) => (
-        <FaStar key={i} color='gold' className='text-[15px]' />
-      ))}
-    </h1>
-    <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
-    <button
-      className='hover:bg-[#9b1d1d] qty-p-i shop-btn-arr px-9 py-2 border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic'
-      onClick={() => handleAddToCart(item)}
-    >
-      <Qty productId={item._id} />
-      ADD TO CART
-    </button>
-  </li>
-));
+const ProductCard = React.memo(function ProductCard({ item, formatter, handlePro, navigation, handleAddToCart }) {
+  return (
+    <li className='box-border bg-[#c0c0c00c] shop-arr-i py-[19px] border-[#c0c0c065] border-[1px]'>
+      <img
+        className='shop-arr-img cursor-pointer'
+        src={item?.img}
+        alt={item.title}
+        width={500}
+        height={500}
+        onClick={() => {
+          handlePro(item);
+          navigation.push(`/details?title=${item.title.toLowerCase()}`);
+        }}
+      />
+      <h1 className='shop-arr-title font-[600] text-[14.5px]'>{item.title}</h1>
+      <h1 className='flex'>
+        {[...Array(4)].map((_, i) => (
+          <FaStar key={i} color='gold' className='text-[15px]' />
+        ))}
+      </h1>
+      <h1 className='font-[600] text-[#f1ce07] text-[15px]'>{formatter.format(item.price)}</h1>
+      <button
+        className='hover:bg-[#9b1d1d] qty-p-i shop-btn-arr px-9 py-2 border rounded-[3px] font-[500] text-[11px] hover:text-[#fff] nunitoextralight_italic'
+        onClick={() => handleAddToCart(item)}
+      >
+        <Qty productId={item._id} />
+        ADD TO CART
+      </button>
+    </li>
+  );
+});
 
 // Shop loading skeleton
 function ShopSkeleton() {

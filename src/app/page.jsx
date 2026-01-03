@@ -161,7 +161,7 @@ export default function Home() {
           <span className="section-label">Premium Selection</span>
           <h2 className="section-title">Shop by Brand</h2>
           <p className="section-description">
-            Explore our curated collection of the world's finest spirits
+            Explore our curated collection of the world&apos;s finest spirits
           </p>
         </div>
         <div className="brands-grid">

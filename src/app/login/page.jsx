@@ -228,7 +228,7 @@ const Page = () => {
                         {/* Footer */}
                         <div className='auth-footer'>
                             <p className='auth-footer-text'>
-                                Don't have an account?{' '}
+                                Don&apos;t have an account?{' '}
                                 <Link href='/signup' className='auth-footer-link'>
                                     Create Account
                                 </Link>
