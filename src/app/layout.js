@@ -2,12 +2,9 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
 import AuthProvider from "../../context/AuthContext";
-import Footer from "./components/Footer/Footer";
 import SearchProvider from "../../context/SearchContext";
-import MsgBtn from "./components/MsgBtn/MsgBtn";
 import { CartProvider } from "../../context/CartContext";
-import BottomNav from "./components/BottomNav/BottomNav";
-import CartSlider from "./components/CartSlider/CartSlider";
+import LayoutWrapper from "./components/LayoutWrapper";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -29,11 +26,9 @@ export default function RootLayout({ children }) {
           <SearchProvider>
             <CartProvider>
               <Navbar />
-              {children}
-              <CartSlider />
-              <MsgBtn />
-              <Footer />
-              <BottomNav />
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
             </CartProvider>
           </SearchProvider>
         </AuthProvider>

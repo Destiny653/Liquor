@@ -1,172 +1,455 @@
 'use client';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { TfiHome } from "react-icons/tfi";
-import { IoCreateOutline } from "react-icons/io5";
-import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
-import { CiUser } from "react-icons/ci";
-import { MdOutlineAddchart } from "react-icons/md";
-import { IoIosLogIn } from "react-icons/io";
-import { GoSignOut } from "react-icons/go";
+import { useRouter } from 'next/navigation';
+import DashboardLayout from '../components/DashboardLayout';
+import {
+    FiUpload, FiImage, FiDollarSign, FiStar,
+    FiFileText, FiPackage, FiArrowLeft, FiCheck
+} from 'react-icons/fi';
 import { Notyf } from 'notyf';
-import './create.css'
-import { Load } from '@/app/components/Skeleton/Skeleton';
-import Menu from '@/app/components/menu/Menu';
-export default function Page() {
 
-    const [title, setTitle] = useState("");
-    const [price, setPrice] = useState(0);
-    const [rate, setRate] = useState(0)
-    const [content, setContent] = useState("");
-    const [option, setOption] = useState("");
-    const [imgSrc, setImgSrc] = useState("https://via.placeholder.com/200")
-    const [loader, setLoader] = useState(false)
+export default function CreatePage() {
+    const router = useRouter();
+    const [title, setTitle] = useState('');
+    const [price, setPrice] = useState('');
+    const [rate, setRate] = useState('');
+    const [content, setContent] = useState('');
+    const [option, setOption] = useState('');
+    const [imgSrc, setImgSrc] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
 
+    const productTypes = [
+        { value: 'baltons', label: 'Balton', description: 'Distinguished single malt selection' },
+        { value: 'buffalos', label: 'Buffalo Trace', description: 'Award-winning Kentucky bourbon' },
+        { value: 'pappies', label: 'Pappy Van Winkle', description: 'The most sought-after bourbon' },
+        { value: 'penelopes', label: 'Penelope', description: 'Crafted four-grain bourbon' },
+        { value: 'wellers', label: 'W.L. Weller', description: 'Premium wheated bourbon' },
+        { value: 'yamazakis', label: 'Yamazaki', description: 'Japanese whisky excellence' },
+    ];
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0]
+        const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImgSrc(reader.result)
-            }
+            reader.onloadend = () => setImgSrc(reader.result);
             reader.readAsDataURL(file);
         }
-    }
-    const handleImgChage = (e) => {
-        setImgSrc(e.target.value)
-    }
+    };
 
     const handleDrag = (e) => {
         e.preventDefault();
-    }
+        e.stopPropagation();
+        if (e.type === 'dragenter' || e.type === 'dragover') {
+            setDragActive(true);
+        } else if (e.type === 'dragleave') {
+            setDragActive(false);
+        }
+    };
+
     const handleDrop = (e) => {
         e.preventDefault();
-        const url = e.dataTransfer.getData('text/plain')
-        setImgSrc(url)
-    }
+        e.stopPropagation();
+        setDragActive(false);
+
+        const url = e.dataTransfer.getData('text/plain');
+        if (url) {
+            setImgSrc(url);
+        } else if (e.dataTransfer.files?.[0]) {
+            const file = e.dataTransfer.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => setImgSrc(reader.result);
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSubmit = async (e) => {
-        setImgSrc('https://via.placeholder.com/200')
-        setLoader(true)
+        e.preventDefault();
+        const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
 
-        const notyf = new Notyf({
-            duration: 3000,
-            position: {
-                x: 'right',
-                y: 'top'
-            }
-        });
-        // Add your code here to save the product to the database or API
+        if (!option) {
+            notyf.error('Please select a product type');
+            return;
+        }
+
+        if (!title || !price || !content) {
+            notyf.error('Please fill in all required fields');
+            return;
+        }
+
+        setLoading(true);
+
         try {
             const response = await fetch(`/api/${option}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ title, price, content, rate, img: imgSrc })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title,
+                    price: parseFloat(price),
+                    content,
+                    rate: parseInt(rate) || 5,
+                    img: imgSrc || 'https://via.placeholder.com/400'
+                })
             });
-            if (!response.ok) {
-                setLoader(false)
-                notyf.error(response.message);
-                return;
+
+            if (response.ok) {
+                notyf.success('Product created successfully!');
+                router.push('/dashboard/posts');
+            } else {
+                notyf.error('Failed to create product');
             }
-            setLoader(false)
-            notyf.success('Product added successfully');
         } catch (error) {
-            setLoader(false)
-            console.log(error);
-            notyf.error(error.message);
+            notyf.error('Error creating product');
+        } finally {
+            setLoading(false);
         }
-    }
-
-    const SelectedImg = () => {
-        if (imgSrc) {
-            return <img src={imgSrc} alt="product img" width={600} height={600} className='rounded-[10px] w-[100%] h-[100%]' />
-        }
-    }
-
-    const _option = () => {
-        if (!option) {
-            return (
-                <div className='top-0 z-[5] fixed flex flex-col justify-center items-center optionParent'>
-                    <div className='z-10 flex flex-col gap-2'>
-                        <label className='font-[600] text-[#112892] text-2xl'>
-                            Select your product type:
-                        </label>
-                        <select className='px-3 py-2 text-black create-input' value={option} required onChange={(e) => setOption(e.target.value)}>
-                            <option value="">Select option</option>
-                            <option value="baltons">Balton</option>
-                            <option value="buffalos">Buffalo</option>
-                            <option value="pappies">Pappy</option>
-                            <option value="penelopes">Penelope</option>
-                            <option value="wellers">Weller</option>
-                            <option value="yamazakis">Yamazaki</option>
-                        </select>
-                    </div>
-                </div>
-            )
-        }
-    }
+    };
 
     return (
-        <div className='w-full dashboard-parent nav-obscure-view'>
-            <div className='box-border flex justify-evenly bg-[#f7f7f7] py-[2%] w-full h-[80vh] text-[#000]'>
+        <DashboardLayout>
+            {/* Loading */}
+            {loading && (
+                <div className='dashboard-loader'>
+                    <div className='dashboard-spinner'></div>
+                </div>
+            )}
 
-                {_option()}
-                <section className='relative bg-[#ffffff] rounded-[15px] w-[16%]'>
-                    {loader && <Load />}
-                    <Menu />
-                </section>
-                <section className='flex justify-evenly items-center bg-[#ffffff] rounded-[15px] w-[80%] dashboard-display'>
-                    <form className='flex flex-col w-[50%]' onSubmit={handleSubmit}>
-                        <section className='flex gap-2 my-[1%]'>
-                            <label htmlFor="rate" className='flex flex-col gap-[4px] w-[50%]'>
-                                <button type='submit' onClick={() => (setOption(""))} className='bg-[#112892] px-[30px] py-[6px] rounded-[12px] w-fit text-[#fff]'>Option</button>
+            {/* Header */}
+            <div className='dashboard-header'>
+                <div className='dashboard-header-left'>
+                    <h1>Add New Product</h1>
+                    <p>Create a new premium spirit for your collection</p>
+                </div>
+                <div className='dashboard-header-right'>
+                    <Link href='/dashboard/posts' className='dashboard-header-btn dashboard-header-btn-secondary'>
+                        <FiArrowLeft />
+                        Back to Products
+                    </Link>
+                </div>
+            </div>
+
+            {/* Form Container */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '24px' }}>
+                {/* Form */}
+                <div className='dashboard-card'>
+                    <div className='dashboard-card-header'>
+                        <h3 className='dashboard-card-title'>Product Details</h3>
+                    </div>
+
+                    <form onSubmit={handleSubmit} style={{ padding: '24px' }}>
+                        {/* Product Type */}
+                        <div style={{ marginBottom: '24px' }}>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                color: 'var(--color-text-secondary)',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px',
+                                marginBottom: '12px'
+                            }}>
+                                Product Type <span style={{ color: 'var(--color-accent)' }}>*</span>
                             </label>
-                            <label htmlFor="name" className='flex flex-col gap-[4px] w-[50%]'>
-                                <p className='font-[600] text-[20px]'> Product Model: <span className='text-[#112892]'>{option}</span></p>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                                {productTypes.map((type) => (
+                                    <div
+                                        key={type.value}
+                                        onClick={() => setOption(type.value)}
+                                        style={{
+                                            padding: '16px',
+                                            background: option === type.value ? 'rgba(212, 175, 55, 0.1)' : 'rgba(255, 255, 255, 0.02)',
+                                            border: `1px solid ${option === type.value ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                                            borderRadius: '12px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s'
+                                        }}
+                                    >
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            marginBottom: '4px'
+                                        }}>
+                                            <span style={{
+                                                fontSize: '14px',
+                                                fontWeight: '600',
+                                                color: option === type.value ? 'var(--color-gold)' : 'var(--color-text-primary)'
+                                            }}>
+                                                {type.label}
+                                            </span>
+                                            {option === type.value && (
+                                                <FiCheck size={16} style={{ color: 'var(--color-gold)' }} />
+                                            )}
+                                        </div>
+                                        <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                                            {type.description}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Title & Rating Row */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                            <div>
+                                <label style={{
+                                    display: 'block',
+                                    fontSize: '13px',
+                                    fontWeight: '600',
+                                    color: 'var(--color-text-secondary)',
+                                    marginBottom: '8px'
+                                }}>
+                                    <FiPackage style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+                                    Product Title *
+                                </label>
+                                <input
+                                    type='text'
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder='e.g., Pappy Van Winkle 23 Year'
+                                    required
+                                    style={{
+                                        width: '100%',
+                                        padding: '14px 18px',
+                                        background: 'rgba(255, 255, 255, 0.03)',
+                                        border: '1px solid var(--color-border)',
+                                        borderRadius: '10px',
+                                        color: 'var(--color-text-primary)',
+                                        fontSize: '15px',
+                                        outline: 'none'
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{
+                                    display: 'block',
+                                    fontSize: '13px',
+                                    fontWeight: '600',
+                                    color: 'var(--color-text-secondary)',
+                                    marginBottom: '8px'
+                                }}>
+                                    <FiStar style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+                                    Rating (1-5)
+                                </label>
+                                <input
+                                    type='number'
+                                    value={rate}
+                                    onChange={(e) => setRate(e.target.value)}
+                                    min='1'
+                                    max='5'
+                                    placeholder='5'
+                                    style={{
+                                        width: '100%',
+                                        padding: '14px 18px',
+                                        background: 'rgba(255, 255, 255, 0.03)',
+                                        border: '1px solid var(--color-border)',
+                                        borderRadius: '10px',
+                                        color: 'var(--color-text-primary)',
+                                        fontSize: '15px',
+                                        outline: 'none'
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Price */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                color: 'var(--color-text-secondary)',
+                                marginBottom: '8px'
+                            }}>
+                                <FiDollarSign style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+                                Price (USD) *
                             </label>
-                        </section>
-                        <section className='flex gap-2 my-[1%]'>
-                            <label htmlFor="name" className='flex flex-col gap-[4px] w-[50%]'>
-                                <span className=''>Product title</span>
-                                <input value={title} onChange={(e) => setTitle(e.target.value)} className='border-[#6d471648] border-[1px] px-[20px] py-[6px] rounded-[20px] w-[100%] outline-[0]' type="text" id="name" name="name" placeholder="Enter product name" required />
+                            <input
+                                type='number'
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                                placeholder='0.00'
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '14px 18px',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    border: '1px solid var(--color-border)',
+                                    borderRadius: '10px',
+                                    color: 'var(--color-text-primary)',
+                                    fontSize: '15px',
+                                    outline: 'none'
+                                }}
+                            />
+                        </div>
+
+                        {/* Description */}
+                        <div style={{ marginBottom: '24px' }}>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                color: 'var(--color-text-secondary)',
+                                marginBottom: '8px'
+                            }}>
+                                <FiFileText style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+                                Description *
                             </label>
-                            <label htmlFor="rate" className='flex flex-col gap-[4px] w-[50%]'>
-                                <span className=''>Product rating</span>
-                                <input value={rate} onChange={(e) => setRate(e.target.value)} className='border-[#6d471648] border-[1px] px-[20px] py-[6px] rounded-[20px] w-[100%] outline-[0]' type="number" id="rate" name="rate" placeholder="Enter product rating" min="1" max="5" required />
-                            </label>
-                        </section>
-                        <section className='flex gap-2'>
-                            <label htmlFor="price" className='flex flex-col gap-[4px] w-[50%]'>
-                                <span className=''>Product price</span>
-                                <input value={price} onChange={e => setPrice(e.target.value)} className='border-[#6d471648] border-[1px] px-[20px] py-[6px] w-[100%] outline-[0]' type="number" id="price" name="price" placeholder="Enter product price" required />
-                            </label>
-                            <label htmlFor="img" className='flex flex-col gap-[4px] w-[50%]'>
-                                <span className=''>Product img</span>
-                                <input onChange={handleFileChange} className='border-[#6d471648] bg-[#c4c1bb57] px-[20px] py-[3px] rounded-[3px] rounded[20px] w-[100%] outline-[0]' type="file" id="img" name="img" accept="img/*" placeholder='select image' />
-                            </label>
-                        </section>
-                        <label htmlFor="content " className='flex flex-col my-[2%]'>
-                            <span className=''>Product content</span>
-                            <textarea value={content} onChange={e => setContent(e.target.value)} className='px-[20px] py-[1%] border outline-[0]' id="content" name="content" rows={5} placeholder="Enter product content" required></textarea>
-                        </label>
-                        <button type='submit' className='bg-[#000] px-[30px] py-[9px] rounded-[12px] w-fit text-[#fff]'>Submit</button>
+                            <textarea
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder='Enter product description...'
+                                rows={5}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '14px 18px',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    border: '1px solid var(--color-border)',
+                                    borderRadius: '10px',
+                                    color: 'var(--color-text-primary)',
+                                    fontSize: '15px',
+                                    outline: 'none',
+                                    resize: 'vertical',
+                                    minHeight: '120px'
+                                }}
+                            />
+                        </div>
+
+                        {/* Submit Button */}
+                        <button
+                            type='submit'
+                            disabled={loading}
+                            style={{
+                                width: '100%',
+                                padding: '16px 24px',
+                                background: 'var(--gradient-accent)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '12px',
+                                fontSize: '15px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '10px'
+                            }}
+                        >
+                            <FiCheck />
+                            {loading ? 'Creating...' : 'Create Product'}
+                        </button>
                     </form>
-                    <div className='flex flex-col gap-[10px] w-[40%] h-[80%]'>
-                        <input
-                            onChange={handleImgChage}
+                </div>
+
+                {/* Image Upload */}
+                <div className='dashboard-card' style={{ height: 'fit-content' }}>
+                    <div className='dashboard-card-header'>
+                        <h3 className='dashboard-card-title'>Product Image</h3>
+                    </div>
+
+                    <div style={{ padding: '24px' }}>
+                        {/* URL Input */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                color: 'var(--color-text-secondary)',
+                                marginBottom: '8px'
+                            }}>
+                                Image URL
+                            </label>
+                            <input
+                                type='url'
+                                value={imgSrc}
+                                onChange={(e) => setImgSrc(e.target.value)}
+                                placeholder='https://example.com/image.jpg'
+                                style={{
+                                    width: '100%',
+                                    padding: '14px 18px',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    border: '1px solid var(--color-border)',
+                                    borderRadius: '10px',
+                                    color: 'var(--color-text-primary)',
+                                    fontSize: '14px',
+                                    outline: 'none'
+                                }}
+                            />
+                        </div>
+
+                        {/* Drop Zone */}
+                        <div
+                            onDragEnter={handleDrag}
+                            onDragLeave={handleDrag}
                             onDragOver={handleDrag}
                             onDrop={handleDrop}
-                            className='border-[#ac7e1c57] border-[1px] px-[20px] py-[6px] rounded-[20px] w-[100%] outline-[0]' type='url' id="url" name="url" placeholder="Enter img URL"
-                        />
-                        <section className='border-[#ac7e1c57] border-[1px] rounded-[10px] w-[100%] h-[80%]'>
-                            {<SelectedImg />}
-                        </section>
+                            style={{
+                                border: `2px dashed ${dragActive ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                                borderRadius: '16px',
+                                padding: '40px 20px',
+                                textAlign: 'center',
+                                background: dragActive ? 'rgba(212, 175, 55, 0.05)' : 'rgba(255, 255, 255, 0.02)',
+                                transition: 'all 0.2s',
+                                marginBottom: '20px'
+                            }}
+                        >
+                            <FiUpload size={32} style={{ color: 'var(--color-text-muted)', marginBottom: '12px' }} />
+                            <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', margin: '0 0 8px 0' }}>
+                                Drag & drop an image here
+                            </p>
+                            <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', margin: '0 0 16px 0' }}>
+                                or
+                            </p>
+                            <label style={{
+                                padding: '10px 20px',
+                                background: 'var(--color-gold)',
+                                color: 'var(--color-bg-primary)',
+                                borderRadius: '8px',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                cursor: 'pointer'
+                            }}>
+                                Choose File
+                                <input
+                                    type='file'
+                                    accept='image/*'
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                />
+                            </label>
+                        </div>
+
+                        {/* Preview */}
+                        {imgSrc && (
+                            <div>
+                                <label style={{
+                                    display: 'block',
+                                    fontSize: '13px',
+                                    fontWeight: '600',
+                                    color: 'var(--color-text-secondary)',
+                                    marginBottom: '8px'
+                                }}>
+                                    <FiImage style={{ marginRight: '6px', verticalAlign: 'middle' }} />
+                                    Preview
+                                </label>
+                                <img
+                                    src={imgSrc}
+                                    alt='Product preview'
+                                    style={{
+                                        width: '100%',
+                                        aspectRatio: '1',
+                                        objectFit: 'cover',
+                                        borderRadius: '12px',
+                                        border: '1px solid var(--color-border)'
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
-                </section>
+                </div>
             </div>
-        </div>
-    )
+        </DashboardLayout>
+    );
 }
