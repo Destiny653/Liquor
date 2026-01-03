@@ -1,34 +1,66 @@
-import React from 'react'
+'use client';
+import React from 'react';
+import '../policies.css';
 
-export default function Page() {
+export default function RefundPolicy() {
   return (
-    <div>
-      <h1>Refund Policy</h1>
-      <h1>Refunds, returns and Cancellation Pilicy</h1>
-      <h2>Refund & Return pilicy</h2>
-      <p>      There are absolutely NO refunds or returns. All sales are final.
-      </p>
-      <p>ANY cancellation will be subject to a 25% restocking fee. Once a shipping label is created the shipping fees are NON-refundable. If the product in question was initially shipped free of charge due to any promotions, we will deduct forty dollars ($40.00) from the refund for shipping and handling.
+    <div className="policy-container">
+      <header className="policy-header">
+        <h1 className="policy-title">Refund & Return Policy</h1>
+        <p className="policy-date">Last Updated: January 2026</p>
+      </header>
 
-</p>
-<ul>
-    <h2>Damages and issues</h2>
-    <p>Please inspect your order upon reception and contact us immediately if the item is defective, damaged or if you receive the wrong item, so that we can evaluate the issue and make it right.
+      <div className="policy-content">
+        <section>
+          <h2>1. Returns</h2>
+          <p>
+            Due to state regulations and legal restrictions on the sale of alcohol, <strong>we cannot accept returns of any alcohol products.</strong> All sales of spirits, wine, and other alcoholic beverages are final.
+          </p>
+          <p>
+            However, we stand behind the quality of our products. If you believe your product is defective (e.g., corked wine or spoiled spirits), please contact us immediately.
+          </p>
+        </section>
 
-</p>
-<li>If your item is damaged, defective or lost in transit, file your claim at Info@Nestorliquor.com.
+        <section>
+          <h2>2. Damaged or Incorrect Items</h2>
+          <p>
+            If you receive your order and items are damaged, broken, or incorrect, please notify us within <strong>48 hours</strong> of delivery.
+            To expedite the resolution process, please:
+          </p>
+          <ul>
+            <li>Take clear photos of the damaged package and bottles.</li>
+            <li>Keep the original packaging until the claim is resolved.</li>
+            <li>Email us at <a href="mailto:support@liquorluxx.com">support@liquorluxx.com</a> with your order number and photos.</li>
+          </ul>
+          <p>
+            We will offer a replacement (subject to availability) or a full refund for the damaged or incorrect items.
+          </p>
+        </section>
 
-</li>
-<li>If you have received the wrong item email us at Info@Nestorliquor.com.
+        <section>
+          <h2>3. Refunds</h2>
+          <p>
+            Once your refund request is approved, we will initiate a refund to your original method of payment.
+            You will receive the credit within a certain amount of days, depending on your card issuer's policies (typically 5-10 business days).
+          </p>
+        </section>
 
-</li>
-<li>Visual evidence (photos) are required upon filing any claim to Info@Nestorliquor.com.
+        <section>
+          <h2>4. Cancelled Orders</h2>
+          <p>
+            You may cancel your order for a full refund at any time <strong>before it has shipped</strong>.
+            Once an order has been shipped, it cannot be cancelled or refunded unless it arrives damaged.
+          </p>
+        </section>
 
-</li>
-<li>Unfortunately, we cannot accept returns on gift cards.
-
-</li>
-</ul>
+        <section>
+          <h2>5. Gift Returns</h2>
+          <p>
+            If the item was marked as a gift when purchased and shipped directly to you, you may be eligible for a store credit
+            in the event of damage or specific non-alcohol related returnable merchandise (e.g., accessories, glassware).
+          </p>
+        </section>
+      </div>
     </div>
-  )
+  );
 }

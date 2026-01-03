@@ -11,48 +11,75 @@
 ================================== 
  */
 
-@media all and (max-width:460px) {
+@media all and (max-width: 768px) {
    .icon-parent {
       display: flex;
       justify-content: space-evenly;
       align-items: center;
-      height: 60px;
+      height: 70px;
       overflow: visible;
       width: 100%;
       position: fixed;
       bottom: 0;
-      background-color: #ffffff;
+      z-index: 1000;
+      background: rgba(18, 18, 18, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+      padding-bottom: env(safe-area-inset-bottom, 10px);
    }
 
    .icon {
-      color: #000000;
-      background-color: #ffffff;
-      transition: all 0.3s ease;
-      padding: 8px;
-      font-weight: 700;
-      box-sizing: content-box;
-      cursor: pointer;
-   }
-   .active-title{ 
-      display: none;
-      position: absolute;
-      top: -10px;
-      left: 10px;
-      font-size: 12px;
-      width: fit-content; 
-      padding: 4px 6px;
-      color: #fff;
-      border-radius: 8px;
-      background-color: #615f5f46; 
+      color: rgba(255, 255, 255, 0.6);
+      background-color: transparent;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 10px;
+      border-radius: 50%;
+      position: relative;
       cursor: pointer;
    }
 
-   /* hover effect */ 
-   .active-title:hover{
-      display: block;
+   .icon:hover,
+   .icon:active {
+      color: var(--color-gold, #d4af37);
+      background-color: rgba(212, 175, 55, 0.1);
+      transform: translateY(-2px);
    }
-   .icon:hover{
-        color: #000000;
-        background-color: #326cb831; 
-     }
+
+   .active-title {
+      display: none;
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      padding: 4px 8px;
+      color: #000;
+      background-color: var(--color-gold, #d4af37);
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+   }
+
+   .active-title::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 4px solid var(--color-gold, #d4af37);
+   }
+
+   .icon:hover .active-title {
+      display: block;
+      opacity: 1;
+      transform: translateX(-50%) translateY(-5px);
+   }
 }
