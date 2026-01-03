@@ -303,7 +303,7 @@ Products Grid Section
 
 .product-image-wrapper {
     position: relative;
-    height: 220px;
+    height: 280px;
     overflow: hidden;
     cursor: pointer;
     background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
@@ -312,7 +312,7 @@ Products Grid Section
 .product-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform var(--transition-smooth);
 }
 
@@ -364,6 +364,7 @@ Products Grid Section
     cursor: pointer;
     transition: color var(--transition-fast);
     display: -webkit-box;
+    line-clamp: 1;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -380,6 +381,7 @@ Products Grid Section
     line-height: 1.5;
     height: 40px;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
