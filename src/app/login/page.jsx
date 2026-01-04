@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import './login.css'
 import { FcGoogle } from 'react-icons/fc'
@@ -18,89 +18,34 @@ const Page = () => {
 
     let localStorageEmail = null
 
-    const { data: session } = useSession()
-    console.log(session)
+    const { data: session, status } = useSession();
 
+    useEffect(() => {
+        if (status === 'loading') return;
+
+        if (session) {
+            // Redirect based on role
+            if (session.user?.role === 'manager') {
+                navigation.push('/dashboard/posts');
+            } else {
+                navigation.push('/');
+            }
+        }
+    }, [session, status, navigation]);
+
+    // If session exists, show loader while redirecting
     if (session) {
-        let reqPass = null;
-        if (typeof window !== 'undefined') {
-            localStorageEmail = window.localStorage.getItem('email')
-        }
-
-        async function handleSubmitGoogle() {
-            if (typeof window !== 'undefined') {
-                window.localStorage.setItem('email', session.user.email)
-                reqPass = window.prompt('Enter secret password, keep in mind that it will be used for purchase verification.')
-            }
-            const notyf = new Notyf({
-                duration: 5000,
-                position: {
-                    x: 'right',
-                    y: 'top'
-                }
-            });
-
-            try {
-                const res = await fetch('/api/signup', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${session.access_token}`
-                    },
-                    body: JSON.stringify({ email: session.user.email, name: session.user.name, password: reqPass })
-                })
-                const data = await res.json()
-                console.log(data);
-
-                if (data.error) {
-                    setBtnLoader(false)
-                    notyf.error(data.message)
-                }
-            } catch (error) {
-                setBtnLoader(false)
-                notyf.error('Error: ' + error)
-            }
-        }
-        console.log(localStorageEmail);
-
-        if (!localStorageEmail) {
-            handleSubmitGoogle()
-        }
-
-        // Logged in state
         return (
-            <div className='auth-page'>
-                <div className='auth-container'>
-                    <div className='auth-card'>
-                        <div className='profile-card'>
-                            <div className='profile-image-wrapper'>
-                                <img
-                                    src={session ? session.user?.image : '/images/default-avatar.png'}
-                                    alt='Profile'
-                                    className='profile-image'
-                                />
-                            </div>
-                            <h2 className='profile-name'>{session.user?.name || 'Welcome'}</h2>
-                            <p className='profile-email'>Signed in as {session.user.email}</p>
-                            <button
-                                className='auth-signout-btn'
-                                onClick={() => {
-                                    alert('You are currently signed out.');
-                                    signOut("google");
-                                    typeof window !== 'undefined' && window.localStorage.removeItem('email');
-                                }}
-                            >
-                                Sign Out
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div className='auth-loader-overlay'>
+                <div className='auth-loader'></div>
             </div>
-        )
-    };
+        );
+    }
 
     const handleSubmit = async (e) => {
+        console.log("handleSubmit called");
         e.preventDefault();
+        setBtnLoader(true);
 
         const notyf = new Notyf({
             duration: 3000,
@@ -111,27 +56,35 @@ const Page = () => {
         });
 
         try {
-            const res = await fetch('/api/auth/authentification', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            })
-            if (res.status === 201) {
-                setBtnLoader(false)
-                notyf.success('Successfully logged in')
-                navigation.push("/");
+            console.log("Attempting sign in for:", email);
+            const result = await signIn("credentials", {
+                redirect: false,
+                email,
+                password,
+            });
+
+            console.log("Sign in result:", result);
+
+            if (result?.ok) {
+                notyf.success("Successfully logged in");
+
                 if (typeof window !== 'undefined') {
-                    window.localStorage.setItem('email', email)
+                    window.localStorage.setItem('email', email);
                 }
+
+                // Use a slight delay or just push to ensure state settles
+                setTimeout(() => {
+                    navigation.push("/");
+                    setBtnLoader(false);
+                }, 100);
             } else {
-                setBtnLoader(false)
-                notyf.error('User not found')
+                setBtnLoader(false);
+                notyf.error(result?.error || "Invalid email or password");
             }
         } catch (error) {
-            console.log(error);
-            notyf.error('error')
+            console.error("Login Error:", error);
+            setBtnLoader(false);
+            notyf.error("Something went wrong");
         }
     };
 
@@ -166,7 +119,7 @@ const Page = () => {
                         </div>
 
                         {/* Form */}
-                        <form className='auth-form' onSubmit={handleSubmit}>
+                        <form className='auth-form' onSubmit={handleSubmit} method="POST">
                             <div className='form-group'>
                                 <label htmlFor="email" className='form-label'>
                                     Email Address
@@ -200,7 +153,6 @@ const Page = () => {
                             </div>
 
                             <button
-                                onClick={() => setBtnLoader(true)}
                                 disabled={btnLoader}
                                 className='auth-submit-btn'
                                 type='submit'

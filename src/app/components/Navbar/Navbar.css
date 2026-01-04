@@ -56,8 +56,45 @@ LiquorLuxx - Premium Navigation Styles
 .top-bar-content {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
-    text-align: center;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 2px 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding-left: 20px;
+}
+
+.top-bar-user .user-icon {
+    font-size: 14px;
+    color: var(--nav-gold);
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.user-name {
+    color: var(--nav-text);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.user-email {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 10px;
+    font-weight: 400;
 }
 
 .top-bar-text {
@@ -223,6 +260,24 @@ LiquorLuxx - Premium Navigation Styles
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* User Nav Group */
+.user-nav-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dashboard-link {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--nav-gold);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.dashboard-link:hover {
+    background: var(--nav-gold);
+    color: var(--nav-primary);
 }
 
 /* User Avatar */
@@ -649,6 +704,14 @@ Responsive Styles
 
     .top-bar {
         padding: 6px 0;
+    }
+
+    .top-bar-content {
+        justify-content: center;
+    }
+
+    .top-bar-user {
+        display: none;
     }
 
     .top-bar-text {

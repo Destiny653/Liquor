@@ -62,7 +62,6 @@ export default function Navbar() {
         { title: 'Home', path: '/' },
         { title: 'Shop', path: '/shop', hasMega: true },
         { title: 'About', path: '/about' },
-        { title: 'Contact', path: '/contact' },
     ];
 
     const [isScrolled, setIsScrolled] = useState(false);
@@ -149,6 +148,15 @@ export default function Navbar() {
                         <span className="top-bar-text">
                             🥃 Free Shipping on Orders Over $500 | Premium Selection Guaranteed
                         </span>
+                        {session && (
+                            <div className="top-bar-user">
+                                <FiUser className="user-icon" />
+                                <div className="user-details">
+                                    <span className="user-name">{session.user.name}</span>
+                                    <span className="user-email">{session.user.email}</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -209,18 +217,35 @@ export default function Navbar() {
                                 )}
                             </Link>
 
-                            {/* User */}
-                            <Link href={session ? "/dashboard/posts" : "/login"} className="nav-action-btn user-btn">
-                                {session?.user?.image ? (
-                                    <img
-                                        src={session.user.image}
-                                        alt={session.user.name}
-                                        className="user-avatar"
-                                    />
-                                ) : (
-                                    <FiUser />
+                            {/* User Profile / Dashboard / Orders */}
+                            <div className="user-nav-group">
+                                {session && session.user?.role === 'manager' && (
+                                    <Link href="/dashboard/posts" className="nav-action-btn dashboard-link" title="Admin Dashboard">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px' }}>
+                                            <rect x="3" y="3" width="7" height="7"></rect>
+                                            <rect x="14" y="3" width="7" height="7"></rect>
+                                            <rect x="14" y="14" width="7" height="7"></rect>
+                                            <rect x="3" y="14" width="7" height="7"></rect>
+                                        </svg>
+                                    </Link>
                                 )}
-                            </Link>
+
+                                <Link
+                                    href={session ? (session.user?.role === 'manager' ? "/dashboard/posts" : "/orders") : "/login"}
+                                    className="nav-action-btn user-btn"
+                                    title={session ? (session.user?.role === 'manager' ? "Manager Dashboard" : "My Orders") : "Sign In"}
+                                >
+                                    {session?.user?.image ? (
+                                        <img
+                                            src={session.user.image}
+                                            alt={session.user.name}
+                                            className="user-avatar"
+                                        />
+                                    ) : (
+                                        <FiUser />
+                                    )}
+                                </Link>
+                            </div>
 
                             {/* Mobile Menu Toggle */}
                             <button
@@ -326,12 +351,12 @@ export default function Navbar() {
                             <span>Cart</span>
                         </Link>
                         <Link
-                            href={session ? "/dashboard/posts" : "/login"}
+                            href={session ? (session.user?.role === 'manager' ? "/dashboard/posts" : "/orders") : "/login"}
                             className="mobile-action-btn"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             <FiUser />
-                            <span>{session ? 'Dashboard' : 'Login'}</span>
+                            <span>{session ? (session.user?.role === 'manager' ? 'Dashboard' : 'Orders') : 'Login'}</span>
                         </Link>
                     </div>
                 </div>

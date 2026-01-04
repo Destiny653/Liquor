@@ -11,7 +11,12 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
+        required: false,
+    },
+    provider: {
+        type: String,
         required: true,
+        default: 'credentials'
     },
     orders: [
         {
