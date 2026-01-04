@@ -41,17 +41,17 @@ export default function Page() {
             localStorage.setItem('email', email);
 
             // validate password
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-            if (!passwordRegex.test(password)) {
+            // validate password
+            if (password.length < 5) {
                 setLoader(false)
-                notyf.error('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+                notyf.error('Password must be at least 5 characters long');
                 return;
             }
 
             try {
                 const res = await fetch('/api/signup', {
                     method: 'POST',
-                    body: JSON.stringify({ username, email, password }),
+                    body: JSON.stringify({ name: username, email, password }),
                     headers: {
                         'Content-Type': 'application/json'
                     }
