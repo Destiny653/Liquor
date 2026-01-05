@@ -76,6 +76,17 @@ export default function Page() {
                 </p>
             </div>
 
+            {/* Mobile Summary Toggle Button (Top) */}
+            <div className='cart-summary-toggle mobile-only'>
+                <button
+                    className='cart-summary-toggle-btn'
+                    onClick={() => setSummaryOpen(true)}
+                >
+                    <span>View Order Summary</span>
+                    <span className='cart-summary-toggle-total'>{formatter.format(grandTotal)}</span>
+                </button>
+            </div>
+
             <div className='cart-layout'>
                 {/* Cart Items Section */}
                 <div className='cart-items-section'>
@@ -231,16 +242,6 @@ export default function Page() {
                 </div>
             </div>
 
-            {/* Mobile Summary Toggle Button */}
-            <div className='cart-summary-toggle'>
-                <button
-                    className='cart-summary-toggle-btn'
-                    onClick={() => setSummaryOpen(true)}
-                >
-                    <span>View Order Summary</span>
-                    <span className='cart-summary-toggle-total'>{formatter.format(grandTotal)}</span>
-                </button>
-            </div>
 
             {/* Mobile Summary Overlay */}
             <div

@@ -9,26 +9,26 @@ export default function BottomNav() {
     const { msgBtn, setMsgBtn } = useContext(SearchContext)
     const icons = [
         {
-            icon: <ChatCircle size={28} weight="regular" />,
+            icon: <ChatCircle size={32} weight="regular" />,
             title: 'message'
         },
         {
-            icon: <ShoppingCart size={28} weight="regular" />,
+            icon: <ShoppingCart size={32} weight="regular" />,
             path: '/cart',
             title: 'cart'
         },
         {
-            icon: <House size={28} weight="regular" />,
+            icon: <House size={32} weight="regular" />,
             path: '/',
             title: 'home'
         },
         {
-            icon: <SignIn size={28} weight="regular" />,
+            icon: <SignIn size={32} weight="regular" />,
             path: '/signup',
             title: 'register'
         },
         {
-            icon: <Storefront size={28} weight="regular" />,
+            icon: <Storefront size={32} weight="regular" />,
             path: '/shop',
             title: 'shop'
         },
@@ -41,10 +41,10 @@ export default function BottomNav() {
                 <div key={index}
                     onClick={() => {
                         icon.path &&
-                        navigation.push(icon.path);
+                            navigation.push(icon.path);
                         icon.title == 'message' && (msgBtn ? setMsgBtn(false) : setMsgBtn(true))
                     }}
-                    className={`icon relative w-[35px] h-[35px] rounded-full flex items-center justify-center`}>
+                    className={`icon relative w-[45px] h-[45px] rounded-full flex items-center justify-center`}>
                     {icon.icon}
                     <p className='active-title'>{icon.title}</p>
                 </div>

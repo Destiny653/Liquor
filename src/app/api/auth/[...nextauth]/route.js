@@ -91,19 +91,21 @@ const handler = NextAuth({
           if (!existingUser) {
             console.log("Creating new Google user:", user.email);
             const newUser = new User({
-              name: user.name,
+              name: user.name || user.email.split('@')[0],
               email: user.email,
               provider: 'google',
               role: 'user', // Explicitly 'user'
             });
             await newUser.save();
-            // Manually attach role to user object to be picked up by jwt callback immediately
+            // Manually attach fields to user object to be picked up by jwt callback immediately
             user.role = 'user';
+            user._id = newUser._id;
             console.log("New Google user created with role:", user.role);
             return true;
           }
           console.log("Google user sign-in:", user.email, "Role in DB:", existingUser.role);
           user.role = existingUser.role;
+          user._id = existingUser._id;
           return true;
         } catch (err) {
           console.log("Error checking/creating user: ", err);

@@ -165,7 +165,7 @@ export default function PostsPage() {
             </div>
 
             {/* Main Content Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '24px' }}>
+            <div className='dashboard-grid-side-preview'>
                 {/* Products Table */}
                 <div className='dashboard-card'>
                     <div className='dashboard-card-header'>
@@ -202,7 +202,7 @@ export default function PostsPage() {
                                             onClick={() => setSelectedPost(post)}
                                             style={{ cursor: 'pointer' }}
                                         >
-                                            <td>
+                                            <td data-label="Product">
                                                 <div className='dashboard-product-cell'>
                                                     <img
                                                         src={post.img}
@@ -215,24 +215,24 @@ export default function PostsPage() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td data-label="Price">
                                                 <span className='dashboard-price'>
                                                     {formatter.format(post.price)}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td data-label="Rating">
                                                 <div className='dashboard-rating'>
                                                     <FiStar fill='currentColor' size={14} />
                                                     {post.rating || 4.5}
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td data-label="Status">
                                                 <span className='dashboard-status active'>
                                                     <span className='dashboard-status-dot'></span>
                                                     In Stock
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td data-label="Actions">
                                                 <div className='dashboard-actions'>
                                                     <button
                                                         className='dashboard-action-btn'

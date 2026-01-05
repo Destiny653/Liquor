@@ -148,7 +148,7 @@ export default function AnalyticsPage() {
                         </div>
                     </div>
 
-                    <div className='dashboard-stats' style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+                    <div className='dashboard-stats'>
                         <div className='dashboard-stat-card'>
                             <div className='dashboard-stat-header'>
                                 <div className='dashboard-stat-icon accent'>
@@ -202,10 +202,10 @@ export default function AnalyticsPage() {
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24, marginBottom: 24 }}>
-                        <div className='dashboard-card' style={{ height: 400, padding: '24px' }}>
-                            <h3 className='dashboard-card-title' style={{ marginBottom: 20 }}>Revenue Overview</h3>
-                            <div style={{ width: '100%', height: 300 }}>
+                    <div className='dashboard-grid-two-one'>
+                        <div className='dashboard-card dashboard-chart-card'>
+                            <h3 className='dashboard-card-title'>Revenue Overview</h3>
+                            <div className='dashboard-chart-container'>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart data={chartData}>
                                         <defs>
@@ -250,21 +250,21 @@ export default function AnalyticsPage() {
                             </div>
                         </div>
 
-                        <div className='dashboard-card' style={{ height: 400, padding: 24 }}>
-                            <h3 className='dashboard-card-title' style={{ marginBottom: 20 }}>Top Products</h3>
-                            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                        <div className='dashboard-card dashboard-top-products-card'>
+                            <h3 className='dashboard-card-title'>Top Products</h3>
+                            <ul className='top-products-list'>
                                 {topProducts.length > 0 ? topProducts.map((item, i) => (
-                                    <li key={i} style={{ marginBottom: 16 }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
-                                            <span style={{ color: 'var(--color-text-primary)' }}>{item.name}</span>
-                                            <span style={{ color: 'var(--color-text-muted)' }}>{item.sales} sold</span>
+                                    <li key={i} className='top-product-item'>
+                                        <div className='top-product-info'>
+                                            <span>{item.name}</span>
+                                            <span className='sales-count'>{item.sales} sold</span>
                                         </div>
-                                        <div style={{ width: '100%', height: 6, background: 'var(--color-border)', borderRadius: 3 }}>
-                                            <div style={{ width: `${item.percent}%`, height: '100%', background: 'var(--color-gold)', borderRadius: 3 }}></div>
+                                        <div className='progress-bar-bg'>
+                                            <div className='progress-bar-fill' style={{ width: `${item.percent}%` }}></div>
                                         </div>
                                     </li>
                                 )) : (
-                                    <li style={{ color: 'var(--color-text-muted)', textAlign: 'center', marginTop: 40 }}>No sales data yet</li>
+                                    <li className='empty-text'>No sales data yet</li>
                                 )}
                             </ul>
                         </div>

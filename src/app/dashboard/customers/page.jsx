@@ -97,7 +97,7 @@ export default function CustomersPage() {
                             {currentItems.length > 0 ? (
                                 currentItems.map((customer) => (
                                     <tr key={customer._id}>
-                                        <td>
+                                        <td data-label="Customer">
                                             <div className='dashboard-product-cell'>
                                                 {customer.image ? (
                                                     <img
@@ -122,8 +122,8 @@ export default function CustomersPage() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style={{ color: 'var(--color-text-secondary)' }}>{customer.email}</td>
-                                        <td style={{ color: 'var(--color-text-muted)' }}>
+                                        <td data-label="Email" style={{ color: 'var(--color-text-secondary)' }}>{customer.email}</td>
+                                        <td data-label="Role" style={{ color: 'var(--color-text-muted)' }}>
                                             <span style={{
                                                 textTransform: 'capitalize',
                                                 padding: '2px 8px',
@@ -134,13 +134,13 @@ export default function CustomersPage() {
                                                 {customer.role || 'user'}
                                             </span>
                                         </td>
-                                        <td style={{ color: 'var(--color-text-muted)' }}>
+                                        <td data-label="Joined" style={{ color: 'var(--color-text-muted)' }}>
                                             {new Date(customer.createdAt).toLocaleDateString()}
                                         </td>
-                                        <td style={{ fontWeight: 500 }}>
+                                        <td data-label="Est. Orders" style={{ fontWeight: 500 }}>
                                             {customer.orders ? customer.orders.length : 0}
                                         </td>
-                                        <td>
+                                        <td data-label="Actions">
                                             <button className='dashboard-action-btn'>
                                                 <FiMoreHorizontal />
                                             </button>

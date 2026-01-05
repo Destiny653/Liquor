@@ -169,19 +169,19 @@ export default function OrdersPage() {
                             {currentItems.length > 0 ? (
                                 currentItems.map((order, index) => (
                                     <tr key={index}>
-                                        <td style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>#{order.uniqueId}</td>
-                                        <td>
+                                        <td data-label="Order ID" style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>#{order.uniqueId}</td>
+                                        <td data-label="Customer">
                                             <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <span>{order.customer}</span>
                                                 <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{order.email}</span>
                                             </div>
                                         </td>
-                                        <td style={{ color: 'var(--color-text-muted)' }}>{order.date}</td>
-                                        <td>{order.items} items</td>
-                                        <td style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                                        <td data-label="Date" style={{ color: 'var(--color-text-muted)' }}>{order.date}</td>
+                                        <td data-label="Items">{order.items} items</td>
+                                        <td data-label="Amount" style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>
                                             {formatter.format(order.amount)}
                                         </td>
-                                        <td>
+                                        <td data-label="Status">
                                             <span
                                                 className={getStatusColor(order.status)}
                                                 style={order.status === 'processing' ? { background: 'rgba(212, 175, 55, 0.1)', color: 'var(--color-gold)' } : {}}
@@ -190,7 +190,7 @@ export default function OrdersPage() {
                                                 <span style={{ marginLeft: 6, textTransform: 'capitalize' }}>{order.status}</span>
                                             </span>
                                         </td>
-                                        <td>
+                                        <td data-label="Actions">
                                             <div className='dashboard-actions'>
                                                 <button className='dashboard-action-btn' title="View Details">
                                                     <FiEye />

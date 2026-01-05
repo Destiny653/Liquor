@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState, useContext } from 'react';
+import { signIn } from 'next-auth/react';
+import { FcGoogle } from 'react-icons/fc';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 import './signup.css';
@@ -180,6 +182,22 @@ export default function Page() {
                                     {loader ? <BtnLoader /> : 'Create Account'}
                                 </button>
                             </form>
+
+                            {/* Divider */}
+                            <div className='signup-divider'>
+                                <span className='signup-divider-line'></span>
+                                <span className='signup-divider-text'>or</span>
+                                <span className='signup-divider-line'></span>
+                            </div>
+
+                            {/* Google Sign In */}
+                            <button
+                                className='signup-google-btn'
+                                onClick={() => { signIn("google"); setLoader(true) }}
+                            >
+                                <FcGoogle size={24} />
+                                Continue with Google
+                            </button>
 
                             <div className='signup-footer'>
                                 <p className='signup-footer-text'>Already have an account?</p>

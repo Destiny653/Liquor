@@ -149,13 +149,13 @@ export default function Navbar() {
                             🥃 Free Shipping on Orders Over $500 | Premium Selection Guaranteed
                         </span>
                         {session && (
-                            <div className="top-bar-user">
+                            <Link href="/profile" className="top-bar-user">
                                 <FiUser className="user-icon" />
                                 <div className="user-details">
                                     <span className="user-name">{session.user.name}</span>
                                     <span className="user-email">{session.user.email}</span>
                                 </div>
-                            </div>
+                            </Link>
                         )}
                     </div>
                 </div>
@@ -231,9 +231,9 @@ export default function Navbar() {
                                 )}
 
                                 <Link
-                                    href={session ? (session.user?.role === 'manager' ? "/dashboard/posts" : "/orders") : "/login"}
+                                    href={session ? "/profile" : "/login"}
                                     className="nav-action-btn user-btn"
-                                    title={session ? (session.user?.role === 'manager' ? "Manager Dashboard" : "My Orders") : "Sign In"}
+                                    title={session ? "My Profile" : "Sign In"}
                                 >
                                     {session?.user?.image ? (
                                         <img
@@ -326,6 +326,17 @@ export default function Navbar() {
                                 </Link>
                             </li>
                         ))}
+                        {session && session.user?.role === 'manager' && (
+                            <li>
+                                <Link
+                                    href="/dashboard/posts"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    style={{ color: 'var(--nav-gold)' }}
+                                >
+                                    Admin Dashboard
+                                </Link>
+                            </li>
+                        )}
                     </ul>
 
                     {/* Mobile Brands */}
@@ -351,12 +362,12 @@ export default function Navbar() {
                             <span>Cart</span>
                         </Link>
                         <Link
-                            href={session ? (session.user?.role === 'manager' ? "/dashboard/posts" : "/orders") : "/login"}
+                            href={session ? "/profile" : "/login"}
                             className="mobile-action-btn"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             <FiUser />
-                            <span>{session ? (session.user?.role === 'manager' ? 'Dashboard' : 'Orders') : 'Login'}</span>
+                            <span>{session ? 'Profile' : 'Login'}</span>
                         </Link>
                     </div>
                 </div>

@@ -290,9 +290,18 @@ function ShopContent() {
     }
   }, [getTotalPages]);
 
+  const [filterOpen, setFilterOpen] = useState(false);
+
   return (
     <div className='relative shop-parent nav-obscure-view'>
-      <div className='top-[10vh] left-0 sticky shop-child1'>
+      {/* Mobile Filter Toggle */}
+      <div className='mobile-filter-toggle'>
+        <button onClick={() => setFilterOpen(!filterOpen)}>
+          {filterOpen ? 'Close Filters' : 'Filter Products'}
+        </button>
+      </div>
+
+      <div className={`shop-child1 ${filterOpen ? 'open' : ''}`}>
         <section className='brand'>
           <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
           {choice.map((brandName, index) => (
@@ -302,7 +311,10 @@ function ShopContent() {
                 id={`radio-${index}`}
                 name="brand"
                 value={brandName.toLowerCase()}
-                onChange={() => setOptions(brandName)}
+                onChange={() => {
+                  setOptions(brandName);
+                  setFilterOpen(false);
+                }}
                 checked={options === brandName}
               />
               <span>{brandName === 'All Brands' ? 'All' : brandName.charAt(0).toUpperCase() + brandName.slice(1, -1)}</span>
@@ -310,7 +322,10 @@ function ShopContent() {
           ))}
         </section>
 
-        <PriceFilter onFilterChange={handleFilterChange} />
+        <PriceFilter onFilterChange={(min, max) => {
+          handleFilterChange(min, max);
+          setFilterOpen(false);
+        }} />
       </div>
 
       <section className='shop-child2'>
