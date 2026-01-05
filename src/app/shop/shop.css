@@ -357,18 +357,84 @@ Responsive Styles
         padding: 20px 5%;
     }
 
-    .shop-child1 {
+    .mobile-filter-toggle {
+        display: block;
+        margin-bottom: 24px;
+    }
+
+    .mobile-filter-toggle button {
         width: 100%;
-        min-width: 100%;
-        position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
+        padding: 14px;
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-gold);
+        color: var(--color-gold);
+        border-radius: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+    }
+
+    .mobile-filter-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .mobile-filter-header h3 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin: 0;
+    }
+
+    .close-filter {
+        background: transparent;
+        border: none;
+        color: var(--color-text-primary);
+        cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .shop-child1 {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--color-bg-primary);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        padding: 40px 24px;
+        gap: 32px;
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+    }
+
+    .shop-child1.open {
+        left: 0;
     }
 
     .shop-filter,
     .brand {
-        flex: 1;
-        min-width: 280px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--color-border);
+        border-radius: 20px;
+        padding: 24px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .shop-arr {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
 
     .shop-child2 {
@@ -391,42 +457,6 @@ Responsive Styles
 }
 
 @media (max-width: 480px) {
-    .mobile-filter-toggle {
-        display: block;
-        margin-bottom: 20px;
-    }
-
-    .mobile-filter-toggle button {
-        width: 100%;
-        padding: 14px;
-        background: var(--color-bg-card);
-        border: 1px solid var(--color-gold);
-        color: var(--color-gold);
-        border-radius: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .shop-child1 {
-        display: none;
-        position: static;
-        width: 100%;
-        min-width: 100%;
-        flex-direction: column;
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-
-    .shop-child1.open {
-        display: flex;
-    }
-
-    .shop-filter,
-    .brand {
-        min-width: 100%;
-    }
-
     .shop-arr {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;

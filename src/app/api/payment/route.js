@@ -1,44 +1,44 @@
 const axios = require('axios');
 const { transaction_id, BASE_URL } = require('@/utils/constants');
 
-export const makePayment = async(products, totalAmount)=>{ 
+export const makePayment = async (products, totalAmount) => {
 
-        const items = products.map(product => ({
-            price_description: {
-                unit_amount: product.price
-            },
-            product_description: {
-                name: product.title,
-                image_url: product.img,
-                about_product: product.description
-            },
-            quantity: product.quantity
-        }))
+    const items = products.map(product => ({
+        price_description: {
+            unit_amount: product.price
+        },
+        product_description: {
+            name: product.title,
+            image_url: product.img,
+            about_product: product.description
+        },
+        quantity: product.quantity
+    }))
 
-    const api_token =process.env.API_TOKEN_LIVE;
+    const api_token = process.env.API_TOKEN_LIVE;
     const api_user = process.env.API_USER;
-    const api_password =process.env.API_PASSWORD;
+    const api_password = process.env.API_PASSWORD;
 
     const credentials = btoa(`${api_user}:${api_password}`)
     const authorization = `Basic ${credentials}`
-    const config ={
-        headers:{
+    const config = {
+        headers: {
             'Content-Type': 'application/json',
             'x-api-key': api_token,
             'Authorization': authorization,
-            "mode": "live", 
+            "mode": "live",
         }
     }
 
     const payload = {
-        "total_amount" : totalAmount,
+        "total_amount": totalAmount,
         "cancel_url": "https://example.com/cancel",
         "success_url": "https://example.com/success",
         "currency": "XAF",
         "mode": "payment",
-        "transaction_id":  transaction_id,
-        "return_url" : "https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34",
-        "notify_url":"https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34",
+        "transaction_id": transaction_id,
+        "return_url": "https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34",
+        "notify_url": "https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34",
         items,
         "meta": {
             "phone_number_collection": false,
@@ -47,10 +47,9 @@ export const makePayment = async(products, totalAmount)=>{
     }
 
     try {
-        const response = await axios.post( BASE_URL + '/api/gateway/checkout/initialize', payload, config);
-        console.log("Payment responst: "+response.data);
+        const response = await axios.post(BASE_URL + '/api/gateway/checkout/initialize', payload, config);
         return response?.data.data.redirect;
     } catch (error) {
-        console.error("Error payment: ",error); 
+        // Silently fail for security
     }
 }

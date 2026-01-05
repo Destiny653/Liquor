@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchContext } from '../../../context/SearchContext';
 import { CartContext } from '../../../context/CartContext';
 import { FaStar } from 'react-icons/fa';
+import { FiX, FiFilter } from 'react-icons/fi';
 import { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton';
 import Qty from '../components/Quantity/quantity';
 
@@ -201,13 +202,6 @@ function ShopContent() {
     );
   }, []);
 
-  // Debug logging effect
-  useEffect(() => {
-    console.log('Current data:', data);
-    console.log('Filtered data:', filteredData);
-    console.log('Loading state:', loader);
-  }, [data, filteredData, loader]);
-
   // Main data fetching effect
   useEffect(() => {
     let isSubscribed = true;
@@ -233,7 +227,6 @@ function ShopContent() {
           setFilteredData(null);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
         if (isSubscribed) {
           setData([]);
           setFilteredData(null);
@@ -296,12 +289,31 @@ function ShopContent() {
     <div className='relative shop-parent nav-obscure-view'>
       {/* Mobile Filter Toggle */}
       <div className='mobile-filter-toggle'>
-        <button onClick={() => setFilterOpen(!filterOpen)}>
-          {filterOpen ? 'Close Filters' : 'Filter Products'}
+        <button onClick={() => setFilterOpen(true)} className="flex items-center justify-center gap-2">
+          <FiFilter /> Filter Products
         </button>
       </div>
 
       <div className={`shop-child1 ${filterOpen ? 'open' : ''}`}>
+        <div className="mobile-filter-header">
+          <div className="flex flex-col">
+            <h3>Filters</h3>
+            <button
+              className="text-[12px] text-red-500 w-fit"
+              onClick={() => {
+                setOptions('All Brands');
+                handleFilterChange(0, 30000);
+                setFilterOpen(false);
+              }}
+            >
+              Clear All
+            </button>
+          </div>
+          <button className="close-filter" onClick={() => setFilterOpen(false)}>
+            <FiX size={24} />
+          </button>
+        </div>
+
         <section className='brand'>
           <h1 className='font-[500] text-[red] text-2xl'>Brand</h1>
           {choice.map((brandName, index) => (

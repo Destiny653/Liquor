@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './cart.css';
 import Link from 'next/link';
 import { FaRegTrashAlt, FaShoppingBag, FaLock, FaArrowRight, FaArrowLeft, FaTimes } from "react-icons/fa";
+import { FiMinus, FiPlus } from "react-icons/fi";
 import { CartContext } from '../../../context/CartContext';
 
 export default function Page() {
@@ -109,7 +110,7 @@ export default function Page() {
 
                                         return (
                                             <tr key={index}>
-                                                <td className='cart-product-cell'>
+                                                <td className='cart-product-cell' data-label="Product">
                                                     <img
                                                         className='cart-product-image'
                                                         src={itemInCart?.img}
@@ -117,30 +118,32 @@ export default function Page() {
                                                     />
                                                     <div className='cart-product-info'>
                                                         <h4>{itemInCart?.title}</h4>
-                                                        <p>Premium Whiskey</p>
+                                                        <p>{itemInCart?.productModel || 'Premium Whiskey'}</p>
                                                     </div>
                                                 </td>
-                                                <td className='cart-price-cell'>
+                                                <td className='cart-price-cell' data-label="Price">
                                                     <span className='cart-price'>{formatter.format(price)}</span>
                                                 </td>
-                                                <td className='cart-qty-cell'>
+                                                <td className='cart-qty-cell' data-label="Quantity">
                                                     <div className='cart-qty-controls'>
                                                         <button
                                                             className='cart-qty-btn'
                                                             onClick={() => handleAddToCart(itemInCart, qtyInCart)}
+                                                            title="Decrease"
                                                         >
-                                                            −
+                                                            <FiMinus size={14} />
                                                         </button>
                                                         <span className='cart-qty-value'>{qtyInCart}</span>
                                                         <button
                                                             className='cart-qty-btn'
                                                             onClick={() => handleAddToCart(itemInCart)}
+                                                            title="Increase"
                                                         >
-                                                            +
+                                                            <FiPlus size={14} />
                                                         </button>
                                                     </div>
                                                 </td>
-                                                <td className='cart-subtotal-cell'>
+                                                <td className='cart-subtotal-cell' data-label="Subtotal">
                                                     <span className='cart-subtotal'>
                                                         {formatter.format(price * qtyInCart)}
                                                     </span>
@@ -149,6 +152,7 @@ export default function Page() {
                                                     <button
                                                         className='cart-remove-btn'
                                                         onClick={() => handleAddToCart(itemInCart, qtyInCart, index)}
+                                                        title="Remove item"
                                                     >
                                                         <FaRegTrashAlt size={16} />
                                                     </button>

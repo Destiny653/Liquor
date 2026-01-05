@@ -48,7 +48,6 @@ const handler = NextAuth({
     async jwt({ token, user, trigger, session }) {
       if (user) {
         // This block runs only on the first sign-in (or when 'user' is passed)
-        console.log("JWT Callback: Initial user object received.", { userId: user._id, userEmail: user.email, userRole: user.role });
         token.id = user._id ? user._id.toString() : user.id;
         token.role = user.role;
       }
@@ -57,7 +56,6 @@ const handler = NextAuth({
       // we should fetch it. For performance, we can skip if it's already there
       // unless we want real-time role updates.
       if (!token.role) {
-        console.log("JWT Callback: Role not found in token, fetching from DB.", { tokenEmail: token.email });
         await connectDB();
         // token.email should be available if user logged in
         if (token.email) {
@@ -65,31 +63,23 @@ const handler = NextAuth({
           if (dbUser) {
             token.role = dbUser.role;
             token.id = dbUser._id.toString();
-            console.log("JWT Callback: Role fetched from DB.", { dbUserRole: dbUser.role });
-          } else {
-            console.log("JWT Callback: User not found in DB for token email.", { tokenEmail: token.email });
           }
         }
       }
-      console.log("JWT Callback: Returning token.", { tokenId: token.id, tokenRole: token.role });
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.role = token.role;
-        console.log("Session Callback: Assigning role from token to session.", { sessionUserRole: session.user.role });
       }
-      console.log("Session Callback: Returning session.", { sessionUserId: session.user.id, sessionUserEmail: session.user.email, sessionUserRole: session.user.role });
       return session;
     },
     async signIn({ user, account }) {
-      console.log("SignIn Callback: Attempting sign-in.", { provider: account.provider, userEmail: user.email });
       if (account.provider === "google") {
         await connectDB();
         try {
           const existingUser = await User.findOne({ email: user.email });
           if (!existingUser) {
-            console.log("Creating new Google user:", user.email);
             const newUser = new User({
               name: user.name || user.email.split('@')[0],
               email: user.email,
@@ -100,15 +90,12 @@ const handler = NextAuth({
             // Manually attach fields to user object to be picked up by jwt callback immediately
             user.role = 'user';
             user._id = newUser._id;
-            console.log("New Google user created with role:", user.role);
             return true;
           }
-          console.log("Google user sign-in:", user.email, "Role in DB:", existingUser.role);
           user.role = existingUser.role;
           user._id = existingUser._id;
           return true;
         } catch (err) {
-          console.log("Error checking/creating user: ", err);
           return false;
         }
       }

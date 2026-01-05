@@ -139,40 +139,40 @@ Premium Cart Page Styles
 .cart-qty-controls {
     display: flex;
     align-items: center;
-    gap: 4px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 4px;
+    border-radius: 12px;
+    padding: 2px;
     width: fit-content;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .cart-qty-btn {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: transparent;
     border: none;
     color: var(--color-text-primary);
-    font-size: 18px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 10px;
     transition: all var(--transition-fast);
 }
 
 .cart-qty-btn:hover {
-    background: var(--color-accent);
-    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-gold);
 }
 
 .cart-qty-value {
-    min-width: 40px;
+    min-width: 44px;
     text-align: center;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--color-text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-gold);
+    font-family: var(--font-mono);
 }
 
 /* Subtotal Cell */
@@ -712,11 +712,11 @@ Responsive Styles
     }
 
     .cart-items-section {
-        padding: 16px;
-        border-radius: 16px;
+        padding: 20px;
+        border-radius: 20px;
     }
 
-    /* Transform table to cards on mobile */
+    /* Redesigned mobile cart items for better stability */
     .cart-table thead {
         display: none;
     }
@@ -730,50 +730,76 @@ Responsive Styles
     }
 
     .cart-table tbody tr {
-        padding: 20px 0;
+        padding: 24px 0;
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
         position: relative;
     }
 
     .cart-table td {
-        padding: 8px 0;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        min-height: 24px;
     }
 
-    .cart-product-cell {
-        margin-bottom: 12px;
+    .cart-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 11px;
+        color: var(--color-text-muted);
+        text-align: left;
+    }
+
+    .cart-table td.cart-product-cell {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        gap: 16px;
+        margin-bottom: 8px;
+    }
+
+    .cart-table td.cart-product-cell::before {
+        display: none;
     }
 
     .cart-product-image {
-        width: 70px;
-        height: 70px;
+        width: 80px;
+        height: 80px;
     }
 
-    .cart-price-cell,
-    .cart-subtotal-cell {
-        display: inline-block;
-        width: auto;
+    .cart-product-info h4 {
+        font-size: 16px;
+        margin-bottom: 4px;
     }
 
-    .cart-qty-cell {
+    .cart-table td.cart-remove-cell {
         position: absolute;
+        top: 24px;
         right: 0;
-        top: 20px;
+        justify-content: flex-end;
+        width: fit-content;
     }
 
-    .cart-remove-cell {
-        position: absolute;
-        right: 0;
-        bottom: 20px;
+    .cart-table td.cart-remove-cell::before {
+        display: none;
     }
 
     .cart-actions {
         flex-direction: column-reverse;
-        gap: 12px;
+        gap: 16px;
     }
 
     .cart-reset-btn,
     .cart-continue-btn {
         width: 100%;
         justify-content: center;
+        padding: 16px;
     }
 }
 

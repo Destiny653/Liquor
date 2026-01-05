@@ -913,6 +913,19 @@ Responsive Styles
         align-items: flex-start;
         gap: 12px;
     }
+
+    .dashboard-pagination {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        padding: 24px 16px;
+    }
+
+    .dashboard-pagination-buttons {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }
 
 @media (max-width: 480px) {

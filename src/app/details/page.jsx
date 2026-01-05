@@ -10,11 +10,8 @@ import Qty from '../components/Quantity/quantity';
 
 export default function Page() {
     const { detailPro, detailArr, api, handlePro } = useContext(SearchContext)
-    console.log(api)
     const { handleAddToCart } = useContext(CartContext)
     const navigation = useRouter();
-    console.log(detailPro);
-    console.log(detailArr);
     // useEffect( async()=>{
 
     //     return;
