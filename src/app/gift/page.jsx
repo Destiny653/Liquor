@@ -213,7 +213,6 @@ function GiftContent() {
                                                             handleAddToCart(gift);
                                                         }}
                                                     >
-                                                        <FiShoppingCart size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
                                                         Add to Collection
                                                     </button>
                                                 </div>
