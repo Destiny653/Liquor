@@ -66,14 +66,12 @@ export default function Page() {
                     return;
                 }
                 const data = await res.json();
-                console.log(data)
                 setLoader(false)
                 notyf.success('Registration successful!');
                 navigation.push('/login');
             } catch (error) {
                 setLoader(false)
-                notyf.error('Registration failed!' + error.message);
-                console.log(error);
+                notyf.error('Registration failed!');
             }
         }
     };

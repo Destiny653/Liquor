@@ -43,7 +43,6 @@ const Page = () => {
     }
 
     const handleSubmit = async (e) => {
-        console.log("handleSubmit called");
         e.preventDefault();
         setBtnLoader(true);
 
@@ -56,14 +55,12 @@ const Page = () => {
         });
 
         try {
-            console.log("Attempting sign in for:", email);
             const result = await signIn("credentials", {
                 redirect: false,
                 email,
                 password,
             });
 
-            console.log("Sign in result:", result);
 
             if (result?.ok) {
                 notyf.success("Successfully logged in");
@@ -82,7 +79,6 @@ const Page = () => {
                 notyf.error(result?.error || "Invalid email or password");
             }
         } catch (error) {
-            console.error("Login Error:", error);
             setBtnLoader(false);
             notyf.error("Something went wrong");
         }

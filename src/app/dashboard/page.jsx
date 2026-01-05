@@ -25,15 +25,10 @@ export default function Dashboard() {
                 }
 
                 if (!email) {
-                    console.log('No email found, redirecting to login...')
                     router.push('/login')
-                    // Assuming redirect happens fast, but to be safe we stop loading
-                    // Actually, if we return here, loading is true.
-                    // This is usually fine as we navigate away.
                     return
                 }
 
-                console.log('Verifying role for:', email)
                 const res = await fetch('/api/users')
 
                 if (res.ok) {
@@ -41,19 +36,15 @@ export default function Dashboard() {
                     const users = data.users || []
                     const currentUser = users.find(u => u.email === email)
 
-                    console.log('User found:', currentUser)
-
                     if (currentUser && currentUser.role === 'manager') {
                         setIsAuthorized(true)
                     } else {
                         setIsAuthorized(false)
                     }
                 } else {
-                    console.error('Failed to fetch users list')
                     setIsAuthorized(false)
                 }
             } catch (error) {
-                console.error('Auth verification error:', error)
                 setIsAuthorized(false)
             } finally {
                 setLoading(false)

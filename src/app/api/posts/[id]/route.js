@@ -12,13 +12,13 @@ export async function GET(req, { params }) {
         const post = await Post.findById(id)
         return new NextResponse(JSON.stringify(post), { status: 200 });
     } catch (error) {
-        return new NextResponse(JSON.stringify({message:'Error: '+error}), { status: 500 })
+        return new NextResponse(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 })
     }
 }
 
 //update a product
 export async function PUT(req, { params }) {
-    const {id } = params
+    const { id } = params
     const { title, content, price, img, rate } = await req.json();
 
     //cloudinary configuration
@@ -29,7 +29,7 @@ export async function PUT(req, { params }) {
     })
     const uploadResult = await cloudinary.uploader.upload(img, {
         public_id: title
-    }).catch((error) => console.log(error));
+    }).catch((error) => { });
 
     try {
         await connectDB();
@@ -42,7 +42,7 @@ export async function PUT(req, { params }) {
         });
         return new NextResponse({ message: 'Product Updated' }, { status: 200 });
     } catch (error) {
-        return new NextResponse(JSON.stringify({message:'Error: '+error}), { status: 500 })
+        return new NextResponse(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 })
     }
 }
 
@@ -60,14 +60,13 @@ export const DELETE = async (req, { params }) => {
             api_key: process.env.API_KEY,
             api_secret: process.env.API_SECRET
         });
-        
+
         const post = await Post.findById(id);
         cloudinary.api.delete_resources([post.title], {
             type: 'upload',
             resource_tube: 'image'
         })
     } catch (error) {
-        console.log(error);
         return new NextResponse('Cloudinary Image not deleted', { status: 500 });
     }
 
@@ -75,9 +74,9 @@ export const DELETE = async (req, { params }) => {
 
     try {
         const post = await Post.findByIdAndDelete(id);
-        return new NextResponse(JSON.stringify(post), {message: 'Post deleted successfully', status: 200 });
+        return new NextResponse(JSON.stringify(post), { message: 'Post deleted successfully', status: 200 });
     } catch (error) {
-        return new NextResponse(JSON.stringify({message:'Error: '+error}), {status: 500});
+        return new NextResponse(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
     }
 
 }
