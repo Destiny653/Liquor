@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
 import { CartContext } from '../../../../context/CartContext';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import Display from '../SearchDisplay/Display';
-import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
+import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiChevronDown, FiLogOut } from 'react-icons/fi';
 
 export default function Navbar() {
     const { setSearchVal } = useContext(SearchContext);
@@ -15,7 +15,7 @@ export default function Navbar() {
 
     // Calculate total cart items
     const totalCartItems = cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const navigation = useRouter();
 
     // Brand data for mega menu
@@ -55,12 +55,46 @@ export default function Navbar() {
             slug: 'baltons',
             description: 'Distinguished single malt selection',
             image: '/images/gift3.jpg'
+        },
+        {
+            name: 'Gift Bundles',
+            slug: 'gifts',
+            description: 'Exclusive curated spirit sets and sets',
+            image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2040&auto=format&fit=crop'
+        }
+    ];
+
+    const occasions = [
+        {
+            name: 'Birthday',
+            slug: 'birthday',
+            description: 'Celebrate another year with a premium selection',
+            image: 'https://images.unsplash.com/photo-1530103862676-fa8c91abe178?q=80&w=2070&auto=format&fit=crop'
+        },
+        {
+            name: 'Anniversary',
+            slug: 'anniversary',
+            description: 'Toast to everlasting love and memories',
+            image: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=2070&auto=format&fit=crop'
+        },
+        {
+            name: 'Corporate',
+            slug: 'corporate',
+            description: 'Make a lasting impression on partners',
+            image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=2074&auto=format&fit=crop'
+        },
+        {
+            name: 'Special Edition',
+            slug: 'special',
+            description: 'Rare finds for the ultimate collector',
+            image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop'
         }
     ];
 
     const navLinks = [
         { title: 'Home', path: '/' },
-        { title: 'Shop', path: '/shop', hasMega: true },
+        { title: 'Shop', path: '/shop', hasMega: true, type: 'shop' },
+        { title: 'Gifts', path: '/gift', hasMega: true, type: 'gifts' },
         { title: 'About', path: '/about' },
     ];
 
@@ -68,6 +102,7 @@ export default function Navbar() {
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+    const [activeMegaMenu, setActiveMegaMenu] = useState(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
     const [query, setQuery] = useState('');
@@ -111,24 +146,35 @@ export default function Navbar() {
     }, [query, setSearchVal]);
 
     // Handle mega menu hover with delay
-    const handleMegaMenuEnter = () => {
+    const handleMegaMenuEnter = (type) => {
         if (megaMenuTimeoutRef.current) {
             clearTimeout(megaMenuTimeoutRef.current);
         }
+        setActiveMegaMenu(type);
         setMegaMenuOpen(true);
     };
 
     const handleMegaMenuLeave = () => {
         megaMenuTimeoutRef.current = setTimeout(() => {
             setMegaMenuOpen(false);
+            setActiveMegaMenu(null);
         }, 150);
     };
 
     // Navigate to shop with brand filter
     const handleBrandClick = (brandSlug) => {
         setMegaMenuOpen(false);
+        setActiveMegaMenu(null);
         setMobileMenuOpen(false);
         navigation.push(`/shop?brand=${brandSlug}`);
+    };
+
+    // Navigate to gift with occasion filter
+    const handleOccasionClick = (occasionSlug) => {
+        setMegaMenuOpen(false);
+        setActiveMegaMenu(null);
+        setMobileMenuOpen(false);
+        navigation.push(`/gift?occasion=${occasionSlug}`);
     };
 
     // Close mobile menu on route change
@@ -149,13 +195,19 @@ export default function Navbar() {
                             🥃 Free Shipping on Orders Over $500 | Premium Selection Guaranteed
                         </span>
                         {session && (
-                            <Link href="/profile" className="top-bar-user">
-                                <FiUser className="user-icon" />
-                                <div className="user-details">
-                                    <span className="user-name">{session.user.name}</span>
-                                    <span className="user-email">{session.user.email}</span>
-                                </div>
-                            </Link>
+                            <div className="top-bar-right">
+                                <Link href="/profile" className="top-bar-user">
+                                    <FiUser className="user-icon" />
+                                    <div className="user-details">
+                                        <span className="user-name">{session.user?.name || 'My Profile'}</span>
+                                        <span className="user-email">{session.user?.email}</span>
+                                    </div>
+                                </Link>
+                                <button onClick={() => signOut()} className="top-bar-logout" title="Sign Out">
+                                    <FiLogOut />
+                                    <span>Sign Out</span>
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -175,12 +227,12 @@ export default function Navbar() {
                                 <li
                                     key={index}
                                     className={`nav-link-item ${link.hasMega ? 'has-mega' : ''}`}
-                                    onMouseEnter={link.hasMega ? handleMegaMenuEnter : undefined}
+                                    onMouseEnter={link.hasMega ? () => handleMegaMenuEnter(link.type) : undefined}
                                     onMouseLeave={link.hasMega ? handleMegaMenuLeave : undefined}
                                 >
                                     <Link href={link.path} className="nav-link">
                                         {link.title}
-                                        {link.hasMega && <FiChevronDown className={`chevron ${megaMenuOpen ? 'rotate' : ''}`} />}
+                                        {link.hasMega && <FiChevronDown className={`chevron ${megaMenuOpen && activeMegaMenu === link.type ? 'rotate' : ''}`} />}
                                     </Link>
                                 </li>
                             ))}
@@ -259,40 +311,59 @@ export default function Navbar() {
                     </div>
                 </nav>
 
-                {/* Mega Menu */}
                 <div
                     ref={megaMenuRef}
                     className={`mega-menu ${megaMenuOpen ? 'open' : ''}`}
-                    onMouseEnter={handleMegaMenuEnter}
+                    onMouseEnter={() => handleMegaMenuEnter(activeMegaMenu)}
                     onMouseLeave={handleMegaMenuLeave}
                 >
                     <div className="mega-menu-container">
                         <div className="mega-menu-header">
-                            <h3>Our Premium Brands</h3>
-                            <p>Discover our curated collection of world-class spirits</p>
+                            <h3>{activeMegaMenu === 'shop' ? 'Our Premium Brands' : 'Gifts by Occasion'}</h3>
+                            <p>{activeMegaMenu === 'shop' ? 'Discover our curated collection of world-class spirits' : 'Find the perfect gift for every milestone'}</p>
                         </div>
                         <div className="mega-menu-grid">
-                            {brands.map((brand, index) => (
-                                <div
-                                    key={index}
-                                    className="mega-menu-item"
-                                    onClick={() => handleBrandClick(brand.slug)}
-                                    style={{ animationDelay: `${index * 0.05}s` }}
-                                >
-                                    <div className="mega-item-image">
-                                        <img src={brand.image} alt={brand.name} />
-                                        <div className="mega-item-overlay"></div>
+                            {activeMegaMenu === 'shop' ? (
+                                brands.map((brand, index) => (
+                                    <div
+                                        key={index}
+                                        className="mega-menu-item"
+                                        onClick={() => handleBrandClick(brand.slug)}
+                                        style={{ animationDelay: `${index * 0.05}s` }}
+                                    >
+                                        <div className="mega-item-image">
+                                            <img src={brand.image} alt={brand.name} />
+                                            <div className="mega-item-overlay"></div>
+                                        </div>
+                                        <div className="mega-item-content">
+                                            <h4>{brand.name}</h4>
+                                            <p>{brand.description}</p>
+                                        </div>
                                     </div>
-                                    <div className="mega-item-content">
-                                        <h4>{brand.name}</h4>
-                                        <p>{brand.description}</p>
+                                ))
+                            ) : (
+                                occasions.map((occ, index) => (
+                                    <div
+                                        key={index}
+                                        className="mega-menu-item"
+                                        onClick={() => handleOccasionClick(occ.slug)}
+                                        style={{ animationDelay: `${index * 0.05}s` }}
+                                    >
+                                        <div className="mega-item-image">
+                                            <img src={occ.image} alt={occ.name} />
+                                            <div className="mega-item-overlay"></div>
+                                        </div>
+                                        <div className="mega-item-content">
+                                            <h4>{occ.name}</h4>
+                                            <p>{occ.description}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
                         <div className="mega-menu-footer">
-                            <Link href="/shop" className="view-all-btn" onClick={() => setMegaMenuOpen(false)}>
-                                View All Products
+                            <Link href={activeMegaMenu === 'shop' ? "/shop" : "/gift"} className="view-all-btn" onClick={() => setMegaMenuOpen(false)}>
+                                {activeMegaMenu === 'shop' ? "View All Products" : "Explore All Gifts"}
                                 <span className="btn-arrow">→</span>
                             </Link>
                         </div>
@@ -355,6 +426,22 @@ export default function Navbar() {
                         </div>
                     </div>
 
+                    {/* Mobile Occasions */}
+                    <div className="mobile-brands" style={{ marginTop: '20px' }}>
+                        <h3>Gifts by Occasion</h3>
+                        <div className="mobile-brands-grid">
+                            {occasions.map((occ, index) => (
+                                <button
+                                    key={index}
+                                    className="mobile-brand-btn"
+                                    onClick={() => handleOccasionClick(occ.slug)}
+                                >
+                                    {occ.name}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* Mobile User Actions */}
                     <div className="mobile-actions">
                         <Link href="/cart" className="mobile-action-btn" onClick={() => setMobileMenuOpen(false)}>
@@ -369,6 +456,16 @@ export default function Navbar() {
                             <FiUser />
                             <span>{session ? 'Profile' : 'Login'}</span>
                         </Link>
+                        {session && (
+                            <button
+                                className="mobile-action-btn logout-btn"
+                                onClick={() => { signOut(); setMobileMenuOpen(false); }}
+                                style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--nav-text)' }}
+                            >
+                                <FiLogOut />
+                                <span>Logout</span>
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

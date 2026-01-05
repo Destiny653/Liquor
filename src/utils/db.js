@@ -1,12 +1,16 @@
 import mongoose from 'mongoose';
 
+const connectDB = async () => {
+    if (mongoose.connections[0].readyState) {
+        return;
+    }
 
-mongoose.set('strictQuery', false);
-const connectDB = async ()=> {
-    try{
+    try {
         await mongoose.connect(process.env.MONGO);
-    }catch(error){
-        throw new Error(`Couldn't connect to Mongo`)
+        console.log("Connected to MongoDB");
+    } catch (error) {
+        console.error("MongoDB connection error:", error);
+        throw new Error("Couldn't connect to Mongo");
     }
 }
 

@@ -16,9 +16,12 @@ export default function CreatePage() {
     const [rate, setRate] = useState('');
     const [content, setContent] = useState('');
     const [option, setOption] = useState('');
+    const [occasion, setOccasion] = useState('General');
     const [imgSrc, setImgSrc] = useState('');
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
+
+    const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];
 
     const productTypes = [
         { value: 'baltons', label: 'Balton', description: 'Distinguished single malt selection' },
@@ -27,6 +30,7 @@ export default function CreatePage() {
         { value: 'penelopes', label: 'Penelope', description: 'Crafted four-grain bourbon' },
         { value: 'wellers', label: 'W.L. Weller', description: 'Premium wheated bourbon' },
         { value: 'yamazakis', label: 'Yamazaki', description: 'Japanese whisky excellence' },
+        { value: 'gifts', label: 'Gift Bundles', description: 'Exclusive curated spirit sets' },
     ];
 
     const handleFileChange = (e) => {
@@ -81,16 +85,22 @@ export default function CreatePage() {
         setLoading(true);
 
         try {
+            const body = {
+                title,
+                price: parseFloat(price),
+                content,
+                rate: parseInt(rate) || 5,
+                img: imgSrc || 'https://via.placeholder.com/400'
+            };
+
+            if (option === 'gifts') {
+                body.occasion = occasion;
+            }
+
             const response = await fetch(`/api/${option}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title,
-                    price: parseFloat(price),
-                    content,
-                    rate: parseInt(rate) || 5,
-                    img: imgSrc || 'https://via.placeholder.com/400'
-                })
+                body: JSON.stringify(body)
             });
 
             if (response.ok) {
@@ -189,6 +199,45 @@ export default function CreatePage() {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Occasion (Only for Gifts) */}
+                        {option === 'gifts' && (
+                            <div style={{ marginBottom: '32px', animation: 'fadeIn 0.3s ease' }}>
+                                <label style={{
+                                    display: 'block',
+                                    fontSize: '13px',
+                                    fontWeight: '600',
+                                    color: 'var(--color-text-secondary)',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.5px',
+                                    marginBottom: '12px'
+                                }}>
+                                    Target Occasion <span style={{ color: 'var(--color-accent)' }}>*</span>
+                                </label>
+                                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                    {occasions.map((occ) => (
+                                        <div
+                                            key={occ}
+                                            onClick={() => setOccasion(occ)}
+                                            style={{
+                                                padding: '12px 24px',
+                                                background: occasion === occ ? 'rgba(212, 175, 55, 0.1)' : 'rgba(255, 255, 255, 0.02)',
+                                                border: `1px solid ${occasion === occ ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                                                borderRadius: '10px',
+                                                cursor: 'pointer',
+                                                fontSize: '14px',
+                                                fontWeight: occasion === occ ? '600' : '400',
+                                                color: occasion === occ ? 'var(--color-gold)' : 'var(--color-text-primary)',
+                                                transition: 'all 0.2s',
+                                                boxShadow: occasion === occ ? '0 4px 12px rgba(212, 175, 55, 0.15)' : 'none'
+                                            }}
+                                        >
+                                            {occ}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Title & Rating Row */}
                         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '20px' }}>

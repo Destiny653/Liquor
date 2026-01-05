@@ -62,13 +62,18 @@ LiquorLuxx - Premium Navigation Styles
     align-items: center;
 }
 
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
 .top-bar-user {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 2px 0;
+    padding: 2px 20px;
     border-left: 1px solid rgba(255, 255, 255, 0.15);
-    padding-left: 20px;
     text-decoration: none;
     transition: opacity var(--transition-fast);
 }
@@ -95,12 +100,40 @@ LiquorLuxx - Premium Navigation Styles
     font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .user-email {
     color: rgba(255, 255, 255, 0.6);
     font-size: 10px;
     font-weight: 400;
+    white-space: nowrap;
+}
+
+.top-bar-logout {
+    background: transparent;
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0 15px;
+    margin-left: 15px;
+    color: var(--nav-text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color var(--transition-fast);
+}
+
+.top-bar-logout:hover {
+    color: var(--nav-gold);
+}
+
+.top-bar-logout svg {
+    font-size: 14px;
 }
 
 .top-bar-text {

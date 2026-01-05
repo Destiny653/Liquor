@@ -1,0 +1,315 @@
+.messages-dashboard {
+    display: flex;
+    height: calc(100vh - 100px);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    margin: 20px;
+    overflow: hidden;
+}
+
+/* Conversation List Panel */
+.conv-list-panel {
+    width: 350px;
+    border-right: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.panel-header h2 {
+    color: var(--color-text-primary);
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    gap: 10px;
+    color: var(--color-text-secondary);
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    width: 100%;
+    outline: none;
+}
+
+.conv-items {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.conv-item {
+    display: flex;
+    padding: 16px 24px;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.conv-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.conv-item.active {
+    background: rgba(212, 175, 55, 0.05);
+    border-left: 3px solid var(--color-gold);
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--color-bg-primary);
+    flex-shrink: 0;
+}
+
+.conv-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.conv-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.user-name {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.last-msg {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Chat Panel */
+.chat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-primary);
+}
+
+.chat-header {
+    padding: 16px 30px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatarLarge {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--color-bg-primary);
+}
+
+.user-profile h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+
+.user-profile span {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.chat-history {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyMTIsIDE3NSwgNTUsIDAuMDUpIi8+PC9zdmc+');
+}
+
+.msg-row {
+    display: flex;
+    width: 100%;
+}
+
+.msg-row.user {
+    justify-content: flex-start;
+}
+
+.msg-row.manager {
+    justify-content: flex-end;
+}
+
+.msg-bubble {
+    max-width: 70%;
+    padding: 12px 18px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user .msg-bubble {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-bottom-left-radius: 2px;
+}
+
+.manager .msg-bubble {
+    background: var(--gradient-gold);
+    color: var(--color-bg-primary);
+    font-weight: 500;
+    border-bottom-right-radius: 2px;
+}
+
+.msg-bubble p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.msg-time {
+    font-size: 0.75rem;
+    margin-top: 6px;
+    display: block;
+    opacity: 0.7;
+}
+
+.user .msg-time {
+    color: var(--color-text-secondary);
+}
+
+.manager .msg-time {
+    color: var(--color-bg-primary);
+    text-align: right;
+}
+
+.chat-input {
+    padding: 24px 30px;
+    background: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    gap: 15px;
+}
+
+.chat-input input {
+    flex: 1;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.chat-input input:focus {
+    border-color: var(--color-gold);
+}
+
+.chat-input button {
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-gold);
+    border: none;
+    border-radius: 12px;
+    color: var(--color-bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-size: 1.25rem;
+}
+
+.chat-input button:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+.chat-input button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.no-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--color-text-secondary);
+    gap: 15px;
+}
+
+.no-selection h3 {
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.empty-state,
+.panel-loader {
+    padding: 40px;
+    text-align: center;
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 992px) {
+    .conv-list-panel {
+        width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .messages-dashboard {
+        margin: 0;
+        border-radius: 0;
+        height: calc(100vh - 60px);
+    }
+
+    .conv-list-panel {
+        display: none;
+    }
+
+    /* On mobile we'd need a toggle, but for now simple desktop-first admin */
+}

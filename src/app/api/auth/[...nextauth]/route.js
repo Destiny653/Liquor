@@ -5,7 +5,7 @@ import connectDB from "@/utils/db";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -19,58 +19,84 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          console.log("Authorize: Missing credentials");
+          return null;
+        }
+
         await connectDB();
         try {
-          const user = await User.findOne({ email: credentials.email });
-          if (user) {
-            if (user.provider === 'google') {
-              throw new Error("This email is registered with Google. Please sign in with Google.");
-            }
-            const isPasswordCorrect = await bcrypt.compare(
-              credentials.password,
-              user.password
-            );
-            if (isPasswordCorrect) {
-              return user;
-            } else {
-              throw new Error("Wrong Credentials!");
-            }
+          const email = credentials.email.toLowerCase().trim();
+          console.log("Authorize: Checking user", email);
+          const user = await User.findOne({ email });
+
+          if (!user) {
+            console.log("Authorize: User not found", email);
+            return null;
+          }
+
+          if (!user.password && user.provider === 'google') {
+            console.log("Authorize: User signed up with Google", email);
+            // We return null here because credentials login isn't allowed for Google-only users
+            return null;
+          }
+
+          if (!user.password) {
+            console.log("Authorize: No password for user", email);
+            return null;
+          }
+
+          const isPasswordCorrect = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (isPasswordCorrect) {
+            console.log("Authorize: Success for", email);
+            return {
+              id: user._id.toString(),
+              name: user.name,
+              email: user.email,
+              role: user.role,
+              image: user.image
+            };
           } else {
-            throw new Error("User not found!");
+            console.log("Authorize: Password mismatch for", email);
+            return null;
           }
         } catch (err) {
-          throw new Error(err.message || err);
+          console.error("Authorize: Unexpected error", err);
+          return null;
         }
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       if (user) {
-        // This block runs only on the first sign-in (or when 'user' is passed)
-        token.id = user._id ? user._id.toString() : user.id;
+        token.id = user.id || user._id;
         token.role = user.role;
+        token.name = user.name;
+        token.email = user.email;
       }
 
-      // If we don't have a role in the token, or we want to ensure it's up to date
-      // we should fetch it. For performance, we can skip if it's already there
-      // unless we want real-time role updates.
-      if (!token.role) {
+      // Refresh role from DB if missing (safety net)
+      if (!token.role && token.email) {
         await connectDB();
-        // token.email should be available if user logged in
-        if (token.email) {
-          const dbUser = await User.findOne({ email: token.email });
-          if (dbUser) {
-            token.role = dbUser.role;
-            token.id = dbUser._id.toString();
-          }
+        const dbUser = await User.findOne({ email: token.email });
+        if (dbUser) {
+          token.role = dbUser.role;
+          token.id = dbUser._id.toString();
         }
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         session.user.role = token.role;
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
       }
       return session;
     },
@@ -82,31 +108,37 @@ const handler = NextAuth({
           if (!existingUser) {
             const newUser = new User({
               name: user.name || user.email.split('@')[0],
-              email: user.email,
+              email: user.email.toLowerCase(),
               provider: 'google',
-              role: 'user', // Explicitly 'user'
+              role: 'user',
             });
             await newUser.save();
-            // Manually attach fields to user object to be picked up by jwt callback immediately
             user.role = 'user';
-            user._id = newUser._id;
+            user.id = newUser._id;
             return true;
           }
           user.role = existingUser.role;
           user._id = existingUser._id;
           return true;
         } catch (err) {
+          console.error("Sign-in callback error:", err);
           return false;
         }
       }
       return true;
     },
   },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   pages: {
+    signIn: "/login",
     error: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  url: process.env.NEXTAUTH_URL,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

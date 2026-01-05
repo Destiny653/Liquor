@@ -19,6 +19,7 @@
     "mongoose": "^8.9.5",
     "next": "15.1.9",
     "next-auth": "^4.24.11",
+    "nodemailer": "^7.0.12",
     "notyf": "^3.10.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

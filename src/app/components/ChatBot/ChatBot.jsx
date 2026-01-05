@@ -4,18 +4,87 @@ import './ChatBot.css';
 import { PiPaperPlaneRight, PiX, PiChatCircleText, PiRobot, PiUser, PiCheckCircle } from 'react-icons/pi';
 
 export default function ChatBot({ onClose }) {
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            type: 'bot',
-            text: 'Welcome to LiquorLuxx Concierge. How may I assist you with your premium spirit selection today?'
-        }
-    ]);
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
-    const [step, setStep] = useState('initial'); // initial, name, email, message, sent
+    const [step, setStep] = useState('initial');
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const messagesEndRef = useRef(null);
+    const pollingInterval = useRef(null);
+
+    // Load initial welcome message if no history
+    useEffect(() => {
+        const email = localStorage.getItem('email');
+        if (email) {
+            setFormData(prev => ({ ...prev, email }));
+            fetchHistory(email);
+        } else {
+            setMessages([{
+                id: 1,
+                type: 'bot',
+                text: 'Welcome to LiquorLuxx Concierge. How may I assist you with your premium spirit selection today?',
+                timestamp: new Date()
+            }]);
+        }
+    }, []);
+
+    // Polling for new messages from manager
+    useEffect(() => {
+        if (formData.email) {
+            const conversationId = `chat_${formData.email.replace(/[@.]/g, '_')}`;
+            pollingInterval.current = setInterval(() => {
+                fetchNewMessages(conversationId);
+            }, 5000);
+        }
+        return () => clearInterval(pollingInterval.current);
+    }, [formData.email, messages.length]);
+
+    const fetchHistory = async (email) => {
+        const conversationId = `chat_${email.replace(/[@.]/g, '_')}`;
+        try {
+            const res = await fetch(`/api/chat?conversationId=${conversationId}`);
+            const result = await res.json();
+            if (result.success && result.data.length > 0) {
+                const formattedMessages = result.data.map(m => ({
+                    id: m._id,
+                    type: m.sender,
+                    text: m.text,
+                    timestamp: new Date(m.timestamp)
+                }));
+                setMessages(formattedMessages);
+                setStep('sent');
+            } else {
+                setMessages([{
+                    id: 1,
+                    type: 'bot',
+                    text: 'Welcome back to LiquorLuxx. How can we help you today?',
+                    timestamp: new Date()
+                }]);
+            }
+        } catch (error) {
+            console.error("Failed to fetch history:", error);
+        }
+    };
+
+    const fetchNewMessages = async (conversationId) => {
+        try {
+            const res = await fetch(`/api/chat?conversationId=${conversationId}`);
+            const result = await res.json();
+            if (result.success) {
+                const newMsgs = result.data.map(m => ({
+                    id: m._id,
+                    type: m.sender,
+                    text: m.text,
+                    timestamp: new Date(m.timestamp)
+                }));
+
+                if (newMsgs.length > messages.length) {
+                    setMessages(newMsgs);
+                }
+            }
+        } catch (error) {
+        }
+    };
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -26,15 +95,34 @@ export default function ChatBot({ onClose }) {
     }, [messages, isTyping]);
 
     const handleSend = async () => {
-        if (!input.trim()) return;
-
-        const userMsg = { id: Date.now(), type: 'user', text: input };
+        const userMsg = {
+            id: Date.now(),
+            type: 'user',
+            text: input,
+            timestamp: new Date()
+        };
         setMessages(prev => [...prev, userMsg]);
+        const currentInput = input;
         setInput('');
         setIsTyping(true);
 
+        if (step === 'sent') {
+            const conversationId = `chat_${formData.email.replace(/[@.]/g, '_')}`;
+            try {
+                await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: formData.name || 'Returning Client', email: formData.email, message: currentInput })
+                });
+                setIsTyping(false);
+            } catch (error) {
+                setIsTyping(false);
+            }
+            return;
+        }
+
         // Simulate bot thinking and flow
-        setTimeout(() => {
+        setTimeout(async () => {
             let botResponse = '';
             let nextStep = step;
 
@@ -54,9 +142,25 @@ export default function ChatBot({ onClose }) {
                     nextStep = 'message';
                     break;
                 case 'message':
-                    setFormData(prev => ({ ...prev, message: userMsg.text }));
-                    // Here you would typically send the data to your backend/EmailJS
-                    botResponse = "Thank you. Your inquiry has been received by our concierge team. We will respond shortly via email.";
+                    const updatedData = { ...formData, message: userMsg.text };
+                    setFormData(updatedData);
+
+                    setIsTyping(true);
+                    try {
+                        const response = await fetch('/api/contact', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(updatedData)
+                        });
+
+                        if (response.ok) {
+                            botResponse = "Thank you. Your inquiry has been received by our concierge team. We will respond shortly via email.";
+                        } else {
+                            botResponse = "I apologize, but I encountered an error sending your inquiry. Our team has been notified, or you can try again later.";
+                        }
+                    } catch (error) {
+                        botResponse = "I'm having trouble connecting to our server right now. Please check your connection or try again shortly.";
+                    }
                     nextStep = 'sent';
                     break;
                 case 'sent':
@@ -72,10 +176,27 @@ export default function ChatBot({ onClose }) {
                     botResponse = "How can I help you today?";
             }
 
-            setMessages(prev => [...prev, { id: Date.now() + 1, type: 'bot', text: botResponse }]);
+            setMessages(prev => [...prev, {
+                id: Date.now() + 1,
+                type: 'bot',
+                text: botResponse,
+                timestamp: new Date()
+            }]);
             setStep(nextStep);
             setIsTyping(false);
         }, 1000);
+    };
+
+    const formatTime = (date) => {
+        const msgDate = new Date(date);
+        const today = new Date();
+        const isToday = msgDate.toDateString() === today.toDateString();
+
+        if (isToday) {
+            return msgDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } else {
+            return msgDate.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
     };
 
     const handleKeyPress = (e) => {
@@ -101,14 +222,17 @@ export default function ChatBot({ onClose }) {
 
             <div className="chatbot-messages">
                 {messages.map((msg) => (
-                    <div key={msg.id} className={`message ${msg.type}`}>
-                        {msg.type === 'bot' && (
+                    <div key={msg.id} className={`message ${msg.type === 'manager' ? 'bot' : msg.type}`}>
+                        {(msg.type === 'bot' || msg.type === 'manager') && (
                             <div className="message-icon bot">
                                 <PiRobot size={16} />
                             </div>
                         )}
-                        <div className="message-bubble">
-                            {msg.text}
+                        <div className="message-bubble-wrapper">
+                            <div className="message-bubble">
+                                {msg.text}
+                            </div>
+                            <span className="message-time">{formatTime(msg.timestamp)}</span>
                         </div>
                         {msg.type === 'user' && (
                             <div className="message-icon user">

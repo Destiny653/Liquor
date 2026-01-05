@@ -244,7 +244,7 @@ export default function PostsPage() {
                                                         <FiEye />
                                                     </button>
                                                     <Link
-                                                        href={`/dashboard/update/${post.productModel}/${post._id}`}
+                                                        href={`/dashboard/update/${post.productModel?.toLowerCase()}s/${post._id}`}
                                                         className='dashboard-action-btn edit'
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
@@ -330,7 +330,7 @@ export default function PostsPage() {
 
                         <div className='dashboard-preview-actions'>
                             <Link
-                                href={`/dashboard/update/${selectedPost.productModel}/${selectedPost._id}`}
+                                href={`/dashboard/update/${selectedPost.productModel?.toLowerCase()}s/${selectedPost._id}`}
                                 className='dashboard-preview-btn primary'
                             >
                                 <FiEdit2 size={16} />

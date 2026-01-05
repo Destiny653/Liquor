@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import {
     FiHome, FiPackage, FiPlusCircle, FiSettings,
     FiUsers, FiShoppingCart, FiBarChart2, FiLogOut,
-    FiMenu, FiX
+    FiMenu, FiX, FiMessageSquare
 } from 'react-icons/fi';
 import { signOut, useSession } from 'next-auth/react';
 import '../dashboard.css';
@@ -34,6 +34,7 @@ export default function DashboardLayout({ children }) {
             items: [
                 { name: 'Orders', path: '/dashboard/orders', icon: FiShoppingCart },
                 { name: 'Customers', path: '/dashboard/customers', icon: FiUsers },
+                { name: 'Concierge Chat', path: '/dashboard/messages', icon: FiMessageSquare },
                 { name: 'Analytics', path: '/dashboard/analytics', icon: FiBarChart2 },
             ]
         },

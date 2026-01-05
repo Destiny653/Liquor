@@ -53,7 +53,7 @@ export default function Page() {
             try {
                 const res = await fetch('/api/signup', {
                     method: 'POST',
-                    body: JSON.stringify({ name: username, email, password }),
+                    body: JSON.stringify({ name: username, email: email.toLowerCase().trim(), password }),
                     headers: {
                         'Content-Type': 'application/json'
                     }

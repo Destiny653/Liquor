@@ -1,0 +1,227 @@
+.gift-container {
+    padding-top: 100px;
+    background: var(--color-bg-primary);
+    min-height: 100vh;
+}
+
+.gift-hero {
+    height: 400px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 50px;
+}
+
+.gift-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+.gift-hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+.gift-hero-content h1 {
+    font-size: 3.5rem;
+    color: var(--color-gold);
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 2px;
+}
+
+.gift-hero-content p {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.gift-main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+}
+
+.gift-sidebar {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.gift-filter-section {
+    margin-bottom: 30px;
+}
+
+.gift-filter-section h3 {
+    color: var(--color-gold);
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.gift-filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gift-filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.gift-filter-item:hover {
+    color: var(--color-gold);
+}
+
+.gift-filter-item input {
+    accent-color: var(--color-gold);
+}
+
+.gift-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.gift-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    cursor: pointer;
+}
+
+.gift-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--color-gold);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.gift-card-image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.gift-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.gift-card:hover .gift-card-image img {
+    transform: scale(1.1);
+}
+
+.gift-card-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--gradient-accent);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.gift-card-content {
+    padding: 25px;
+}
+
+.gift-card-title {
+    font-size: 1.4rem;
+    color: var(--color-text-primary);
+    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif;
+}
+
+.gift-card-desc {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.gift-card-price {
+    font-size: 1.3rem;
+    color: var(--color-gold);
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.gift-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gift-add-btn {
+    background: var(--color-gold);
+    color: var(--color-bg-primary);
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.gift-add-btn:hover {
+    background: white;
+    transform: scale(1.02);
+}
+
+@media (max-width: 1024px) {
+    .gift-main {
+        grid-template-columns: 1fr;
+    }
+
+    .gift-sidebar {
+        display: none;
+        /* We can add a mobile filter drawer later */
+    }
+}
+
+@media (max-width: 768px) {
+    .gift-hero-content h1 {
+        font-size: 2.5rem;
+    }
+}

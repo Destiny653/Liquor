@@ -242,6 +242,10 @@ Floating Cart Slider Styles
     color: var(--color-text-primary);
     margin: 0 0 4px 0;
     line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .cart-slider-item-price {
@@ -423,26 +427,104 @@ Floating Cart Slider Styles
     }
 
     .cart-slider-header {
-        padding: 20px 16px;
+        padding: 16px;
+    }
+
+    .cart-slider-title h2 {
+        font-size: 1.25rem;
     }
 
     .cart-slider-items {
-        padding: 12px 16px;
+        padding: 12px;
     }
 
-    .cart-slider-footer {
-        padding: 20px 16px;
+    .cart-slider-item {
+        padding: 12px 0;
+        gap: 12px;
     }
 
     .cart-slider-item-image {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
+    }
+
+    .cart-slider-item-title {
+        font-size: 0.9rem;
+    }
+
+    .cart-slider-item-price {
+        font-size: 0.8rem;
+    }
+
+    .cart-slider-qty-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+
+    .cart-slider-qty {
+        font-size: 13px;
+        min-width: 20px;
+    }
+
+    .cart-slider-item-subtotal {
+        font-size: 0.95rem;
+    }
+
+    .cart-slider-item-actions {
+        min-width: 60px;
+        gap: 8px;
+    }
+
+    .cart-slider-footer {
+        padding: 16px;
+    }
+
+    .cart-slider-summary {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .cart-slider-total .cart-slider-value {
+        font-size: 1.25rem;
+    }
+
+    .cart-slider-checkout {
+        padding: 14px;
+        font-size: 0.95rem;
     }
 
     .cart-float-btn {
-        bottom: 100px;
+        bottom: 80px;
         top: auto;
         transform: none;
-        padding: 14px 10px;
+        padding: 12px 10px;
+    }
+
+    .cart-float-badge {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        top: -4px;
+        right: -4px;
+    }
+}
+
+@media (max-width: 360px) {
+    .cart-slider-item {
+        gap: 8px;
+    }
+
+    .cart-slider-item-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .cart-slider-item-actions {
+        min-width: 50px;
+    }
+
+    .cart-slider-item-title {
+        font-size: 0.85rem;
     }
 }

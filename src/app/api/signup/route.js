@@ -9,17 +9,17 @@ export const POST = async (req, res) => {
         return NextResponse.json({ success: false, message: `Method ${req.method} not allowed` }, { status: 405 });
     }
     const { name, email, password } = await req.json();
-
+    const normalizedEmail = email.toLowerCase();
 
     try {
-        const existUser = await User.findOne({ email });
+        const existUser = await User.findOne({ email: normalizedEmail });
         if (existUser) {
             return NextResponse.json({ error: true, success: false, message: 'User already exists please try using another account.' }, { status: 400 });
         }
         const hashedpassword = await bcrypt.hash(password, 5)
         const newUser = new User({
             name: name,
-            email,
+            email: normalizedEmail,
             password: hashedpassword,
             provider: 'credentials'
         })

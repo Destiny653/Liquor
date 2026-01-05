@@ -55,32 +55,41 @@ const Page = () => {
         });
 
         try {
+            const normalizedEmail = email.toLowerCase().trim();
+            console.log("Attempting login for:", normalizedEmail);
+
             const result = await signIn("credentials", {
                 redirect: false,
-                email,
+                email: normalizedEmail,
                 password,
             });
 
+            console.log("SignIn result:", result);
 
             if (result?.ok) {
                 notyf.success("Successfully logged in");
 
                 if (typeof window !== 'undefined') {
-                    window.localStorage.setItem('email', email);
+                    window.localStorage.setItem('email', normalizedEmail);
                 }
 
                 // Use a slight delay or just push to ensure state settles
                 setTimeout(() => {
                     navigation.push("/");
                     setBtnLoader(false);
-                }, 100);
+                }, 500);
             } else {
                 setBtnLoader(false);
-                notyf.error(result?.error || "Invalid email or password");
+                const errorMessage = result?.error === "CredentialsSignin"
+                    ? "Invalid email or password"
+                    : result?.error || "Invalid email or password";
+                notyf.error(errorMessage);
+                console.error("Login failed:", result?.error);
             }
         } catch (error) {
             setBtnLoader(false);
             notyf.error("Something went wrong");
+            console.error("Login catch error:", error);
         }
     };
 

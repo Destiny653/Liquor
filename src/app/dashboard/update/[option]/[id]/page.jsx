@@ -18,10 +18,13 @@ export default function UpdatePage({ params }) {
   const [price, setPrice] = useState('');
   const [rate, setRate] = useState('');
   const [content, setContent] = useState('');
+  const [occasion, setOccasion] = useState('General');
   const [imgSrc, setImgSrc] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+
+  const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -40,6 +43,7 @@ export default function UpdatePage({ params }) {
           setPrice(data.price || '');
           setRate(data.rate || '');
           setContent(data.content || '');
+          setOccasion(data.occasion || 'General');
           setImgSrc(data.img || '');
         } else {
           console.error('Failed to fetch product');
@@ -103,7 +107,8 @@ export default function UpdatePage({ params }) {
           price: parseFloat(price),
           content,
           rate: parseInt(rate) || 5,
-          img: imgSrc
+          img: imgSrc,
+          occasion: option === 'gifts' ? occasion : undefined
         })
       });
 
@@ -248,6 +253,41 @@ export default function UpdatePage({ params }) {
                 }}
               />
             </div>
+
+            {/* Occasion (Only for Gifts) */}
+            {option === 'gifts' && (
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  color: 'var(--color-text-secondary)',
+                  marginBottom: '12px'
+                }}>
+                  Target Occasion
+                </label>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {occasions.map((occ) => (
+                    <div
+                      key={occ}
+                      onClick={() => setOccasion(occ)}
+                      style={{
+                        padding: '10px 16px',
+                        background: occasion === occ ? 'rgba(212, 175, 55, 0.1)' : 'rgba(255, 255, 255, 0.02)',
+                        border: `1px solid ${occasion === occ ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontSize: '13px',
+                        color: occasion === occ ? 'var(--color-gold)' : 'var(--color-text-primary)',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {occ}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Description */}
             <div style={{ marginBottom: '24px' }}>
