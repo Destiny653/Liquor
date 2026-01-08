@@ -15,7 +15,7 @@ export const GET = async () => {
         //return the posts as a json when successful
         return new NextResponse(JSON.stringify(posts), { status: 200 });
     } catch (error) {
-        new NextResponse(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
+        return new NextResponse(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
     }
 }
 

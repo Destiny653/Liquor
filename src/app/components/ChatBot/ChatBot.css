@@ -14,7 +14,7 @@
     position: fixed;
     bottom: 90px;
     right: 20px;
-    z-index: 1000;
+    z-index: 2000;
 }
 
 @keyframes slideUp {
@@ -295,15 +295,23 @@
 @media (max-width: 480px) {
     .chatbot-container {
         width: 100%;
-        height: 100%;
-        bottom: 0;
+        height: calc(100% - 70px);
+        bottom: 70px;
         right: 0;
         border-radius: 0;
         border: none;
     }
 
     .chatbot-header {
-        padding-top: 20px;
-        /* Safe area for mobile */
+        padding-top: 15px;
+    }
+
+    .chatbot-messages {
+        padding: 15px;
+    }
+
+    .chatbot-input-area {
+        padding: 12px 15px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
     }
 }
