@@ -15,6 +15,7 @@ export default function UpdatePage({ params: paramsPromise }) {
   const router = useRouter();
 
   // State
+  const [selectedOption, setSelectedOption] = useState(option);
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [rate, setRate] = useState('');
@@ -24,8 +25,17 @@ export default function UpdatePage({ params: paramsPromise }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-
   const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];
+
+  const productTypes = [
+    { value: 'baltons', label: 'Balton', description: 'Distinguished single malt selection' },
+    { value: 'buffalos', label: 'Buffalo Trace', description: 'Award-winning Kentucky bourbon' },
+    { value: 'pappies', label: 'Pappy Van Winkle', description: 'The most sought-after bourbon' },
+    { value: 'penelopes', label: 'Penelope', description: 'Crafted four-grain bourbon' },
+    { value: 'wellers', label: 'W.L. Weller', description: 'Premium wheated bourbon' },
+    { value: 'yamazakis', label: 'Yamazaki', description: 'Japanese whisky excellence' },
+    { value: 'gifts', label: 'Gift Bundles', description: 'Exclusive curated spirit sets' },
+  ];
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -99,25 +109,59 @@ export default function UpdatePage({ params: paramsPromise }) {
     const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
     setSaving(true);
 
-    try {
-      const response = await fetch(`/api/${option}/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          price: parseFloat(price),
-          content,
-          rate: parseInt(rate) || 5,
-          img: imgSrc,
-          occasion: option === 'gifts' ? occasion : undefined
-        })
-      });
+    if (selectedOption !== option) {
+      if (!confirm(`Changing the product type will move this item from ${option} to ${selectedOption}. This will change its ID. Continue?`)) {
+        setSaving(false);
+        return;
+      }
+    }
 
-      if (response.ok) {
-        notyf.success('Product updated successfully!');
-        router.push('/dashboard/posts');
+    try {
+      if (selectedOption !== option) {
+        // Brand Migration Logic: DELETE then POST
+        const deleteRes = await fetch(`/api/${option}/${id}`, { method: 'DELETE' });
+        if (!deleteRes.ok) throw new Error('Failed to remove from old collection');
+
+        const createRes = await fetch(`/api/${selectedOption}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            price: parseFloat(price),
+            content,
+            rate: parseInt(rate) || 5,
+            img: imgSrc,
+            occasion: selectedOption === 'gifts' ? occasion : undefined
+          })
+        });
+
+        if (createRes.ok) {
+          notyf.success('Product moved and updated successfully!');
+          router.push('/dashboard/posts');
+        } else {
+          notyf.error('Failed to create in new collection');
+        }
       } else {
-        notyf.error('Failed to update product');
+        // Regular Update
+        const response = await fetch(`/api/${option}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            price: parseFloat(price),
+            content,
+            rate: parseInt(rate) || 5,
+            img: imgSrc,
+            occasion: selectedOption === 'gifts' ? occasion : undefined
+          })
+        });
+
+        if (response.ok) {
+          notyf.success('Product updated successfully!');
+          router.push('/dashboard/posts');
+        } else {
+          notyf.error('Failed to update product');
+        }
       }
     } catch (error) {
       notyf.error('Error updating product');
@@ -161,6 +205,50 @@ export default function UpdatePage({ params: paramsPromise }) {
           </div>
 
           <form onSubmit={handleSubmit} style={{ padding: '24px' }}>
+            {/* Product Type Selector */}
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '13px',
+                fontWeight: '600',
+                color: 'var(--color-text-secondary)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                marginBottom: '12px'
+              }}>
+                Brand / Product Type <span style={{ color: 'var(--color-accent)' }}>*</span>
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+                {productTypes.map((type) => (
+                  <div
+                    key={type.value}
+                    onClick={() => setSelectedOption(type.value)}
+                    style={{
+                      padding: '12px 16px',
+                      background: selectedOption === type.value ? 'rgba(212, 175, 55, 0.1)' : 'rgba(255, 255, 255, 0.02)',
+                      border: `1px solid ${selectedOption === type.value ? 'var(--color-gold)' : 'var(--color-border)'}`,
+                      borderRadius: '10px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <span style={{
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      color: selectedOption === type.value ? 'var(--color-gold)' : 'var(--color-text-primary)'
+                    }}>
+                      {type.label}
+                    </span>
+                    {selectedOption === type.value && <FiCheck size={14} style={{ color: 'var(--color-gold)' }} />}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ height: '1px', background: 'var(--color-border)', margin: '24px 0' }}></div>
             {/* Title & Rating Row */}
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '20px' }}>
               <div>
@@ -256,7 +344,7 @@ export default function UpdatePage({ params: paramsPromise }) {
             </div>
 
             {/* Occasion (Only for Gifts) */}
-            {option === 'gifts' && (
+            {selectedOption === 'gifts' && (
               <div style={{ marginBottom: '24px' }}>
                 <label style={{
                   display: 'block',
