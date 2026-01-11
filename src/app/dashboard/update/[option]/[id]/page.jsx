@@ -9,7 +9,8 @@ import {
 } from 'react-icons/fi';
 import { Notyf } from 'notyf';
 
-export default function UpdatePage({ params }) {
+export default function UpdatePage({ params: paramsPromise }) {
+  const params = React.use(paramsPromise);
   const { option, id } = params;
   const router = useRouter();
 

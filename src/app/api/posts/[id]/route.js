@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 
 //get a product by id
 export async function GET(req, { params }) {
-    const { id } = params;
+    const { id } = await params;
 
     try {
         await connectDB();
@@ -18,7 +18,7 @@ export async function GET(req, { params }) {
 
 //update a product
 export async function PUT(req, { params }) {
-    const { id } = params
+    const { id } = await params
     const { title, content, price, img, rate } = await req.json();
 
     //cloudinary configuration
@@ -49,8 +49,7 @@ export async function PUT(req, { params }) {
 //deleting a product by id
 
 export const DELETE = async (req, { params }) => {
-
-    const { id } = params;
+    const { id } = await params;
     await connectDB();
 
     try {

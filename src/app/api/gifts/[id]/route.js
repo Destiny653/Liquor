@@ -11,7 +11,7 @@ cloudinary.config({
 });
 
 export const GET = async (req, { params }) => {
-    const { id } = params;
+    const { id } = await params;
     try {
         await connectDB();
         const gift = await Gift.findById(id);
@@ -23,7 +23,7 @@ export const GET = async (req, { params }) => {
 }
 
 export const PUT = async (req, { params }) => {
-    const { id } = params;
+    const { id } = await params;
     try {
         await connectDB();
         const body = await req.json();
@@ -51,7 +51,7 @@ export const PUT = async (req, { params }) => {
 }
 
 export const DELETE = async (req, { params }) => {
-    const { id } = params;
+    const { id } = await params;
     try {
         await connectDB();
         const deletedGift = await Gift.findByIdAndDelete(id);
