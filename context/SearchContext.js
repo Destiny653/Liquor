@@ -20,7 +20,7 @@ export default function SearchProvider({ children }) {
     '/api/penelopes',
     '/api/wellers',
     '/api/yamazakis',
-    '/api/baltons',
+    '/api/blantons',
     '/api/buffalos'
   ]
 

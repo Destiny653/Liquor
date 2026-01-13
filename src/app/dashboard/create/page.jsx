@@ -24,7 +24,7 @@ export default function CreatePage() {
     const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];
 
     const productTypes = [
-        { value: 'baltons', label: 'Balton', description: 'Distinguished single malt selection' },
+        { value: 'blantons', label: 'Blanton', description: 'Distinguished single malt selection' },
         { value: 'buffalos', label: 'Buffalo Trace', description: 'Award-winning Kentucky bourbon' },
         { value: 'pappies', label: 'Pappy Van Winkle', description: 'The most sought-after bourbon' },
         { value: 'penelopes', label: 'Penelope', description: 'Crafted four-grain bourbon' },

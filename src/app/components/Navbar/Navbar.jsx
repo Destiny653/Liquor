@@ -51,8 +51,8 @@ export default function Navbar() {
             image: '/images/gift2.jpg'
         },
         {
-            name: 'Baltons',
-            slug: 'baltons',
+            name: 'Blantons',
+            slug: 'blantons',
             description: 'Distinguished single malt selection',
             image: '/images/gift3.jpg'
         },

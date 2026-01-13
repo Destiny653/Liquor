@@ -1,5 +1,5 @@
 import connectDB from "@/utils/db";
-import Balton from "@/models/Balton";
+import Blanton from "@/models/Blanton";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from 'cloudinary';
 
@@ -9,7 +9,7 @@ export async function GET(req, { params }) {
 
     try {
         await connectDB();
-        const post = await Balton.findById(id)
+        const post = await Blanton.findById(id)
         return new NextResponse(JSON.stringify(post), { status: 200 });
     } catch (error) {
         return new NextResponse(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 })
@@ -33,7 +33,7 @@ export async function PUT(req, { params }) {
 
     try {
         await connectDB();
-        await Balton.findByIdAndUpdate(id, {
+        await Blanton.findByIdAndUpdate(id, {
             title,
             content,
             price,
@@ -60,7 +60,7 @@ export const DELETE = async (req, { params }) => {
             api_secret: process.env.API_SECRET
         });
 
-        const post = await Balton.findById(id);
+        const post = await Blanton.findById(id);
         cloudinary.api.delete_resources([post.title], {
             type: 'upload',
             resource_tube: 'image'
@@ -72,7 +72,7 @@ export const DELETE = async (req, { params }) => {
     //deleting from databse
 
     try {
-        const post = await Balton.findByIdAndDelete(id);
+        const post = await Blanton.findByIdAndDelete(id);
         return new NextResponse(JSON.stringify(post), { message: 'Post deleted successfully', status: 200 });
     } catch (error) {
         return new NextResponse(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });

@@ -28,7 +28,7 @@ export default function UpdatePage({ params: paramsPromise }) {
   const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];
 
   const productTypes = [
-    { value: 'baltons', label: 'Balton', description: 'Distinguished single malt selection' },
+    { value: 'blantons', label: 'Blanton', description: 'Distinguished single malt selection' },
     { value: 'buffalos', label: 'Buffalo Trace', description: 'Award-winning Kentucky bourbon' },
     { value: 'pappies', label: 'Pappy Van Winkle', description: 'The most sought-after bourbon' },
     { value: 'penelopes', label: 'Penelope', description: 'Crafted four-grain bourbon' },
@@ -44,7 +44,7 @@ export default function UpdatePage({ params: paramsPromise }) {
         // The current structure suggests 'option' might already be pluralized or needs 's'
         // Based on previous code: /api/${option.toLowerCase()}s/${id}
         // But params.option from URL might vary. Let's assume params.option is the product model name
-        // e.g. "baltons" or "balton"
+        // e.g. "blantons" or "blanton"
 
         // Let's try to fetch
         const res = await fetch(`/api/${option}/${id}`);

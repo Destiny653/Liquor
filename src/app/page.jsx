@@ -83,7 +83,7 @@ export default function Home() {
     { name: "Buffalo Trace", slug: "buffalos", image: "/images/bestsell3.jpg" },
     { name: "Yamazaki", slug: "yamazakis", image: "/images/gift1.jpg" },
     { name: "Penelope", slug: "penelopes", image: "/images/gift2.jpg" },
-    { name: "Baltons", slug: "baltons", image: "/images/gift3.jpg" },
+    { name: "Blantons", slug: "blantons", image: "/images/gift3.jpg" },
   ];
 
   return (

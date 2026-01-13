@@ -18,7 +18,7 @@ export default function Page() {
         const getData = async () => {
             const apis = [
                 '/api/posts',
-                '/api/baltons',
+                '/api/blantons',
                 '/api/wellers',
                 '/api/buffalos',
                 '/api/pappies',

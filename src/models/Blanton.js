@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const baltonSchema = new Schema({
+const blantonSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -23,8 +23,8 @@ const baltonSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'Balton'
+        default: 'Blanton'
     }
 },{timestamps:true});
 
-export default mongoose.models.Balton ||  mongoose.model("Balton", baltonSchema);
+export default mongoose.models.Blanton ||  mongoose.model("Blanton", blantonSchema);

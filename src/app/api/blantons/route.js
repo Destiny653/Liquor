@@ -1,4 +1,4 @@
-import Balton from "@/models/Balton";
+import Blanton from "@/models/Blanton";
 import connectDB from "@/utils/db";
 import { v2 as cloudinary } from "cloudinary"
 import { NextResponse } from 'next/server';
@@ -11,7 +11,7 @@ export const GET = async () => {
         // connect to database
         await connectDB();
         // find all the psts in the database
-        const posts = await Balton.find().sort({ createdAt: -1 })
+        const posts = await Blanton.find().sort({ createdAt: -1 })
         //return the posts as a json when successful
         return new NextResponse(JSON.stringify(posts), { status: 200 });
     } catch (error) {
@@ -40,7 +40,7 @@ export const POST = async (req) => {
     }).catch((error) => { });
 
     try {
-        const newPost = new Balton({
+        const newPost = new Blanton({
             title,
             content,
             price,

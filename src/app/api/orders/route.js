@@ -3,7 +3,7 @@ import User from "@/models/User";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
 
-const { default: Balton } = require("@/models/Balton");
+const { default: Blanton } = require("@/models/Blanton");
 const { default: Buffalo } = require("@/models/Buffalo");
 const { default: Pappy } = require("@/models/Pappy");
 const { default: Penelope } = require("@/models/Penelope");
@@ -28,8 +28,8 @@ export const POST = async (req, res) => {
                 case 'Weller':
                     product = await Weller.findById(product_id);
                     break;
-                case 'Balton':
-                    product = await Balton.findById(product_id)
+                case 'Blanton':
+                    product = await Blanton.findById(product_id)
                     break;
                 case 'Penelope':
                     product = await Penelope.findById(product_id)
@@ -92,8 +92,8 @@ export const POST = async (req, res) => {
                     case 'Weller':
                         product = await Weller.findById(item.productId).exec();
                         break;
-                    case 'Balton':
-                        product = await Balton.findById(item.productId).exec();
+                    case 'Blanton':
+                        product = await Blanton.findById(item.productId).exec();
                         break;
                     case 'Penelope':
                         product = await Penelope.findById(item.productId).exec();

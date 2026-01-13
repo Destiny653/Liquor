@@ -151,7 +151,7 @@ function ShopContent() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 12;
-  const choice = useMemo(() => ['baltons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'gifts', 'All Brands'], []);
+  const choice = useMemo(() => ['blantons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'gifts', 'All Brands'], []);
   const formatter = useMemo(() => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }), []);
 
   // Read brand from URL params on mount and when URL changes
@@ -164,7 +164,7 @@ function ShopContent() {
   }, [searchParams, choice]);
 
   const endpoints = useMemo(() => ({
-    'baltons': ['/api/baltons'],
+    'blantons': ['/api/blantons'],
     'wellers': ['/api/wellers'],
     'buffalos': ['/api/buffalos'],
     'pappies': ['/api/pappies'],
@@ -173,7 +173,7 @@ function ShopContent() {
     'gifts': ['/api/gifts'],
     'All Brands': [
       '/api/posts',
-      '/api/baltons',
+      '/api/blantons',
       '/api/wellers',
       '/api/buffalos',
       '/api/pappies',

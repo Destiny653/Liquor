@@ -24,7 +24,7 @@ export default function Footer() {
         { name: 'Buffalo Trace', slug: 'buffalos' },
         { name: 'Yamazaki', slug: 'yamazakis' },
         { name: 'Penelope', slug: 'penelopes' },
-        { name: 'Baltons', slug: 'baltons' },
+        { name: 'Blantons', slug: 'blantons' },
     ];
 
     const customerLinks = [

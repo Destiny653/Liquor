@@ -1,5 +1,5 @@
 import Post from '@/models/Post';
-import Balton from '@/models/Balton';
+import Blanton from '@/models/Blanton';
 import Buffalo from '@/models/Buffalo';
 import Pappy from '@/models/Pappy';
 import Penelope from '@/models/Penelope';
@@ -15,9 +15,9 @@ export const GET = async () => {
         await connectDB();
 
         // Fetch all products from all collections
-        const [posts, baltons, buffalos, pappies, penelopes, wellers, yamazakis, gifts] = await Promise.all([
+        const [posts, blantons, buffalos, pappies, penelopes, wellers, yamazakis, gifts] = await Promise.all([
             Post.find(),
-            Balton.find(),
+            Blanton.find(),
             Buffalo.find(),
             Pappy.find(),
             Penelope.find(),
@@ -28,7 +28,7 @@ export const GET = async () => {
 
         // Combine and sort by createdAt
         const allProducts = [
-            ...posts, ...baltons, ...buffalos, ...pappies,
+            ...posts, ...blantons, ...buffalos, ...pappies,
             ...penelopes, ...wellers, ...yamazakis, ...gifts
         ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
