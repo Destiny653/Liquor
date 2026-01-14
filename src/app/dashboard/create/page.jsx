@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '../components/DashboardLayout';
@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fi';
 import { Notyf } from 'notyf';
 
-export default function CreatePage() {
+function CreateContent() {
     const router = useRouter();
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
@@ -520,5 +520,17 @@ export default function CreatePage() {
                 </div>
             </div>
         </DashboardLayout>
+    );
+}
+
+export default function CreatePage() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <CreateContent />
+        </Suspense>
     );
 }

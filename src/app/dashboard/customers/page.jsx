@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { FiSearch, FiMail, FiMapPin, FiMoreHorizontal, FiUser } from 'react-icons/fi';
 
-export default function CustomersPage() {
+function CustomersContent() {
     const [customers, setCustomers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
@@ -184,5 +184,17 @@ export default function CustomersPage() {
                 )}
             </div>
         </DashboardLayout>
+    );
+}
+
+export default function CustomersPage() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <CustomersContent />
+        </Suspense>
     );
 }

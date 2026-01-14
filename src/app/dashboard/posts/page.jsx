@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import DashboardLayout from '../components/DashboardLayout';
@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fi';
 import { Notyf } from 'notyf';
 
-export default function PostsPage() {
+function PostsContent() {
     const [posts, setPosts] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -364,5 +364,17 @@ export default function PostsPage() {
                 )}
             </div>
         </DashboardLayout >
+    );
+}
+
+export default function PostsPage() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <PostsContent />
+        </Suspense>
     );
 }

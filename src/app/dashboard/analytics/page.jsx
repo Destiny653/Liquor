@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { FiTrendingUp, FiTrendingDown, FiDollarSign, FiShoppingBag, FiUsers, FiActivity } from 'react-icons/fi';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
-export default function AnalyticsPage() {
+function AnalyticsContent() {
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({
         revenue: 0,
@@ -272,5 +272,17 @@ export default function AnalyticsPage() {
                 </>
             )}
         </DashboardLayout>
+    );
+}
+
+export default function AnalyticsPage() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <AnalyticsContent />
+        </Suspense>
     );
 }

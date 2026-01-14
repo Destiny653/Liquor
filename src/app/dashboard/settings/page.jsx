@@ -1,10 +1,10 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { FiUser, FiLock, FiBell, FiShield, FiSave } from 'react-icons/fi';
 import { Notyf } from 'notyf';
 
-export default function SettingsPage() {
+function SettingsContent() {
     const [loading, setLoading] = useState(false);
 
     const handleSave = (e) => {
@@ -187,5 +187,17 @@ export default function SettingsPage() {
                 </div>
             </div>
         </DashboardLayout>
+    );
+}
+
+export default function SettingsPage() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <SettingsContent />
+        </Suspense>
     );
 }

@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { FiSearch, FiEye, FiFilter, FiDownload, FiCheckCircle, FiClock, FiXCircle, FiAlertCircle } from 'react-icons/fi';
 import { Notyf } from 'notyf';
 
-export default function OrdersPage() {
+function OrdersContent() {
     const [orders, setOrders] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
@@ -257,5 +257,17 @@ export default function OrdersPage() {
                 )}
             </div>
         </DashboardLayout>
+    );
+}
+
+export default function OrdersPage() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <OrdersContent />
+        </Suspense>
     );
 }

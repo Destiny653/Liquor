@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { PiRobot, PiUser, PiPaperPlaneRight, PiChatCircleText, PiClock, PiMagnifyingGlass } from 'react-icons/pi';
 import './messages.css';
 import DashboardLayout from '../components/DashboardLayout';
 
-export default function MessagesDashboard() {
+function MessagesContent() {
     const [conversations, setConversations] = useState([]);
     const [selectedConv, setSelectedConv] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -179,5 +179,17 @@ export default function MessagesDashboard() {
                 </div>
             </div>
         </DashboardLayout>
+    );
+}
+
+export default function MessagesDashboard() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <MessagesContent />
+        </Suspense>
     );
 }

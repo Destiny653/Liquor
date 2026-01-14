@@ -1,12 +1,12 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import {
     FiPlus, FiTrash2, FiEdit2, FiCheck, FiX, FiTag, FiImage, FiUpload, FiCloud
 } from 'react-icons/fi';
 import { Notyf } from 'notyf';
 
-export default function BrandsPage() {
+function BrandsContent() {
     const [brands, setBrands] = useState([]);
     const [loading, setLoading] = useState(true);
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -557,5 +557,17 @@ export default function BrandsPage() {
                 }
             `}</style>
         </DashboardLayout>
+    );
+}
+
+export default function BrandsPage() {
+    return (
+        <Suspense fallback={
+            <div className='dashboard-loader'>
+                <div className='dashboard-spinner'></div>
+            </div>
+        }>
+            <BrandsContent />
+        </Suspense>
     );
 }

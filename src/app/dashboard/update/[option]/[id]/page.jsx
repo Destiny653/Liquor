@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '../../../components/DashboardLayout';
@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fi';
 import { Notyf } from 'notyf';
 
-export default function UpdatePage({ params: paramsPromise }) {
+function UpdateContent({ params: paramsPromise }) {
   const params = React.use(paramsPromise);
   const { option, id } = params;
   const router = useRouter();
@@ -535,5 +535,17 @@ export default function UpdatePage({ params: paramsPromise }) {
         </div>
       </div>
     </DashboardLayout>
+  );
+}
+
+export default function UpdatePage(props) {
+  return (
+    <Suspense fallback={
+      <div className='dashboard-loader'>
+        <div className='dashboard-spinner'></div>
+      </div>
+    }>
+      <UpdateContent {...props} />
+    </Suspense>
   );
 }
