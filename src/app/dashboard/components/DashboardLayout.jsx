@@ -1,12 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
     FiHome, FiPackage, FiPlusCircle, FiSettings,
     FiUsers, FiShoppingCart, FiBarChart2, FiLogOut,
-    FiMenu, FiX, FiMessageSquare, FiTag, FiChevronLeft, FiChevronRight
+    FiMenu, FiX, FiMessageSquare, FiTag, FiSearch, FiBell
 } from 'react-icons/fi';
+import { HiOutlineViewGridAdd } from 'react-icons/hi';
 import { signOut, useSession } from 'next-auth/react';
 import '../dashboard.css';
 
@@ -14,12 +15,36 @@ export default function DashboardLayout({ children }) {
     const [mounted, setMounted] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const pathname = usePathname();
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const { data: session } = useSession();
 
     useEffect(() => {
         setMounted(true);
+        const stored = localStorage.getItem('dashboard_sidebar_collapsed');
+        if (stored) setSidebarCollapsed(stored === 'true');
     }, []);
+
+    useEffect(() => {
+        if (mounted) {
+            localStorage.setItem('dashboard_sidebar_collapsed', String(sidebarCollapsed));
+        }
+    }, [sidebarCollapsed, mounted]);
+
+    useEffect(() => {
+        const query = searchParams.get('search');
+        if (query !== null) setSearchQuery(query);
+    }, [searchParams]);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            // Navigate to products page with search query
+            router.push(`/dashboard/posts?search=${encodeURIComponent(searchQuery.trim())}`);
+        }
+    };
 
     const navItems = [
         {
@@ -68,13 +93,6 @@ export default function DashboardLayout({ children }) {
                                 </span>
                             )}
                         </Link>
-                        <button
-                            className='dashboard-sidebar-toggle'
-                            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                        >
-                            {sidebarCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
-                        </button>
                     </div>
 
                     <nav className='dashboard-nav'>
@@ -148,6 +166,63 @@ export default function DashboardLayout({ children }) {
                         </div>
                     </nav>
                 </aside>
+
+                {/* Dashboard Header */}
+                <header className='dashboard-top-header' style={{
+                    marginLeft: sidebarCollapsed ? '80px' : '280px',
+                    width: sidebarCollapsed ? 'calc(100% - 80px)' : 'calc(100% - 280px)'
+                }}>
+                    <div className='dashboard-top-header-left'>
+                        <button
+                            className='dashboard-header-toggle-btn'
+                            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                        >
+                            <HiOutlineViewGridAdd />
+                        </button>
+
+                        <form onSubmit={handleSearch} className='dashboard-global-search'>
+                            <FiSearch className='dashboard-global-search-icon' />
+                            <input
+                                type='text'
+                                placeholder='Search products, orders, customers...'
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className='dashboard-global-search-input'
+                            />
+                            {searchQuery && (
+                                <button
+                                    type='button'
+                                    onClick={() => setSearchQuery('')}
+                                    className='dashboard-global-search-clear'
+                                >
+                                    <FiX />
+                                </button>
+                            )}
+                        </form>
+                    </div>
+
+                    <div className='dashboard-top-header-right'>
+                        <button className='dashboard-header-icon-btn' title='Notifications'>
+                            <FiBell />
+                            <span className='dashboard-header-badge'>3</span>
+                        </button>
+
+                        {session?.user && (
+                            <div className='dashboard-header-user'>
+                                <img
+                                    src={session.user.image || 'https://via.placeholder.com/40'}
+                                    alt={session.user.name}
+                                    className='dashboard-header-user-avatar'
+                                />
+                                <div className='dashboard-header-user-info'>
+                                    <div className='dashboard-header-user-name'>{session.user.name}</div>
+                                    <div className='dashboard-header-user-role'>Admin</div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </header>
 
                 {/* Main Content */}
                 <main className='dashboard-main' style={{ marginLeft: sidebarCollapsed ? '80px' : '280px' }}>

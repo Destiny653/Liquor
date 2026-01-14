@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import DashboardLayout from '../components/DashboardLayout';
 import {
     FiPackage, FiDollarSign, FiShoppingCart, FiTrendingUp,
@@ -12,6 +13,16 @@ export default function PostsPage() {
     const [posts, setPosts] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const query = searchParams.get('search');
+        if (query !== null) {
+            setSearchQuery(query);
+            setCurrentPage(1); // Reset to first page on search
+        }
+    }, [searchParams]);
+
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
