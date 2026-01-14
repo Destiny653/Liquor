@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import {
     FiHome, FiPackage, FiPlusCircle, FiSettings,
     FiUsers, FiShoppingCart, FiBarChart2, FiLogOut,
-    FiMenu, FiX, FiMessageSquare, FiTag
+    FiMenu, FiX, FiMessageSquare, FiTag, FiChevronLeft, FiChevronRight
 } from 'react-icons/fi';
 import { signOut, useSession } from 'next-auth/react';
 import '../dashboard.css';
@@ -13,6 +13,7 @@ import '../dashboard.css';
 export default function DashboardLayout({ children }) {
     const [mounted, setMounted] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const pathname = usePathname();
     const { data: session } = useSession();
 
@@ -57,20 +58,31 @@ export default function DashboardLayout({ children }) {
         <div className='dashboard-page nav-obscure-view'>
             <div className='dashboard-container'>
                 {/* Sidebar */}
-                <aside className={`dashboard-sidebar ${sidebarOpen ? 'open' : ''}`}>
+                <aside className={`dashboard-sidebar ${sidebarOpen ? 'open' : ''} ${sidebarCollapsed ? 'collapsed' : ''}`}>
                     <div className='dashboard-sidebar-header'>
                         <Link href='/' className='dashboard-sidebar-logo'>
                             <div className='dashboard-sidebar-logo-icon'>🥃</div>
-                            <span className='dashboard-sidebar-logo-text'>
-                                Liquor<span>Luxx</span>
-                            </span>
+                            {!sidebarCollapsed && (
+                                <span className='dashboard-sidebar-logo-text'>
+                                    Liquor<span>Luxx</span>
+                                </span>
+                            )}
                         </Link>
+                        <button
+                            className='dashboard-sidebar-toggle'
+                            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                        >
+                            {sidebarCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
+                        </button>
                     </div>
 
                     <nav className='dashboard-nav'>
                         {navItems.map((section, idx) => (
                             <div key={idx} className='dashboard-nav-section'>
-                                <div className='dashboard-nav-label'>{section.section}</div>
+                                {!sidebarCollapsed && (
+                                    <div className='dashboard-nav-label'>{section.section}</div>
+                                )}
                                 <ul className='dashboard-nav-list'>
                                     {section.items.map((item, itemIdx) => {
                                         const Icon = item.icon;
@@ -81,10 +93,11 @@ export default function DashboardLayout({ children }) {
                                                     href={item.path}
                                                     className={`dashboard-nav-item ${isActive ? 'active' : ''}`}
                                                     onClick={() => setSidebarOpen(false)}
+                                                    title={sidebarCollapsed ? item.name : ''}
                                                 >
                                                     <span className='dashboard-nav-icon'><Icon /></span>
-                                                    {item.name}
-                                                    {item.badge && (
+                                                    {!sidebarCollapsed && item.name}
+                                                    {!sidebarCollapsed && item.badge && (
                                                         <span className='dashboard-nav-badge'>{item.badge}</span>
                                                     )}
                                                 </Link>
@@ -98,36 +111,46 @@ export default function DashboardLayout({ children }) {
                         {/* User Section */}
                         <div className='dashboard-nav-section' style={{ marginTop: 'auto', paddingTop: '24px', borderTop: '1px solid var(--color-border)' }}>
                             {session?.user && (
-                                <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                <div style={{
+                                    padding: sidebarCollapsed ? '12px 0' : '12px 16px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: sidebarCollapsed ? 'center' : 'flex-start',
+                                    gap: '12px',
+                                    marginBottom: '8px'
+                                }}>
                                     <img
                                         src={session.user.image || 'https://via.placeholder.com/40'}
                                         alt={session.user.name}
                                         style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
                                     />
-                                    <div>
-                                        <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
-                                            {session.user.name}
+                                    {!sidebarCollapsed && (
+                                        <div>
+                                            <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
+                                                {session.user.name}
+                                            </div>
+                                            <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                                                Admin
+                                            </div>
                                         </div>
-                                        <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
-                                            Admin
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
                             )}
                             <button
                                 onClick={handleSignOut}
                                 className='dashboard-nav-item'
                                 style={{ width: '100%' }}
+                                title={sidebarCollapsed ? 'Sign Out' : ''}
                             >
                                 <span className='dashboard-nav-icon'><FiLogOut /></span>
-                                Sign Out
+                                {!sidebarCollapsed && 'Sign Out'}
                             </button>
                         </div>
                     </nav>
                 </aside>
 
                 {/* Main Content */}
-                <main className='dashboard-main'>
+                <main className='dashboard-main' style={{ marginLeft: sidebarCollapsed ? '80px' : '280px' }}>
                     {children}
                 </main>
 
