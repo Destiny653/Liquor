@@ -23,7 +23,6 @@ export default function CreatePage() {
     const [productTypes, setProductTypes] = useState([]);
 
     React.useEffect(() => {
-
         const fetchBrands = async () => {
             try {
                 const res = await fetch('/api/product-models');
@@ -35,7 +34,19 @@ export default function CreatePage() {
                 console.error('Error fetching brands:', error);
             }
         };
+
         fetchBrands();
+
+        // Listen for brand updates from dashboard
+        const handleBrandUpdate = () => {
+            fetchBrands();
+        };
+
+        window.addEventListener('brandDataUpdated', handleBrandUpdate);
+
+        return () => {
+            window.removeEventListener('brandDataUpdated', handleBrandUpdate);
+        };
     }, []);
 
     const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];

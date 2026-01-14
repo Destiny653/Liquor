@@ -41,7 +41,19 @@ export default function UpdatePage({ params: paramsPromise }) {
         console.error('Error fetching brands:', error);
       }
     };
+
     fetchBrands();
+
+    // Listen for brand updates from dashboard
+    const handleBrandUpdate = () => {
+      fetchBrands();
+    };
+
+    window.addEventListener('brandDataUpdated', handleBrandUpdate);
+
+    return () => {
+      window.removeEventListener('brandDataUpdated', handleBrandUpdate);
+    };
   }, []);
 
   useEffect(() => {

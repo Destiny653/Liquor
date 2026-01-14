@@ -17,6 +17,17 @@ export default function BrandsPage() {
 
     useEffect(() => {
         fetchBrands();
+
+        // Listen for brand updates from other components
+        const handleBrandUpdate = () => {
+            fetchBrands();
+        };
+
+        window.addEventListener('brandDataUpdated', handleBrandUpdate);
+
+        return () => {
+            window.removeEventListener('brandDataUpdated', handleBrandUpdate);
+        };
     }, []);
 
     const fetchBrands = async () => {
@@ -31,6 +42,11 @@ export default function BrandsPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const notifyBrandUpdate = () => {
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new CustomEvent('brandDataUpdated'));
     };
 
     const handleOpenDrawer = (brand = null) => {
@@ -84,9 +100,23 @@ export default function BrandsPage() {
             });
 
             if (res.ok) {
+                const savedBrand = await res.json();
+
+                // Optimistically update the UI immediately
+                if (editingBrand) {
+                    setBrands(brands.map(b => b._id === savedBrand._id ? savedBrand : b));
+                } else {
+                    setBrands([...brands, savedBrand]);
+                }
+
                 notyf.success(`Brand ${editingBrand ? 'updated' : 'added'} successfully`);
-                fetchBrands();
                 handleCloseDrawer();
+
+                // Notify other components to refresh
+                notifyBrandUpdate();
+
+                // Refetch in background to ensure consistency
+                fetchBrands();
             } else {
                 notyf.error('Failed to save brand');
             }
@@ -100,15 +130,27 @@ export default function BrandsPage() {
     const handleDelete = async (id) => {
         if (!confirm('Are you sure you want to delete this brand? Products associated with it will still exist but might not show up in filtered views.')) return;
         const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
+
+        // Optimistically remove from UI
+        const previousBrands = [...brands];
+        setBrands(brands.filter(b => b._id !== id));
+
         try {
             const res = await fetch(`/api/product-models/${id}`, { method: 'DELETE' });
             if (res.ok) {
                 notyf.success('Brand deleted successfully');
+                // Notify other components to refresh
+                notifyBrandUpdate();
+                // Refetch to ensure consistency
                 fetchBrands();
             } else {
+                // Rollback on error
+                setBrands(previousBrands);
                 notyf.error('Failed to delete brand');
             }
         } catch (error) {
+            // Rollback on error
+            setBrands(previousBrands);
             notyf.error('Error deleting brand');
         }
     };

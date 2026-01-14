@@ -39,7 +39,19 @@ export default function Navbar() {
                 console.error('Error fetching brands:', error);
             }
         };
+
         fetchBrands();
+
+        // Listen for brand updates from dashboard
+        const handleBrandUpdate = () => {
+            fetchBrands();
+        };
+
+        window.addEventListener('brandDataUpdated', handleBrandUpdate);
+
+        return () => {
+            window.removeEventListener('brandDataUpdated', handleBrandUpdate);
+        };
     }, []);
 
     const occasions = [
