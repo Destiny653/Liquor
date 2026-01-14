@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import {
     FiHome, FiPackage, FiPlusCircle, FiSettings,
     FiUsers, FiShoppingCart, FiBarChart2, FiLogOut,
-    FiMenu, FiX, FiMessageSquare
+    FiMenu, FiX, FiMessageSquare, FiTag
 } from 'react-icons/fi';
 import { signOut, useSession } from 'next-auth/react';
 import '../dashboard.css';
@@ -25,8 +25,9 @@ export default function DashboardLayout({ children }) {
             section: 'Main',
             items: [
                 { name: 'Dashboard', path: '/dashboard/posts', icon: FiHome },
-                { name: 'Products', path: '/dashboard/posts', icon: FiPackage, badge: 'New' },
+                { name: 'Products', path: '/dashboard/posts', icon: FiPackage },
                 { name: 'Add Product', path: '/dashboard/create', icon: FiPlusCircle },
+                { name: 'Manage Brands', path: '/dashboard/brands', icon: FiTag },
             ]
         },
         {
