@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const giftSchema = new Schema({
+const productSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -15,7 +15,7 @@ const giftSchema = new Schema({
     },
     rate: {
         type: Number,
-        default: 5,
+        default: 0,
     },
     img: {
         type: String,
@@ -23,8 +23,10 @@ const giftSchema = new Schema({
     },
     productModel: {
         type: String,
-        default: 'Gift'
+        required: true,
+        index: true
     },
+    // Optional fields from Gift or other specific types
     bundleItems: {
         type: [String],
         default: []
@@ -39,4 +41,4 @@ const giftSchema = new Schema({
     }
 }, { timestamps: true });
 
-export default mongoose.models.Gift || mongoose.model("Gift", giftSchema);
+export default mongoose.models.Product || mongoose.model("Product", productSchema);

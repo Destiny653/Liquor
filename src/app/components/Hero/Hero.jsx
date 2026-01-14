@@ -35,14 +35,14 @@ export default function Hero() {
         const getData = async () => {
             setLoader(true);
             try {
-                const res = await fetch(`/api/posts`);
+                const res = await fetch(`/api/products?limit=10`);
                 if (!res.ok) {
                     notyf.error('Network error, please refresh your browser.');
                     setLoader(false);
                     return;
                 }
                 const jsonData = await res.json();
-                setData(Array.isArray(jsonData) ? jsonData : []);
+                setData(jsonData.products || []);
                 setLoader(false);
             } catch (error) {
                 console.error(error);

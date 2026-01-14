@@ -16,19 +16,16 @@ export default function Page() {
 
     useEffect(() => {
         const getData = async () => {
-            const apis = [
-                '/api/posts',
-                '/api/blantons',
-                '/api/wellers',
-                '/api/buffalos',
-                '/api/pappies',
-                '/api/penelopes',
-                '/api/yamazakis',
-            ];
-
-            const fetchPromises = apis.map(api => fetch(api).then(res => res.json()));
-            const results = await Promise.all(fetchPromises);
-            setReturns(results.flat());
+            try {
+                // Fetch all products from unified Product collection
+                const res = await fetch('/api/products?limit=1000');
+                if (res.ok) {
+                    const data = await res.json();
+                    setReturns(data.products || []);
+                }
+            } catch (error) {
+                console.error("Error fetching products for cart:", error);
+            }
         };
         getData();
     }, []);

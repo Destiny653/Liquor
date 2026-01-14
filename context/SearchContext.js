@@ -14,15 +14,8 @@ export default function SearchProvider({ children }) {
 
 
   const [api, setApi] = useState(null);
-  const apis = [
-    '/api/posts',
-    '/api/pappies',
-    '/api/penelopes',
-    '/api/wellers',
-    '/api/yamazakis',
-    '/api/blantons',
-    '/api/buffalos'
-  ]
+  const apis = ['/api/products?limit=1000']
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,19 +23,15 @@ export default function SearchProvider({ children }) {
         const data = await Promise.all(apis.map(async api => {
           try {
             const response = await fetch(api);
-            if (!response.ok) {
-              console.error(`Error fetching ${api}: ${response.status} ${response.statusText}`);
-              return [];
-            }
-            const text = await response.text();
-            if (!text) return [];
-            return JSON.parse(text);
+            if (!response.ok) return [];
+            const result = await response.json();
+            return result.products || result;
           } catch (err) {
-            console.error(`Failed to fetch or parse ${api}:`, err);
             return [];
           }
         }))
         setApi(data.flat());
+
         // console.log('Fetched data:', api);
       } catch (error) {
         console.error('Error fetching data:', error);

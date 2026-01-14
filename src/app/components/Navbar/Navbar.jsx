@@ -19,50 +19,28 @@ export default function Navbar() {
     const navigation = useRouter();
 
     // Brand data for mega menu
-    const brands = [
-        {
-            name: 'Pappy Van Winkle',
-            slug: 'pappies',
-            description: 'The most sought-after bourbon in the world',
-            image: '/images/bestsell1.jpg'
-        },
-        {
-            name: 'W.L. Weller',
-            slug: 'wellers',
-            description: 'Premium wheated bourbon collection',
-            image: '/images/bestsell2.jpg'
-        },
-        {
-            name: 'Buffalo Trace',
-            slug: 'buffalos',
-            description: 'Award-winning Kentucky straight bourbon',
-            image: '/images/bestsell3.jpg'
-        },
-        {
-            name: 'Yamazaki',
-            slug: 'yamazakis',
-            description: 'Japanese whisky excellence',
-            image: '/images/gift1.jpg'
-        },
-        {
-            name: 'Penelope',
-            slug: 'penelopes',
-            description: 'Crafted four-grain bourbon',
-            image: '/images/gift2.jpg'
-        },
-        {
-            name: 'Blantons',
-            slug: 'blantons',
-            description: 'Distinguished single malt selection',
-            image: '/images/gift3.jpg'
-        },
-        {
-            name: 'Gift Bundles',
-            slug: 'gifts',
-            description: 'Exclusive curated spirit sets and sets',
-            image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2040&auto=format&fit=crop'
-        }
-    ];
+    const [brands, setBrands] = useState([]);
+
+    useEffect(() => {
+        const fetchBrands = async () => {
+            try {
+                const res = await fetch('/api/product-models');
+                if (res.ok) {
+                    const data = await res.json();
+                    const mappedBrands = data.map(brand => ({
+                        name: brand.label,
+                        slug: brand.value,
+                        description: brand.description || 'Premium selection',
+                        image: brand.image || 'https://images.unsplash.com/photo-1569158062037-d86260ef3fa9?q=80&w=2000&auto=format&fit=crop'
+                    }));
+                    setBrands(mappedBrands);
+                }
+            } catch (error) {
+                console.error('Error fetching brands:', error);
+            }
+        };
+        fetchBrands();
+    }, []);
 
     const occasions = [
         {
@@ -131,14 +109,21 @@ export default function Navbar() {
     // Search functionality
     const fetchFromAPIs = async (title) => {
         if (!title) return [];
-        const apis = ['/api/posts'];
-        const fetchPromises = apis.map(api => fetch(api).then(res => res.json()));
-        const results = await Promise.all(fetchPromises);
-        return results.flat().filter(product =>
-            product?.title?.toLowerCase().includes(title.toLowerCase())
-        );
+        try {
+            const res = await fetch(`/api/products?limit=20`);
+            if (res.ok) {
+                const data = await res.json();
+                const products = data.products || [];
+                return products.filter(product =>
+                    product?.title?.toLowerCase().includes(title.toLowerCase())
+                );
+            }
+            return [];
+        } catch (error) {
+            console.error("Search error:", error);
+            return [];
+        }
     };
-
     useEffect(() => {
         if (query) {
             fetchFromAPIs(query).then(results => setSearchVal(results));

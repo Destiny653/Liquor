@@ -25,35 +25,37 @@ export default function PostsPage() {
 
     const fetchPosts = async () => {
         try {
-            const result = await fetch('/api/posts');
+            const result = await fetch('/api/products?limit=100'); // Fetch enough for current client pagination
             if (result.ok) {
                 const data = await result.json();
-                setPosts(data);
-                if (data.length > 0) setSelectedPost(data[0]);
+                const products = data.products || data; // Handle both old and new response formats
+                setPosts(products);
+                if (products.length > 0) setSelectedPost(products[0]);
             }
         } catch (error) {
-            console.error('Failed to fetch posts:', error);
+            console.error('Failed to fetch products:', error);
         } finally {
             setLoading(false);
         }
     };
 
-    const deletePost = async (option, id) => {
+
+    const deletePost = async (id) => {
         const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
 
         if (!confirm('Are you sure you want to delete this product?')) return;
 
         setDeleting(true);
         try {
-            const res = await fetch(`/api/${option.toLowerCase()}s/${id}`, {
+            const res = await fetch(`/api/products/${id}`, {
                 method: 'DELETE'
             });
 
-            if (res.status === 200) {
+            if (res.ok) {
                 notyf.success('Product deleted successfully');
                 setPosts(posts.filter(p => p._id !== id));
                 if (selectedPost?._id === id) {
-                    setSelectedPost(posts[0] || null);
+                    setSelectedPost(posts.find(p => p._id !== id) || null);
                 }
             } else {
                 notyf.error('Failed to delete product');
@@ -64,6 +66,7 @@ export default function PostsPage() {
             setDeleting(false);
         }
     };
+
 
     const filteredPosts = posts.filter(post =>
         post.title?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -244,7 +247,7 @@ export default function PostsPage() {
                                                         <FiEye />
                                                     </button>
                                                     <Link
-                                                        href={`/dashboard/update/${post.productModel?.toLowerCase()}s/${post._id}`}
+                                                        href={`/dashboard/update/${post.productModel?.toLowerCase()}/${post._id}`}
                                                         className='dashboard-action-btn edit'
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
@@ -254,8 +257,9 @@ export default function PostsPage() {
                                                         className='dashboard-action-btn delete'
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            deletePost(post.productModel, post._id);
+                                                            deletePost(post._id);
                                                         }}
+
                                                         disabled={deleting}
                                                     >
                                                         <FiTrash2 />
@@ -330,7 +334,7 @@ export default function PostsPage() {
 
                         <div className='dashboard-preview-actions'>
                             <Link
-                                href={`/dashboard/update/${selectedPost.productModel?.toLowerCase()}s/${selectedPost._id}`}
+                                href={`/dashboard/update/${selectedPost.productModel?.toLowerCase()}/${selectedPost._id}`}
                                 className='dashboard-preview-btn primary'
                             >
                                 <FiEdit2 size={16} />
@@ -338,7 +342,7 @@ export default function PostsPage() {
                             </Link>
                             <button
                                 className='dashboard-preview-btn danger'
-                                onClick={() => deletePost(selectedPost.productModel, selectedPost._id)}
+                                onClick={() => deletePost(selectedPost._id)}
                                 disabled={deleting}
                             >
                                 <FiTrash2 size={16} />

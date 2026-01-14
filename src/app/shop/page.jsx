@@ -149,10 +149,29 @@ function ShopContent() {
   const [options, setOptions] = useState('All Brands');
   const [loader, setLoader] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [choice, setChoice] = useState([]);
 
   const itemsPerPage = 12;
-  const choice = useMemo(() => ['blantons', 'wellers', 'buffalos', 'pappies', 'penelopes', 'yamazakis', 'gifts', 'All Brands'], []);
   const formatter = useMemo(() => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }), []);
+
+  // Fetch dynamic brands
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const res = await fetch('/api/product-models');
+        if (res.ok) {
+          const brandsData = await res.json();
+          // Map to just values and add "All Brands"
+          const brandValues = brandsData.map(b => b.value);
+          setChoice([...brandValues, 'All Brands']);
+        }
+      } catch (error) {
+        console.error('Error fetching brands:', error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
 
   // Read brand from URL params on mount and when URL changes
   useEffect(() => {
@@ -163,29 +182,13 @@ function ShopContent() {
     }
   }, [searchParams, choice]);
 
-  const endpoints = useMemo(() => ({
-    'blantons': ['/api/blantons'],
-    'wellers': ['/api/wellers'],
-    'buffalos': ['/api/buffalos'],
-    'pappies': ['/api/pappies'],
-    'penelopes': ['/api/penelopes'],
-    'yamazakis': ['/api/yamazakis'],
-    'gifts': ['/api/gifts'],
-    'All Brands': [
-      '/api/posts',
-      '/api/blantons',
-      '/api/wellers',
-      '/api/buffalos',
-      '/api/pappies',
-      '/api/penelopes',
-      '/api/yamazakis',
-      '/api/gifts',
-    ],
-  }), []);
+  const getApiUrl = useCallback((selectedOption) => {
+    if (selectedOption === 'All Brands') {
+      return '/api/products?limit=100';
+    }
+    return `/api/products?model=${selectedOption}&limit=100`;
+  }, []);
 
-  const getApiEndpoints = useCallback((selectedOption) => {
-    return endpoints[selectedOption] || endpoints['All Brands'];
-  }, [endpoints]);
 
   const handleFilterChange = useCallback((min, max) => {
     if (!data || data.length === 0) return;
@@ -211,20 +214,16 @@ function ShopContent() {
     const fetchData = async () => {
       setLoader(true);
       try {
-        const currentEndpoints = getApiEndpoints(options);
-        const fetchPromises = currentEndpoints.map(api =>
-          fetch(api)
-            .then(res => {
-              if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-              return res.json();
-            })
-        );
+        const apiUrl = getApiUrl(options);
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const result = await res.json();
 
-        const results = await Promise.all(fetchPromises);
-        const flattenedResults = results.flat();
+        // Handle paginated response format
+        const products = result.products || result;
 
         if (isSubscribed) {
-          const searchFiltered = debouncedSearch(searchInp, flattenedResults);
+          const searchFiltered = debouncedSearch(searchInp, products);
           setData(searchFiltered);
           setFilteredData(null);
         }
@@ -240,17 +239,16 @@ function ShopContent() {
       }
     };
 
-    // Execute fetchData immediately for initial load
     fetchData();
 
-    // Set up debounced updates for subsequent changes
     const timeoutId = setTimeout(fetchData, 300);
 
     return () => {
       isSubscribed = false;
       clearTimeout(timeoutId);
     };
-  }, [searchInp, options, getApiEndpoints, debouncedSearch]);
+  }, [searchInp, options, getApiUrl, debouncedSearch]);
+
 
   const getTotalPages = useMemo(() => {
     const itemsToDisplay = filteredData || data;

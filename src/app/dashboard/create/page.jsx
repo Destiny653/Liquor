@@ -20,18 +20,26 @@ export default function CreatePage() {
     const [imgSrc, setImgSrc] = useState('');
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
+    const [productTypes, setProductTypes] = useState([]);
+
+    React.useEffect(() => {
+
+        const fetchBrands = async () => {
+            try {
+                const res = await fetch('/api/product-models');
+                if (res.ok) {
+                    const data = await res.json();
+                    setProductTypes(data);
+                }
+            } catch (error) {
+                console.error('Error fetching brands:', error);
+            }
+        };
+        fetchBrands();
+    }, []);
 
     const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];
 
-    const productTypes = [
-        { value: 'blantons', label: 'Blanton', description: 'Distinguished single malt selection' },
-        { value: 'buffalos', label: 'Buffalo Trace', description: 'Award-winning Kentucky bourbon' },
-        { value: 'pappies', label: 'Pappy Van Winkle', description: 'The most sought-after bourbon' },
-        { value: 'penelopes', label: 'Penelope', description: 'Crafted four-grain bourbon' },
-        { value: 'wellers', label: 'W.L. Weller', description: 'Premium wheated bourbon' },
-        { value: 'yamazakis', label: 'Yamazaki', description: 'Japanese whisky excellence' },
-        { value: 'gifts', label: 'Gift Bundles', description: 'Exclusive curated spirit sets' },
-    ];
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -90,14 +98,15 @@ export default function CreatePage() {
                 price: parseFloat(price),
                 content,
                 rate: parseInt(rate) || 5,
-                img: imgSrc || 'https://via.placeholder.com/400'
+                img: imgSrc || 'https://via.placeholder.com/400',
+                productModel: option
             };
 
             if (option === 'gifts') {
                 body.occasion = occasion;
             }
 
-            const response = await fetch(`/api/${option}`, {
+            const response = await fetch(`/api/products`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)

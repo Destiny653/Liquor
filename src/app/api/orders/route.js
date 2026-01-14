@@ -3,13 +3,8 @@ import User from "@/models/User";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
 
-const { default: Blanton } = require("@/models/Blanton");
-const { default: Buffalo } = require("@/models/Buffalo");
-const { default: Pappy } = require("@/models/Pappy");
-const { default: Penelope } = require("@/models/Penelope");
-const { default: Weller } = require("@/models/Weller");
-const { default: Yamazaki } = require("@/models/Yamazaki");
-const { default: Post } = require("@/models/Post")
+import Product from "@/models/Product";
+
 
 
 export const POST = async (req, res) => {
@@ -22,40 +17,16 @@ export const POST = async (req, res) => {
             return NextResponse.json({ success: false, message: 'User mot found please sign up' }, { status: 404 });
         };
 
-        async function verifyProductId(product_id, productModel) {
-            let product = null;
-            switch (productModel) {
-                case 'Weller':
-                    product = await Weller.findById(product_id);
-                    break;
-                case 'Blanton':
-                    product = await Blanton.findById(product_id)
-                    break;
-                case 'Penelope':
-                    product = await Penelope.findById(product_id)
-                    break;
-                case 'Yamazaki':
-                    product = await Yamazaki.findById(product_id)
-                    break;
-                case 'Pappy':
-                    product = await Pappy.findById(product_id)
-                    break;
-                case 'Buffalo':
-                    product = await Buffalo.findById(product_id)
-                    break;
-                case 'Post':
-                    product = await Post.findById(product_id)
-                    break;
-                default:
-                    return product ? { product, model: productModel } : null;
-            }
-            return product;
+        async function verifyProductId(product_id) {
+            return await Product.findById(product_id);
         }
+
         async function verifyAndPopulateOrderItems(cartItems, subtotal) {
             const verifiedCartItems = [];
             let dataError = null
             for (const { product_id, productModel, quantity } of cartItems) {
-                const verificationResult = await verifyProductId(product_id, productModel);
+                const verificationResult = await verifyProductId(product_id);
+
                 if (verificationResult) {
                     verifiedCartItems.push({
                         productId: verificationResult._doc._id.toHexString(),
@@ -85,31 +56,8 @@ export const POST = async (req, res) => {
             for (const item of verifiedItems) {
                 let product;
 
-                switch (item.productModel) {
-                    case 'Post':
-                        product = await Post.findById(item.productId).exec();
-                        break;
-                    case 'Weller':
-                        product = await Weller.findById(item.productId).exec();
-                        break;
-                    case 'Blanton':
-                        product = await Blanton.findById(item.productId).exec();
-                        break;
-                    case 'Penelope':
-                        product = await Penelope.findById(item.productId).exec();
-                        break;
-                    case 'Yamazaki':
-                        product = await Yamazaki.findById(item.productId).exec();
-                        break;
-                    case 'Pappy':
-                        product = await Pappy.findById(item.productId).exec();
-                        break;
-                    case 'Buffalo':
-                        product = await Buffalo.findById(item.productId).exec();
-                        break;
-                    default:
-                        throw new Error(`Product type ${item.productModel} not found.`);
-                }
+                product = await Product.findById(item.productId).exec();
+
                 // Check if the product exists in the database and calculate the total price for this item.
                 if (product) {
                     totalPrice += product.price * item.quantity;

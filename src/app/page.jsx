@@ -77,14 +77,35 @@ export default function Home() {
   ];
 
   // Brand showcase data
-  const brands = [
-    { name: "Pappy Van Winkle", slug: "pappies", image: "/images/bestsell1.jpg" },
-    { name: "W.L. Weller", slug: "wellers", image: "/images/bestsell2.jpg" },
-    { name: "Buffalo Trace", slug: "buffalos", image: "/images/bestsell3.jpg" },
-    { name: "Yamazaki", slug: "yamazakis", image: "/images/gift1.jpg" },
-    { name: "Penelope", slug: "penelopes", image: "/images/gift2.jpg" },
-    { name: "Blantons", slug: "blantons", image: "/images/gift3.jpg" },
-  ];
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const res = await fetch('/api/product-models');
+        if (res.ok) {
+          const data = await res.json();
+          const getBrandImage = (slug) => {
+            const images = {
+              'pappies': '/images/bestsell1.jpg',
+              'wellers': '/images/bestsell2.jpg',
+              'buffalos': '/images/bestsell3.jpg',
+              'yamazakis': '/images/gift1.jpg',
+              'penelopes': '/images/gift2.jpg',
+              'blantons': '/images/gift3.jpg',
+              'gifts': 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2040&auto=format&fit=crop'
+            };
+            return images[slug] || 'https://images.unsplash.com/photo-1569158062037-d86260ef3fa9?q=80&w=2000&auto=format&fit=crop';
+          };
+          setBrands(data.map(b => ({ name: b.label, slug: b.value, image: getBrandImage(b.value) })));
+        }
+      } catch (error) {
+        console.error('Error fetching brands:', error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
 
   return (
     <main className="home-page">

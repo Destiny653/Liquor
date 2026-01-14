@@ -27,27 +27,28 @@ export default function UpdatePage({ params: paramsPromise }) {
   const [dragActive, setDragActive] = useState(false);
   const occasions = ['Birthday', 'Anniversary', 'Corporate', 'Special Edition'];
 
-  const productTypes = [
-    { value: 'blantons', label: 'Blanton', description: 'Distinguished single malt selection' },
-    { value: 'buffalos', label: 'Buffalo Trace', description: 'Award-winning Kentucky bourbon' },
-    { value: 'pappies', label: 'Pappy Van Winkle', description: 'The most sought-after bourbon' },
-    { value: 'penelopes', label: 'Penelope', description: 'Crafted four-grain bourbon' },
-    { value: 'wellers', label: 'W.L. Weller', description: 'Premium wheated bourbon' },
-    { value: 'yamazakis', label: 'Yamazaki', description: 'Japanese whisky excellence' },
-    { value: 'gifts', label: 'Gift Bundles', description: 'Exclusive curated spirit sets' },
-  ];
+  const [productTypes, setProductTypes] = useState([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const res = await fetch('/api/product-models');
+        if (res.ok) {
+          const data = await res.json();
+          setProductTypes(data);
+        }
+      } catch (error) {
+        console.error('Error fetching brands:', error);
+      }
+    };
+    fetchBrands();
+  }, []);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // Determine the correct endpoint based on option pluralization
-        // The current structure suggests 'option' might already be pluralized or needs 's'
-        // Based on previous code: /api/${option.toLowerCase()}s/${id}
-        // But params.option from URL might vary. Let's assume params.option is the product model name
-        // e.g. "blantons" or "blanton"
-
-        // Let's try to fetch
-        const res = await fetch(`/api/${option}/${id}`);
+        // Use the unified products endpoint
+        const res = await fetch(`/api/products/${id}`);
         if (res.ok) {
           const data = await res.json();
           setTitle(data.title || '');
@@ -56,6 +57,7 @@ export default function UpdatePage({ params: paramsPromise }) {
           setContent(data.content || '');
           setOccasion(data.occasion || 'General');
           setImgSrc(data.img || '');
+          setSelectedOption(data.productModel || option);
         } else {
           console.error('Failed to fetch product');
         }
@@ -68,6 +70,7 @@ export default function UpdatePage({ params: paramsPromise }) {
 
     fetchProduct();
   }, [option, id]);
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -117,57 +120,32 @@ export default function UpdatePage({ params: paramsPromise }) {
     }
 
     try {
-      if (selectedOption !== option) {
-        // Brand Migration Logic: DELETE then POST
-        const deleteRes = await fetch(`/api/${option}/${id}`, { method: 'DELETE' });
-        if (!deleteRes.ok) throw new Error('Failed to remove from old collection');
+      const response = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          price: parseFloat(price),
+          content,
+          rate: parseInt(rate) || 5,
+          img: imgSrc,
+          productModel: selectedOption,
+          occasion: selectedOption === 'gifts' ? occasion : undefined
+        })
+      });
 
-        const createRes = await fetch(`/api/${selectedOption}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title,
-            price: parseFloat(price),
-            content,
-            rate: parseInt(rate) || 5,
-            img: imgSrc,
-            occasion: selectedOption === 'gifts' ? occasion : undefined
-          })
-        });
-
-        if (createRes.ok) {
-          notyf.success('Product moved and updated successfully!');
-          router.push('/dashboard/posts');
-        } else {
-          notyf.error('Failed to create in new collection');
-        }
+      if (response.ok) {
+        notyf.success('Product updated successfully!');
+        router.push('/dashboard/posts');
       } else {
-        // Regular Update
-        const response = await fetch(`/api/${option}/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title,
-            price: parseFloat(price),
-            content,
-            rate: parseInt(rate) || 5,
-            img: imgSrc,
-            occasion: selectedOption === 'gifts' ? occasion : undefined
-          })
-        });
-
-        if (response.ok) {
-          notyf.success('Product updated successfully!');
-          router.push('/dashboard/posts');
-        } else {
-          notyf.error('Failed to update product');
-        }
+        notyf.error('Failed to update product');
       }
     } catch (error) {
       notyf.error('Error updating product');
     } finally {
       setSaving(false);
     }
+
   };
 
   if (loading) {

@@ -6,7 +6,7 @@ const orderSchema = new Schema({
         ref: "User",
         required: true
     },
-    orders:[{
+    orders: [{
         products: [
 
             {
@@ -16,9 +16,10 @@ const orderSchema = new Schema({
                 },
                 productId: {
                     type: Schema.Types.ObjectId,
-                    refPath: "orders.products.productModel",
+                    ref: "Product",
                     required: true
                 },
+
                 price: {
                     type: Number,
                     required: true
@@ -50,7 +51,7 @@ const orderSchema = new Schema({
             default: "Pending"
         }
     }]
-},{ timestamps: true});
+}, { timestamps: true });
 
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 export default Order;

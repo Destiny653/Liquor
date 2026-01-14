@@ -44,10 +44,10 @@ function GiftContent() {
 
     const fetchGifts = async () => {
         try {
-            const res = await fetch('/api/gifts');
+            const res = await fetch('/api/products?model=gifts&limit=100');
             if (res.ok) {
                 const data = await res.json();
-                setGifts(data);
+                setGifts(data.products || []);
             }
         } catch (error) {
             console.error('Error fetching gifts:', error);

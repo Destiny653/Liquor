@@ -18,14 +18,23 @@ import Link from 'next/link';
 export default function Footer() {
     const currentYear = new Date().getFullYear();
 
-    const brands = [
-        { name: 'Pappy Van Winkle', slug: 'pappies' },
-        { name: 'W.L. Weller', slug: 'wellers' },
-        { name: 'Buffalo Trace', slug: 'buffalos' },
-        { name: 'Yamazaki', slug: 'yamazakis' },
-        { name: 'Penelope', slug: 'penelopes' },
-        { name: 'Blantons', slug: 'blantons' },
-    ];
+    const [brands, setBrands] = React.useState([]);
+
+    React.useEffect(() => {
+        const fetchBrands = async () => {
+            try {
+                const res = await fetch('/api/product-models');
+                if (res.ok) {
+                    const data = await res.json();
+                    setBrands(data.map(b => ({ name: b.label, slug: b.value })));
+                }
+            } catch (error) {
+                console.error('Error fetching brands:', error);
+            }
+        };
+        fetchBrands();
+    }, []);
+
 
     const customerLinks = [
         { name: 'My Account', href: '/login' },
