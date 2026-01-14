@@ -2,6 +2,8 @@ import ProductModel from "@/models/ProductModel";
 import connectDB from "@/utils/db";
 import { NextResponse } from 'next/server';
 
+import { v2 as cloudinary } from "cloudinary";
+
 export const GET = async () => {
     try {
         await connectDB();
@@ -16,7 +18,22 @@ export const POST = async (req) => {
     try {
         await connectDB();
         const { value, label, description, image } = await req.json();
-        const newModel = new ProductModel({ value, label, description, image });
+
+        cloudinary.config({
+            cloud_name: 'dxornm9ex',
+            api_key: process.env.API_KEY,
+            api_secret: process.env.API_SECRET
+        });
+
+        let imageUrl = image;
+        if (image && image.startsWith('data:image')) {
+            const uploadResult = await cloudinary.uploader.upload(image, {
+                public_id: `brand_${value}_${Date.now()}`
+            });
+            imageUrl = uploadResult.secure_url;
+        }
+
+        const newModel = new ProductModel({ value, label, description, image: imageUrl });
         await newModel.save();
         return new NextResponse(JSON.stringify(newModel), { status: 201 });
     } catch (error) {
