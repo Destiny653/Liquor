@@ -435,30 +435,62 @@ Homepage Styles
 
 .brands-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 280px;
+    grid-auto-flow: dense;
     gap: 24px;
 }
 
 .brand-card {
     position: relative;
-    border-radius: 16px;
+    border-radius: 24px;
     overflow: hidden;
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
     text-decoration: none;
     transition: all var(--transition-smooth);
     animation: fadeInUp 0.6s ease both;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Complex Grid Pattern */
+.brand-card:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.brand-card:nth-child(2) {
+    grid-column: span 2;
+}
+
+.brand-card:nth-child(3) {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+.brand-card:nth-child(6) {
+    grid-column: span 2;
+}
+
+.brand-card:nth-child(7) {
+    grid-column: span 2;
+    grid-row: span 2;
 }
 
 .brand-card:hover {
     transform: translateY(-8px);
     border-color: var(--color-gold);
     box-shadow: var(--shadow-gold);
+    z-index: 2;
 }
 
 .brand-image {
     position: relative;
-    height: 380px;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    /* Important for flex child overflow */
     overflow: hidden;
 }
 
@@ -466,21 +498,40 @@ Homepage Styles
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--transition-smooth);
+    transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .brand-card:hover .brand-image img {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
 .brand-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
+    /* Stronger gradient since text is now overlaying image */
+    background: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.9) 100%);
+    opacity: 0.8;
+    transition: opacity var(--transition-smooth);
+}
+
+.brand-card:hover .brand-overlay {
+    opacity: 1;
 }
 
 .brand-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     padding: 24px;
+    z-index: 10;
+    transform: translateY(12px);
+    /* Push down slightly initially */
+    transition: transform var(--transition-bounce);
+}
+
+.brand-card:hover .brand-info {
+    transform: translateY(0);
 }
 
 .brand-info h3 {
@@ -488,11 +539,7 @@ Homepage Styles
     font-size: 20px;
     font-weight: 600;
     color: var(--color-text-primary);
-    transition: color var(--transition-fast);
-}
-
-.brand-card:hover .brand-info h3 {
-    color: var(--color-gold);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .brand-cta {
@@ -500,12 +547,15 @@ Homepage Styles
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: var(--color-text-secondary);
-    transition: color var(--transition-fast);
+    color: var(--color-gold);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all var(--transition-smooth);
 }
 
 .brand-card:hover .brand-cta {
-    color: var(--color-gold);
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* CTA Banner */
@@ -709,6 +759,17 @@ Responsive Styles
         grid-template-columns: repeat(2, 1fr);
     }
 
+    /* Reset row spans on tablet to prevent huge cards */
+    .brand-card:nth-child(n) {
+        grid-row: span 1;
+    }
+
+    /* Keep some interest by letting some items span 2 columns (full width) */
+    .brand-card:nth-child(1),
+    .brand-card:nth-child(6) {
+        grid-column: span 2;
+    }
+
     .features-container {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -717,8 +778,9 @@ Responsive Styles
         border-right: none;
     }
 
+    /* Remove fixed height, let flex-grow work with grid-auto-rows */
     .brand-image {
-        height: 220px;
+        height: auto;
     }
 }
 
@@ -727,6 +789,8 @@ Responsive Styles
         height: 80vh;
         min-height: 500px;
     }
+
+    /* ... (keep hero styles) ... */
 
     .hero-content {
         left: 5%;
@@ -771,11 +835,20 @@ Responsive Styles
 
     .brands-grid {
         grid-template-columns: 1fr;
+        grid-auto-rows: 320px;
+        /* Slightly taller on mobile for better visibility */
         gap: 16px;
     }
 
+    /* Reset all spans for mobile */
+    .brand-card:nth-child(n) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
     .brand-image {
-        height: 200px;
+        height: auto;
+        /* Allow flex to control height */
     }
 
     .brand-info {
