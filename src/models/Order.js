@@ -53,6 +53,18 @@ const orderSchema = new Schema({
             type: String,
             enum: ["Pending", "Shipped", "Delivered", "Cancelled"],
             default: "Pending"
+        },
+        billingDetails: {
+            firstname: String,
+            lastname: String,
+            useremail: String,
+            country: String,
+            streetAddress: String,
+            city: String,
+            state: String,
+            zipCode: String,
+            phone: String,
+            additionalNotes: String
         }
     }]
 }, { timestamps: true });

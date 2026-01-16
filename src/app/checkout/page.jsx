@@ -34,7 +34,7 @@ export default function Checkout() {
 
     const navigation = useRouter();
     const { data: session } = useSession();
-    const { cartItems } = useContext(CartContext);
+    const { cartItems, emptyCart } = useContext(CartContext);
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     const totalPrice = cartItems?.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0) || 0;
@@ -102,6 +102,7 @@ export default function Checkout() {
                 // notyf.success(data.message);
                 // Show modal instead
                 setShowSuccessModal(true);
+                emptyCart();
             } else {
                 notyf.error('Error placing order: ' + res.statusText);
             }

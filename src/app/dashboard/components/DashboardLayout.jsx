@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }) {
         {
             section: 'Main',
             items: [
-                { name: 'Dashboard', path: '/dashboard/posts', icon: FiHome },
+                { name: 'Dashboard', path: '/dashboard/analytics', icon: FiHome },
                 { name: 'Products', path: '/dashboard/posts', icon: FiPackage },
                 { name: 'Add Product', path: '/dashboard/create', icon: FiPlusCircle },
                 { name: 'Manage Brands', path: '/dashboard/brands', icon: FiTag },

@@ -87,7 +87,8 @@ export const POST = async (req, res) => {
                 orders: [{
                     products: verifiedItems,
                     totalPrice: totalPrice,
-                    paymentMethod: paymentMethod
+                    paymentMethod: paymentMethod,
+                    billingDetails: billingDetails
                 }],
             })
             const userId = user._doc._id.toHexString();
@@ -98,7 +99,7 @@ export const POST = async (req, res) => {
             if (!existingOrder) {
                 await newOrder.save()
             } else {
-                await Order.updateOne({ user: userId }, { $push: { orders: { products: verifiedItems, totalPrice, paymentMethod } } })
+                await Order.updateOne({ user: userId }, { $push: { orders: { products: verifiedItems, totalPrice, paymentMethod, billingDetails } } })
             }
             //  updating user orders
             const verifiedOrdersInUser = await User.find({ _id: userId, 'order.productId': { $all: orderIds } })
@@ -125,22 +126,76 @@ export const POST = async (req, res) => {
                 });
 
                 const mailOptions = {
-                    from: process.env.EMAIL_USER,
-                    to: process.env.OWNER_EMAIL || 'admin@liquorluxx.com', // Replace with actual owner email or env var
-                    subject: `New Order - ${paymentMethod} - ${billingDetails.firstname} ${billingDetails.lastname}`,
+                    from: `"LiquorLuxx Admin" <${process.env.EMAIL_USER}>`,
+                    to: process.env.OWNER_EMAIL || 'admin@liquorluxx.com',
+                    subject: `New Order Received - ${paymentMethod.toUpperCase()} - $${totalPrice}`,
                     html: `
-                        <h2>New Order Received</h2>
-                        <p><strong>Customer:</strong> ${billingDetails.firstname} ${billingDetails.lastname}</p>
-                        <p><strong>Phone:</strong> ${billingDetails.phone}</p>
-                        <p><strong>Email:</strong> ${email}</p>
-                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                        <p><strong>Total Amount:</strong> $${totalPrice}</p>
-                        <hr/>
-                        <h3>Order Items:</h3>
-                        <ul>
-                            ${verifiedItems.map(item => `<li>${item.title} (x${item.quantity})</li>`).join('')}
-                        </ul>
-                        <p>Please contact the customer to finalize the payment.</p>
+                        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                            <div style="text-align: center; padding-bottom: 20px; border-bottom: 2px solid #d4af37;">
+                                <h1 style="color: #1a1a1a; margin: 0; letter-spacing: 2px;">LIQUOR<span style="color: #d4af37;">LUXX</span></h1>
+                                <p style="color: #888; font-size: 14px; margin: 5px 0 0;">Premium Order Notification</p>
+                            </div>
+                            
+                            <div style="padding: 20px 0;">
+                                <h2 style="color: #333; font-size: 20px; border-left: 4px solid #d4af37; padding-left: 10px;">New Order Details</h2>
+                                
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #666; font-weight: 600;">Customer:</td>
+                                        <td style="padding: 8px 0; color: #333;">${billingDetails.firstname} ${billingDetails.lastname}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #666; font-weight: 600;">Contact:</td>
+                                        <td style="padding: 8px 0; color: #333;">${billingDetails.phone} | ${email}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #666; font-weight: 600;">Payment Method:</td>
+                                        <td style="padding: 8px 0;"><span style="background-color: #d4af37; color: #000; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">${paymentMethod.toUpperCase()}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; color: #666; font-weight: 600;">Total Amount:</td>
+                                        <td style="padding: 8px 0; color: #d4af37; font-size: 18px; font-weight: bold;">$${totalPrice}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div style="padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <h3 style="margin-top: 0; color: #333; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Billing Address</h3>
+                                <p style="color: #555; line-height: 1.6; margin: 10px 0;">
+                                    ${billingDetails.streetAddress}<br>
+                                    ${billingDetails.city}, ${billingDetails.state} ${billingDetails.zipCode}<br>
+                                    ${billingDetails.country}
+                                </p>
+                                ${billingDetails.additionalNotes ? `<p style="font-style: italic; color: #888; font-size: 13px;"><strong>Note:</strong> ${billingDetails.additionalNotes}</p>` : ''}
+                            </div>
+                            
+                            <div style="padding: 20px 0;">
+                                <h3 style="color: #333; font-size: 16px;">Order Items</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="background-color: #eee;">
+                                            <th style="padding: 10px; text-align: left; font-size: 14px; color: #333;">Product</th>
+                                            <th style="padding: 10px; text-align: center; font-size: 14px; color: #333;">Qty</th>
+                                            <th style="padding: 10px; text-align: right; font-size: 14px; color: #333;">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${verifiedItems.map(item => `
+                                            <tr style="border-bottom: 1px solid #eee;">
+                                                <td style="padding: 10px; color: #555; font-size: 14px;">${item.title}</td>
+                                                <td style="padding: 10px; text-align: center; color: #555; font-size: 14px;">${item.quantity}</td>
+                                                <td style="padding: 10px; text-align: right; color: #555; font-size: 14px;">$${(item.price * item.quantity).toFixed(2)}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div style="text-align: center; padding-top: 20px; border-top: 1px solid #eee; margin-top: 20px; color: #888; font-size: 12px;">
+                                <p>This is an automated notification from your LiquorLuxx store.</p>
+                                <p>&copy; ${new Date().getFullYear()} LiquorLuxx Inc.</p>
+                            </div>
+                        </div>
                     `
                 };
 

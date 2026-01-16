@@ -14,6 +14,7 @@ function AnalyticsContent() {
     });
     const [chartData, setChartData] = useState([]);
     const [topProducts, setTopProducts] = useState([]);
+    const [recentOrders, setRecentOrders] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -115,6 +116,27 @@ function AnalyticsContent() {
             { name: 'Mon', value: 0 }, { name: 'Tue', value: 0 }, { name: 'Wed', value: 0 },
             { name: 'Thu', value: 0 }, { name: 'Fri', value: 0 }, { name: 'Sat', value: 0 }, { name: 'Sun', value: 0 }
         ]);
+
+        // Recent Orders
+        const flatOrders = [];
+        orders.forEach(orderDoc => {
+            if (orderDoc.orders) {
+                orderDoc.orders.forEach(item => {
+                    flatOrders.push({
+                        id: item._id,
+                        user: orderDoc.user?.name || 'Guest',
+                        email: orderDoc.user?.email || 'N/A',
+                        total: item.totalPrice,
+                        date: item.orderDate || orderDoc.createdAt,
+                        status: item.status || 'Pending',
+                        billing: item.billingDetails,
+                        payment: item.paymentMethod,
+                        items: item.products
+                    });
+                });
+            }
+        });
+        setRecentOrders(flatOrders.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5));
     };
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
@@ -267,6 +289,97 @@ function AnalyticsContent() {
                                     <li className='empty-text'>No sales data yet</li>
                                 )}
                             </ul>
+
+                            <h3 className='dashboard-card-title' style={{ marginTop: '32px' }}>Recent activity</h3>
+                            <ul className='top-products-list' style={{ marginTop: '16px' }}>
+                                <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-gold)' }}></div>
+                                    <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                                        New order received from {recentOrders[0]?.billing?.firstname || 'a customer'}
+                                    </div>
+                                </li>
+                                <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6' }}></div>
+                                    <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                                        Inventory alert: Don Julio 1942 low on stock
+                                    </div>
+                                </li>
+                                <li style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1b8a37' }}></div>
+                                    <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                                        New message on Concierge Chat
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className='dashboard-card' style={{ marginBottom: '32px' }}>
+                        <div className='dashboard-card-header'>
+                            <h3 className='dashboard-card-title'>Recent Orders</h3>
+                            <button className='dashboard-header-btn-secondary' style={{ padding: '8px 16px' }}>View All</button>
+                        </div>
+                        <div className='dashboard-table-container' style={{ overflowX: 'auto' }}>
+                            <table className='dashboard-table'>
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Billing Address</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {recentOrders.length > 0 ? recentOrders.map((order, idx) => (
+                                        <tr key={idx}>
+                                            <td>
+                                                <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                                                    #{order.id?.slice(-8).toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span style={{ fontWeight: '600', color: 'var(--color-text-primary)' }}>{order.billing?.firstname} {order.billing?.lastname}</span>
+                                                    <span style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>{order.email}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)', maxWidth: '200px' }}>
+                                                    {order.billing?.streetAddress}, {order.billing?.city}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span style={{ fontWeight: '600', color: 'var(--color-gold)' }}>
+                                                    {formatter.format(order.total)}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span style={{
+                                                    padding: '4px 10px',
+                                                    borderRadius: '50px',
+                                                    fontSize: '11px',
+                                                    fontWeight: '600',
+                                                    background: order.status === 'Delivered' ? 'rgba(27, 138, 55, 0.1)' : 'rgba(212, 175, 55, 0.1)',
+                                                    color: order.status === 'Delivered' ? '#1b8a37' : '#d4af37'
+                                                }}>
+                                                    {order.status}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>
+                                                    {order.payment?.toUpperCase()}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    )) : (
+                                        <tr>
+                                            <td colSpan="6" className='empty-text'>No recent orders</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </>

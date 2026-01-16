@@ -8,6 +8,8 @@ function OrdersContent() {
     const [orders, setOrders] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -34,12 +36,6 @@ function OrdersContent() {
     };
 
     const processOrders = (apiOrders) => {
-        // Flatten the nested order structure
-        // User -> Orders Array -> Products Array (which essentially is one "cart" checkout usually)
-        // But looking at the schema, 'orders' array in User model seems to store history.
-        // The /api/orders GET returns Order documents.
-        // Order Schema: user (ref), orders: [{ products: [...], totalPrice }]
-
         const flatOrders = [];
 
         apiOrders.forEach(orderDoc => {
@@ -47,45 +43,51 @@ function OrdersContent() {
 
             if (orderDoc.orders && Array.isArray(orderDoc.orders)) {
                 orderDoc.orders.forEach((orderItem, index) => {
-                    // Create a unique ID for this specific order instance
-                    const orderId = `${orderDoc._id.slice(-6)}-${index + 1}`;
+                    const orderId = orderItem._id || `${orderDoc._id.slice(-6)}-${index + 1}`;
 
-                    // Calculate total items
                     const totalItems = orderItem.products ?
                         orderItem.products.reduce((acc, curr) => acc + (curr.quantity || 1), 0) : 0;
 
-                    // Determine logic for status - simulating based on data existence or random for demo if not in DB
-                    // Since schema doesn't seem to have 'status' in the nested object, we'll assume 'completed' for now
-                    // or check if it's recent. 
-                    const status = 'completed';
-
-                    // Format Date
-                    const date = orderDoc.createdAt ? new Date(orderDoc.createdAt).toLocaleDateString('en-US', {
-                        year: 'numeric', month: 'short', day: 'numeric'
-                    }) : 'N/A';
+                    const date = orderItem.orderDate || orderDoc.createdAt;
 
                     flatOrders.push({
-                        uniqueId: orderId,
+                        id: orderId,
+                        rawId: orderDoc._id,
                         customer: user.name,
                         email: user.email,
-                        date: date,
+                        phone: user.phoneNumber || orderItem.billingDetails?.phone || 'N/A',
+                        date: new Date(date).toLocaleDateString('en-US', {
+                            year: 'numeric', month: 'short', day: 'numeric'
+                        }),
                         amount: orderItem.totalPrice,
                         items: totalItems,
-                        status: status,
-                        products: orderItem.products // Keep for details view if needed
+                        status: orderItem.status || 'Pending',
+                        payment: orderItem.paymentMethod || 'N/A',
+                        billing: orderItem.billingDetails,
+                        products: orderItem.products
                     });
                 });
             }
         });
 
-        // Sort by date (newest first) - assuming we essentially want that
-        // Since we don't have exact date for nested items, we rely on parent doc or just reverse
-        setOrders(flatOrders.reverse());
+        setOrders(flatOrders.sort((a, b) => new Date(b.date) - new Date(a.date)));
+    };
+
+    const handleViewDetails = (order) => {
+        setSelectedOrder(order);
+        setIsDrawerOpen(true);
+    };
+
+    const closeDrawer = () => {
+        setIsDrawerOpen(false);
+        setTimeout(() => setSelectedOrder(null), 300);
     };
 
     const getStatusColor = (status) => {
-        switch (status) {
+        switch (status?.toLowerCase()) {
+            case 'delivered':
             case 'completed': return 'dashboard-status active';
+            case 'pending':
             case 'processing': return 'dashboard-status warning';
             case 'cancelled': return 'dashboard-status inactive';
             default: return 'dashboard-status';
@@ -93,8 +95,10 @@ function OrdersContent() {
     };
 
     const getStatusIcon = (status) => {
-        switch (status) {
+        switch (status?.toLowerCase()) {
+            case 'delivered':
             case 'completed': return <FiCheckCircle size={14} />;
+            case 'pending':
             case 'processing': return <FiClock size={14} />;
             case 'cancelled': return <FiXCircle size={14} />;
             default: return <FiAlertCircle size={14} />;
@@ -103,12 +107,13 @@ function OrdersContent() {
 
     const filteredOrders = orders.filter(order =>
         order.customer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        order.uniqueId?.toLowerCase().includes(searchQuery.toLowerCase())
+        order.id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.email?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 8;
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
@@ -131,20 +136,20 @@ function OrdersContent() {
                 <div className='dashboard-header-right'>
                     <button className='dashboard-header-btn dashboard-header-btn-secondary'>
                         <FiDownload />
-                        Export
+                        Export Data
                     </button>
                 </div>
             </div>
 
             <div className='dashboard-card'>
                 <div className='dashboard-card-header'>
-                    <h3 className='dashboard-card-title'>All Orders</h3>
+                    <h3 className='dashboard-card-title'>Recent Transactions</h3>
                     <div className='dashboard-card-actions'>
                         <div className='dashboard-search'>
                             <FiSearch className='dashboard-search-icon' />
                             <input
                                 type='text'
-                                placeholder='Search orders...'
+                                placeholder='Search customer or ID...'
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -159,8 +164,8 @@ function OrdersContent() {
                                 <th>Order ID</th>
                                 <th>Customer</th>
                                 <th>Date</th>
-                                <th>Items</th>
-                                <th>Total Amount</th>
+                                <th>Payment</th>
+                                <th>Total</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -169,22 +174,30 @@ function OrdersContent() {
                             {currentItems.length > 0 ? (
                                 currentItems.map((order, index) => (
                                     <tr key={index}>
-                                        <td data-label="Order ID" style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>#{order.uniqueId}</td>
+                                        <td data-label="Order ID">
+                                            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+                                                #{order.id?.slice(-8).toUpperCase()}
+                                            </span>
+                                        </td>
                                         <td data-label="Customer">
                                             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <span>{order.customer}</span>
+                                                <span style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{order.customer}</span>
                                                 <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{order.email}</span>
                                             </div>
                                         </td>
-                                        <td data-label="Date" style={{ color: 'var(--color-text-muted)' }}>{order.date}</td>
-                                        <td data-label="Items">{order.items} items</td>
-                                        <td data-label="Amount" style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                                        <td data-label="Date" style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>{order.date}</td>
+                                        <td data-label="Payment">
+                                            <span style={{ fontSize: '11px', fontWeight: '800', opacity: 0.7 }}>
+                                                {order.payment?.replace('_', ' ').toUpperCase()}
+                                            </span>
+                                        </td>
+                                        <td data-label="Total" style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
                                             {formatter.format(order.amount)}
                                         </td>
                                         <td data-label="Status">
                                             <span
                                                 className={getStatusColor(order.status)}
-                                                style={order.status === 'processing' ? { background: 'rgba(212, 175, 55, 0.1)', color: 'var(--color-gold)' } : {}}
+                                                style={order.status?.toLowerCase() === 'pending' ? { background: 'rgba(212, 175, 55, 0.1)', color: 'var(--color-gold)' } : {}}
                                             >
                                                 {getStatusIcon(order.status)}
                                                 <span style={{ marginLeft: 6, textTransform: 'capitalize' }}>{order.status}</span>
@@ -192,7 +205,11 @@ function OrdersContent() {
                                         </td>
                                         <td data-label="Actions">
                                             <div className='dashboard-actions'>
-                                                <button className='dashboard-action-btn' title="View Details">
+                                                <button
+                                                    className='dashboard-action-btn'
+                                                    title="View Details"
+                                                    onClick={() => handleViewDetails(order)}
+                                                >
                                                     <FiEye />
                                                 </button>
                                             </div>
@@ -201,8 +218,8 @@ function OrdersContent() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7" style={{ textAlign: 'center', padding: '40px', color: 'var(--color-text-muted)' }}>
-                                        No orders found
+                                    <td colSpan="7" style={{ textAlign: 'center', padding: '60px', color: 'var(--color-text-muted)' }}>
+                                        No matching orders found
                                     </td>
                                 </tr>
                             )}
@@ -211,10 +228,10 @@ function OrdersContent() {
                 </div>
 
                 {/* Pagination */}
-                {filteredOrders.length > 0 && (
+                {filteredOrders.length > itemsPerPage && (
                     <div className='dashboard-pagination'>
                         <span className='dashboard-pagination-info'>
-                            Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredOrders.length)} of {filteredOrders.length} orders
+                            Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredOrders.length)} of {filteredOrders.length}
                         </span>
                         <div className='dashboard-pagination-buttons'>
                             <button
@@ -222,29 +239,17 @@ function OrdersContent() {
                                 onClick={() => paginate(currentPage - 1)}
                                 disabled={currentPage === 1}
                             >
-                                Previous
+                                Prev
                             </button>
-
-                            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                                // Simple pagination logic for now (showing first 5 or logic needs to be smarter for many pages)
-                                let pageNum = i + 1;
-                                if (totalPages > 5 && currentPage > 3) {
-                                    // shift window
-                                    pageNum = currentPage - 2 + i;
-                                    if (pageNum > totalPages) return null;
-                                }
-
-                                return (
-                                    <button
-                                        key={pageNum}
-                                        className={`dashboard-pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
-                                        onClick={() => paginate(pageNum)}
-                                    >
-                                        {pageNum}
-                                    </button>
-                                );
-                            }).filter(Boolean)}
-
+                            {Array.from({ length: totalPages }, (_, i) => (
+                                <button
+                                    key={i + 1}
+                                    className={`dashboard-pagination-btn ${currentPage === i + 1 ? 'active' : ''}`}
+                                    onClick={() => paginate(i + 1)}
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
                             <button
                                 className='dashboard-pagination-btn'
                                 onClick={() => paginate(currentPage + 1)}
@@ -255,6 +260,132 @@ function OrdersContent() {
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* Order Details Sliding Drawer */}
+            <div
+                className={`order-drawer-overlay ${isDrawerOpen ? 'open' : ''}`}
+                onClick={closeDrawer}
+            />
+            <div className={`order-drawer ${isDrawerOpen ? 'open' : ''}`}>
+                <div className='order-drawer-header'>
+                    <h2>Order Details</h2>
+                    <button className='order-drawer-close' onClick={closeDrawer}>
+                        <FiXCircle />
+                    </button>
+                </div>
+
+                {selectedOrder && (
+                    <div className='order-drawer-body'>
+                        {/* Status Summary */}
+                        <div className='order-detail-section' style={{ textAlign: 'center' }}>
+                            <div style={{ marginBottom: '8px' }}>
+                                <span className={getStatusColor(selectedOrder.status)} style={{ padding: '8px 20px', borderRadius: '50px' }}>
+                                    {getStatusIcon(selectedOrder.status)}
+                                    <span style={{ marginLeft: 8, fontWeight: 700 }}>{selectedOrder.status.toUpperCase()}</span>
+                                </span>
+                            </div>
+                            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Order ID: #{selectedOrder.id?.toUpperCase()}</p>
+                        </div>
+
+                        {/* Customer & Billing */}
+                        <div className='order-detail-section'>
+                            <span className='order-detail-label'>Customer Information</span>
+                            <div className='order-info-card'>
+                                <div className='order-info-row'>
+                                    <span>Name</span>
+                                    <span className='order-info-value'>{selectedOrder.customer}</span>
+                                </div>
+                                <div className='order-info-row'>
+                                    <span>Email</span>
+                                    <span className='order-info-value'>{selectedOrder.email}</span>
+                                </div>
+                                <div className='order-info-row'>
+                                    <span>Phone</span>
+                                    <span className='order-info-value'>{selectedOrder.phone}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='order-detail-section'>
+                            <span className='order-detail-label'>Shipping / Billing Address</span>
+                            <div className='order-info-card' style={{ borderStyle: 'dashed' }}>
+                                {selectedOrder.billing ? (
+                                    <>
+                                        <div style={{ color: 'var(--color-text-primary)', fontWeight: 600, marginBottom: '4px' }}>
+                                            {selectedOrder.billing.firstname} {selectedOrder.billing.lastname}
+                                        </div>
+                                        <div style={{ color: 'var(--color-text-secondary)', fontSize: '14px', lineHeight: '1.6' }}>
+                                            {selectedOrder.billing.streetAddress}<br />
+                                            {selectedOrder.billing.city}, {selectedOrder.billing.state} {selectedOrder.billing.zipCode}<br />
+                                            {selectedOrder.billing.country}
+                                        </div>
+                                        {selectedOrder.billing.additionalNotes && (
+                                            <div style={{ marginTop: '12px', padding: '8px', background: 'rgba(212, 175, 55, 0.05)', borderRadius: '6px', fontSize: '12px', color: 'var(--color-gold)' }}>
+                                                <strong>Notes:</strong> {selectedOrder.billing.additionalNotes}
+                                            </div>
+                                        )}
+                                    </>
+                                ) : (
+                                    <p style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>No billing details provided.</p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Payment Method */}
+                        <div className='order-detail-section'>
+                            <span className='order-detail-label'>Payment Details</span>
+                            <div className='order-info-card'>
+                                <div className='order-info-row'>
+                                    <span>Method</span>
+                                    <span className='order-info-value' style={{ color: 'var(--color-gold)' }}>
+                                        {selectedOrder.payment?.replace('_', ' ').toUpperCase()}
+                                    </span>
+                                </div>
+                                <div className='order-info-row'>
+                                    <span>Transaction Date</span>
+                                    <span className='order-info-value'>{selectedOrder.date}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Products */}
+                        <div className='order-detail-section'>
+                            <span className='order-detail-label'>Order Items ({selectedOrder.products?.length || 0})</span>
+                            <div className='order-products-list'>
+                                {selectedOrder.products?.map((prod, idx) => (
+                                    <div key={idx} className='order-product-item'>
+                                        <img
+                                            src={prod.productId?.img || 'https://via.placeholder.com/60'}
+                                            alt=""
+                                            className='order-product-img'
+                                        />
+                                        <div className='order-product-details'>
+                                            <h4 className='order-product-title'>{prod.productId?.title || 'Unknown Product'}</h4>
+                                            <div className='order-product-meta'>
+                                                Qty: {prod.quantity} &times; {formatter.format(prod.price)}
+                                            </div>
+                                        </div>
+                                        <div className='order-product-price'>
+                                            {formatter.format(prod.price * prod.quantity)}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className='order-drawer-footer'>
+                    <div className='order-total-display'>
+                        <span className='order-total-label'>Grand Total</span>
+                        <span className='order-total-value'>{selectedOrder ? formatter.format(selectedOrder.amount) : '$0.00'}</span>
+                    </div>
+                    <div className='order-action-btns'>
+                        <button className='order-btn-approve'>Complete Order</button>
+                        <button className='order-btn-cancel'>Cancel Order</button>
+                    </div>
+                </div>
             </div>
         </DashboardLayout>
     );
