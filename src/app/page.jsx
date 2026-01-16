@@ -3,6 +3,10 @@ import Hero from "./components/Hero/Hero";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiArrowRight, FiAward, FiTruck, FiShield, FiGift } from "react-icons/fi";
+import { FaApple } from "react-icons/fa";
+import { SiZelle, SiCashapp } from "react-icons/si";
+import { BiTransfer } from "react-icons/bi";
+import { PiBank } from "react-icons/pi";
 import Link from "next/link";
 
 export default function Home() {
@@ -169,6 +173,35 @@ export default function Home() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Payment Methods Preview */}
+      <section className="payment-preview-section">
+        <div className="payment-preview-content">
+          <span className="section-label">Secure Checkout</span>
+          <div className="payment-icons-row">
+            <div className="payment-item">
+              <FaApple className="payment-icon-lg" />
+              <span>Apple Pay</span>
+            </div>
+            <div className="payment-item">
+              <SiZelle className="payment-icon-lg" />
+              <span>Zelle</span>
+            </div>
+            <div className="payment-item">
+              <SiCashapp className="payment-icon-lg" />
+              <span>Cash App</span>
+            </div>
+            <div className="payment-item">
+              <BiTransfer className="payment-icon-lg" />
+              <span>E-Transfer</span>
+            </div>
+            <div className="payment-item">
+              <PiBank className="payment-icon-lg" />
+              <span>Chime</span>
+            </div>
+          </div>
         </div>
       </section>
 

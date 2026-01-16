@@ -2,6 +2,7 @@ import Order from "@/models/Order";
 import User from "@/models/User";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 import Product from "@/models/Product";
 
@@ -10,12 +11,17 @@ import Product from "@/models/Product";
 export const POST = async (req, res) => {
     await connectDB();
     try {
-        const { email, cartItems } = await req.json();
+        const { email, cartItems, billingDetails, paymentMethod } = await req.json();
 
         const user = await User.findOne({ email });
         if (!user) {
             return NextResponse.json({ success: false, message: 'User mot found please sign up' }, { status: 404 });
         };
+
+        // Update user phone number if provided
+        if (billingDetails?.phone) {
+            await User.findOneAndUpdate({ email }, { phoneNumber: billingDetails.phone });
+        }
 
         async function verifyProductId(product_id) {
             return await Product.findById(product_id);
@@ -81,6 +87,7 @@ export const POST = async (req, res) => {
                 orders: [{
                     products: verifiedItems,
                     totalPrice: totalPrice,
+                    paymentMethod: paymentMethod
                 }],
             })
             const userId = user._doc._id.toHexString();
@@ -91,7 +98,7 @@ export const POST = async (req, res) => {
             if (!existingOrder) {
                 await newOrder.save()
             } else {
-                await Order.updateOne({ user: userId }, { $push: { orders: { products: verifiedItems, totalPrice } } })
+                await Order.updateOne({ user: userId }, { $push: { orders: { products: verifiedItems, totalPrice, paymentMethod } } })
             }
             //  updating user orders
             const verifiedOrdersInUser = await User.find({ _id: userId, 'order.productId': { $all: orderIds } })
@@ -106,6 +113,43 @@ export const POST = async (req, res) => {
             } else {
                 await User.findByIdAndUpdate(userId, { $push: { orders: verifiedItems } })
             }
+
+            // Send email notification
+            try {
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS
+                    }
+                });
+
+                const mailOptions = {
+                    from: process.env.EMAIL_USER,
+                    to: process.env.OWNER_EMAIL || 'admin@liquorluxx.com', // Replace with actual owner email or env var
+                    subject: `New Order - ${paymentMethod} - ${billingDetails.firstname} ${billingDetails.lastname}`,
+                    html: `
+                        <h2>New Order Received</h2>
+                        <p><strong>Customer:</strong> ${billingDetails.firstname} ${billingDetails.lastname}</p>
+                        <p><strong>Phone:</strong> ${billingDetails.phone}</p>
+                        <p><strong>Email:</strong> ${email}</p>
+                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                        <p><strong>Total Amount:</strong> $${totalPrice}</p>
+                        <hr/>
+                        <h3>Order Items:</h3>
+                        <ul>
+                            ${verifiedItems.map(item => `<li>${item.title} (x${item.quantity})</li>`).join('')}
+                        </ul>
+                        <p>Please contact the customer to finalize the payment.</p>
+                    `
+                };
+
+                await transporter.sendMail(mailOptions);
+            } catch (emailError) {
+                console.error("Failed to send email notification:", emailError);
+                // Continue execution, don't fail the order just because email failed
+            }
+
             return NextResponse.json({ success: true, message: 'Order created successfully' }, { status: 200 });
         }
 

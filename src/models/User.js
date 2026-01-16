@@ -14,6 +14,10 @@ const userSchema = new Schema({
         type: String,
         required: false,
     },
+    phoneNumber: {
+        type: String,
+        required: false
+    },
     provider: {
         type: String,
         required: true,

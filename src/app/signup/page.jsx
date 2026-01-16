@@ -17,6 +17,7 @@ export default function Page() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [phone, setPhone] = useState('')
     const [loader, setLoader] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -53,7 +54,7 @@ export default function Page() {
             try {
                 const res = await fetch('/api/signup', {
                     method: 'POST',
-                    body: JSON.stringify({ name: username, email: email.toLowerCase().trim(), password }),
+                    body: JSON.stringify({ name: username, email: email.toLowerCase().trim(), password, phoneNumber: phone }),
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -153,6 +154,21 @@ export default function Page() {
                                         className='form-input'
                                         onChange={e => setEmail(e.target.value)}
                                         required
+                                    />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label htmlFor="phone" className='form-label'>
+                                        Phone Number (Optional)
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        value={phone}
+                                        name='phone'
+                                        placeholder='Enter your phone number'
+                                        className='form-input'
+                                        onChange={e => setPhone(e.target.value)}
                                     />
                                 </div>
 

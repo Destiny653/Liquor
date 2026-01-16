@@ -1,0 +1,134 @@
+/* Age Verification Modal */
+.age-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.age-modal-content {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-gold);
+    padding: 48px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+    position: relative;
+    overflow: hidden;
+    animation: scaleIn 0.5s ease;
+}
+
+.age-modal-logo {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    color: var(--color-text-primary);
+    margin-bottom: 24px;
+    display: block;
+}
+
+.age-modal-logo span {
+    color: var(--color-gold);
+}
+
+.age-modal-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.age-modal-message {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.age-modal-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.age-btn {
+    padding: 12px 32px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.age-btn-confirm {
+    background: var(--color-gold);
+    color: var(--color-bg-primary);
+    border: 2px solid var(--color-gold);
+}
+
+.age-btn-confirm:hover {
+    background: transparent;
+    color: var(--color-gold);
+}
+
+.age-btn-deny {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 2px solid var(--color-border);
+}
+
+.age-btn-deny:hover {
+    border-color: var(--color-text-primary);
+    color: var(--color-text-primary);
+}
+
+.age-modal-blocked {
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-top: 20px;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}

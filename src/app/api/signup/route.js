@@ -8,7 +8,7 @@ export const POST = async (req, res) => {
     if (req.method !== 'POST') {
         return NextResponse.json({ success: false, message: `Method ${req.method} not allowed` }, { status: 405 });
     }
-    const { name, email, password } = await req.json();
+    const { name, email, password, phoneNumber } = await req.json();
     const normalizedEmail = email.toLowerCase();
 
     try {
@@ -21,6 +21,7 @@ export const POST = async (req, res) => {
             name: name,
             email: normalizedEmail,
             password: hashedpassword,
+            phoneNumber: phoneNumber,
             provider: 'credentials'
         })
         await newUser.save();

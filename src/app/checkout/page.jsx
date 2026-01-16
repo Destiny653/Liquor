@@ -8,8 +8,11 @@ import { useRouter } from 'next/navigation';
 import { Notyf } from 'notyf';
 import axios from 'axios';
 import { makePayment } from '@/utils/helper';
-import { FiCreditCard, FiSmartphone, FiLock, FiArrowRight, FiCheck } from 'react-icons/fi';
-import { FaBitcoin, FaPaypal } from 'react-icons/fa';
+import { FiCreditCard, FiSmartphone, FiLock, FiArrowRight, FiCheck, FiX } from 'react-icons/fi';
+import { FaApple } from "react-icons/fa";
+import { SiZelle, SiCashapp } from "react-icons/si";
+import { BiTransfer } from "react-icons/bi";
+import { PiBank } from "react-icons/pi";
 
 export default function Checkout() {
     const [mounted, setMounted] = useState(false);
@@ -27,8 +30,7 @@ export default function Checkout() {
     const [additionalNotes, setAdditionalNotes] = useState('');
     const [loader, setLoader] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('');
-    const [paymentUrl, setPaymentUrl] = useState(null);
-    const [payUrl, setPayUrl] = useState(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const navigation = useRouter();
     const { data: session } = useSession();
@@ -45,16 +47,15 @@ export default function Checkout() {
     }, []);
 
     const paymentMethods = [
-        { id: 'credit', name: 'Credit Card', desc: 'Visa, Mastercard, Amex', icon: FiCreditCard },
-        { id: 'paypal', name: 'PayPal', desc: 'Fast & secure checkout', icon: FaPaypal },
-        { id: 'crypto', name: 'Cryptocurrency', desc: 'Bitcoin, Ethereum, USDT', icon: FaBitcoin },
-        { id: 'mobile', name: 'Mobile Payment', desc: 'Apple Pay, Google Pay', icon: FiSmartphone },
+        { id: 'apple_pay', name: 'Apple Pay', desc: 'Secure payment via Apple Pay', icon: FaApple },
+        { id: 'zelle', name: 'Zelle', desc: 'Pay instantly with Zelle', icon: SiZelle },
+        { id: 'cash_app', name: 'Cash App', desc: 'Send cash via Cash App', icon: SiCashapp },
+        { id: 'etransfer', name: 'E-Transfer', desc: 'Direct bank transfer', icon: BiTransfer },
+        { id: 'chime', name: 'Chime', desc: 'Mobile banking', icon: PiBank },
     ];
 
     const handlePaymentMethodChange = (method) => {
         setPaymentMethod(method);
-        setPaymentUrl(null);
-        setPayUrl(null);
     };
 
     const handleSubmit = async (e) => {
@@ -82,7 +83,8 @@ export default function Checkout() {
                 billingDetails: {
                     firstname, lastname, useremail, country,
                     streetAddress, city, state, zipCode, phone, additionalNotes
-                }
+                },
+                paymentMethod
             };
 
             const res = await fetch('/api/orders', {
@@ -97,8 +99,9 @@ export default function Checkout() {
                 notyf.error(data.message);
                 navigation.push('/signup');
             } else if (data.success) {
-                notyf.success(data.message);
-                handlePaymentProcess();
+                // notyf.success(data.message);
+                // Show modal instead
+                setShowSuccessModal(true);
             } else {
                 notyf.error('Error placing order: ' + res.statusText);
             }
@@ -109,64 +112,7 @@ export default function Checkout() {
         }
     };
 
-    const handlePaymentProcess = async () => {
-        switch (paymentMethod) {
-            case 'crypto':
-                await handleCryptoPayment();
-                break;
-            case 'mobile':
-                await handleMobilePayment();
-                break;
-            case 'paypal':
-                await handlePaypalPayment();
-                break;
-            case 'credit':
-                await handleCreditCardPayment();
-                break;
-            default:
-                break;
-        }
-    };
 
-    const handleCryptoPayment = async () => {
-        const config = {
-            headers: { "X-CC-Api-Key": process.env.NEXT_PUBLIC_COINBASE_API_KEY }
-        };
-
-        try {
-            const response = await axios.post(
-                "https://api.commerce.coinbase.com/charges",
-                {
-                    local_price: { amount: grandTotal, currency: 'USD' },
-                    description: "LiquorLuxx Order Payment",
-                    pricing_type: "fixed_price",
-                },
-                config
-            );
-            setPaymentUrl(response.data.data.hosted_url);
-        } catch (error) {
-            const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
-            notyf.error('Error processing crypto payment');
-        }
-    };
-
-    const handleMobilePayment = async () => {
-        try {
-            const paymentData = await makePayment(cartItems, grandTotal);
-            setPayUrl(paymentData);
-        } catch (error) {
-            const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
-            notyf.error('Error processing mobile payment');
-        }
-    };
-
-    const handlePaypalPayment = async () => {
-        // PayPal implementation
-    };
-
-    const handleCreditCardPayment = async () => {
-        // Credit card implementation
-    };
 
     if (!mounted) return null;
 
@@ -471,30 +417,7 @@ export default function Checkout() {
                             <FiArrowRight />
                         </button>
 
-                        {/* Validation Links */}
-                        {paymentUrl && (
-                            <a
-                                href={paymentUrl}
-                                className='checkout-validate-btn'
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
-                                Complete Crypto Payment
-                                <FiArrowRight />
-                            </a>
-                        )}
 
-                        {payUrl && (
-                            <a
-                                href={payUrl}
-                                className='checkout-validate-btn'
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
-                                Complete Mobile Payment
-                                <FiArrowRight />
-                            </a>
-                        )}
 
                         {/* Security */}
                         <div className='checkout-security'>
@@ -503,6 +426,37 @@ export default function Checkout() {
                         </div>
                     </div>
                 </div>
+                {/* Success Modal */}
+                {showSuccessModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+                        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative animate-fadeIn text-center">
+                            <button
+                                onClick={() => setShowSuccessModal(false)}
+                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                            >
+                                <FiX size={24} />
+                            </button>
+
+                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <FiCheck className="text-green-600 text-3xl" />
+                            </div>
+
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Order Received!</h2>
+                            <p className="text-gray-600 mb-6">
+                                Thank you for your order. We have received your request and payment preference.
+                                <br /><br />
+                                <strong>We will contact you shortly</strong> via the provided phone number or email to finalize the payment and shipping.
+                            </p>
+
+                            <Link
+                                href="/"
+                                className="inline-block w-full bg-black text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-800 transition-colors"
+                            >
+                                Return to Home
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -41,6 +41,10 @@ const orderSchema = new Schema({
             type: Number,
             required: true
         },
+        paymentMethod: {
+            type: String,
+            required: true
+        },
         orderDate: {
             type: Date,
             default: Date.now

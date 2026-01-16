@@ -6,12 +6,15 @@ import CartSlider from './CartSlider/CartSlider';
 import MsgBtn from './MsgBtn/MsgBtn';
 import Navbar from './Navbar/Navbar';
 
+import AgeVerificationModal from './AgeVerification/AgeVerificationModal';
+
 export default function LayoutWrapper({ children }) {
     const pathname = usePathname();
     const isDashboard = pathname?.startsWith('/dashboard');
 
     return (
         <>
+            {!isDashboard && <AgeVerificationModal />}
             {!isDashboard && <Navbar />}
             {children}
             {!isDashboard && <CartSlider />}
