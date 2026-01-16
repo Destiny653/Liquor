@@ -11,8 +11,12 @@ import {
     PiMedal,
     PiTruck,
     PiShieldCheck,
-    PiUsers
+    PiUsers,
+    PiBank
 } from "react-icons/pi";
+import { FaApple } from "react-icons/fa";
+import { SiZelle, SiCashapp } from "react-icons/si";
+import { BiTransfer } from "react-icons/bi";
 import Link from 'next/link';
 
 export default function Footer() {
@@ -170,6 +174,13 @@ export default function Footer() {
                         <Link href='/policies/shipping-policy'>Shipping Policy</Link>
                         <span className='divider'>|</span>
                         <Link href='/policies/refund-policy'>Refund Policy</Link>
+                    </div>
+                    <div className="payment-methods">
+                        <FaApple className="payment-icon" title="Apple Pay" />
+                        <SiZelle className="payment-icon" title="Zelle" />
+                        <SiCashapp className="payment-icon" title="Cash App" />
+                        <BiTransfer className="payment-icon" title="E-Transfer" />
+                        <PiBank className="payment-icon" title="Chime" />
                     </div>
                     <p className='age-disclaimer'>
                         You must be 21 years or older to purchase from this site.
