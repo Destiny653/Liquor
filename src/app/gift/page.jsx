@@ -1,14 +1,15 @@
-'use client';
-import React, { useState, useEffect, useMemo, useContext, Suspense } from 'react';
-import './gift.css';
-import { FiFilter, FiSearch, FiGift, FiStar, FiPackage, FiShoppingCart } from 'react-icons/fi';
-import { CartContext } from '../../../context/CartContext';
-import { SkeletonArr2 } from '../components/Skeleton/Skeleton';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+// Fetcher function
+const fetchGiftsData = async () => {
+    const res = await fetch('/api/products?model=gifts&limit=100');
+    if (!res.ok) throw new Error('Failed to fetch gifts');
+    const data = await res.json();
+    return data.products || [];
+};
+
 function GiftContent() {
-    const [gifts, setGifts] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedPriceRange, setSelectedPriceRange] = useState([0, 5000]);
     const [selectedOccasions, setSelectedOccasions] = useState([]);
@@ -16,15 +17,21 @@ function GiftContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const formatter = new Intl.NumberFormat('en-US', {
+    // Query for gifts
+    const { data: gifts = [], isLoading: loading } = useQuery({
+        queryKey: ['gifts'],
+        queryFn: fetchGiftsData,
+        staleTime: 5 * 60 * 1000,
+    });
+
+    const formatter = useMemo(() => new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-    });
+    }), []);
 
     useEffect(() => {
         const occParam = searchParams.get('occasion');
         if (occParam) {
-            // Map slug to proper case
             const occasionMap = {
                 'birthday': 'Birthday',
                 'anniversary': 'Anniversary',
@@ -38,24 +45,6 @@ function GiftContent() {
         }
     }, [searchParams]);
 
-    useEffect(() => {
-        fetchGifts();
-    }, []);
-
-    const fetchGifts = async () => {
-        try {
-            const res = await fetch('/api/products?model=gifts&limit=100');
-            if (res.ok) {
-                const data = await res.json();
-                setGifts(data.products || []);
-            }
-        } catch (error) {
-            console.error('Error fetching gifts:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const handleOccasionChange = (occ) => {
         setSelectedOccasions(prev =>
             prev.includes(occ) ? prev.filter(o => o !== occ) : [...prev, occ]
@@ -64,7 +53,7 @@ function GiftContent() {
 
     const filteredGifts = useMemo(() => {
         return gifts.filter(gift => {
-            const matchesSearch = gift.title.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = gift.title?.toLowerCase().includes(searchQuery.toLowerCase());
             const matchesPrice = gift.price >= selectedPriceRange[0] && gift.price <= selectedPriceRange[1];
             const matchesOccasion = selectedOccasions.length === 0 || selectedOccasions.includes(gift.occasion);
             return matchesSearch && matchesPrice && matchesOccasion;

@@ -1,13 +1,30 @@
-'use client';
-import React, { useContext, useEffect, useState, useCallback, useMemo, useRef, Suspense } from 'react';
-import "./shop.css";
-import { useRouter, useSearchParams } from 'next/navigation';
-import { SearchContext } from '../../../context/SearchContext';
-import { CartContext } from '../../../context/CartContext';
-import { FaStar } from 'react-icons/fa';
-import { FiX, FiFilter } from 'react-icons/fi';
-import { SkeletonArr, SkeletonArr2 } from '../components/Skeleton/Skeleton';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Qty from '../components/Quantity/quantity';
+
+// Fetcher functions
+const fetchChoices = async () => {
+  const res = await fetch('/api/product-models');
+  if (!res.ok) throw new Error('Failed to fetch brands');
+  const brandsData = await res.json();
+  const brandValues = brandsData.map(b => b.value);
+  return [...brandValues, 'All Brands'];
+};
+
+const fetchShopProducts = async (options, searchInp) => {
+  const url = options === 'All Brands'
+    ? '/api/products?limit=100'
+    : `/api/products?model=${options}&limit=100`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch products');
+  const result = await res.json();
+  const products = result.products || result;
+
+  if (!searchInp) return products;
+  return products.filter(product =>
+    product.title?.toLowerCase().includes(searchInp.toLowerCase())
+  );
+};
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -144,48 +161,45 @@ function ShopContent() {
   const navigation = useRouter();
   const searchParams = useSearchParams();
 
-  const [data, setData] = useState([]);
+  const queryClient = useQueryClient();
   const [filteredData, setFilteredData] = useState(null);
   const [options, setOptions] = useState('All Brands');
-  const [loader, setLoader] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [choice, setChoice] = useState([]);
+  const [debouncedSearch, setDebouncedSearch] = useState(searchInp);
 
   const itemsPerPage = 12;
   const formatter = useMemo(() => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }), []);
 
-  // Fetch dynamic brands
+  // Debounce search input
   useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const res = await fetch('/api/product-models');
-        if (res.ok) {
-          const brandsData = await res.json();
-          // Map to just values and add "All Brands"
-          const brandValues = brandsData.map(b => b.value);
-          setChoice([...brandValues, 'All Brands']);
-        }
-      } catch (error) {
-        console.error('Error fetching brands:', error);
-      }
-    };
+    const timer = setTimeout(() => setDebouncedSearch(searchInp), 300);
+    return () => clearTimeout(timer);
+  }, [searchInp]);
 
-    fetchBrands();
+  // Queries
+  const { data: choice = [] } = useQuery({
+    queryKey: ['choices'],
+    queryFn: fetchChoices,
+    staleTime: 5 * 60 * 1000,
+  });
 
-    // Listen for brand updates from dashboard
+  const { data: data = [], isLoading: loader } = useQuery({
+    queryKey: ['shopProducts', options, debouncedSearch],
+    queryFn: () => fetchShopProducts(options, debouncedSearch),
+    staleTime: 30 * 1000,
+  });
+
+  // Handle brand updates from dashboard
+  useEffect(() => {
     const handleBrandUpdate = () => {
-      fetchBrands();
+      queryClient.invalidateQueries({ queryKey: ['choices'] });
+      queryClient.invalidateQueries({ queryKey: ['shopProducts'] });
     };
-
     window.addEventListener('brandDataUpdated', handleBrandUpdate);
+    return () => window.removeEventListener('brandDataUpdated', handleBrandUpdate);
+  }, [queryClient]);
 
-    return () => {
-      window.removeEventListener('brandDataUpdated', handleBrandUpdate);
-    };
-  }, []);
-
-
-  // Read brand from URL params on mount and when URL changes
+  // Read brand from URL params
   useEffect(() => {
     const brandParam = searchParams.get('brand');
     if (brandParam && choice.includes(brandParam)) {
@@ -193,14 +207,6 @@ function ShopContent() {
       setCurrentPage(1);
     }
   }, [searchParams, choice]);
-
-  const getApiUrl = useCallback((selectedOption) => {
-    if (selectedOption === 'All Brands') {
-      return '/api/products?limit=100';
-    }
-    return `/api/products?model=${selectedOption}&limit=100`;
-  }, []);
-
 
   const handleFilterChange = useCallback((min, max) => {
     if (!data || data.length === 0) return;
@@ -212,54 +218,10 @@ function ShopContent() {
     setCurrentPage(1);
   }, [data]);
 
-  const debouncedSearch = useCallback((searchTerm, currentData) => {
-    if (!searchTerm) return currentData;
-    return currentData.filter(product =>
-      product.title?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, []);
-
-  // Main data fetching effect
+  // Reset filtered data when main data changes
   useEffect(() => {
-    let isSubscribed = true;
-
-    const fetchData = async () => {
-      setLoader(true);
-      try {
-        const apiUrl = getApiUrl(options);
-        const res = await fetch(apiUrl);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const result = await res.json();
-
-        // Handle paginated response format
-        const products = result.products || result;
-
-        if (isSubscribed) {
-          const searchFiltered = debouncedSearch(searchInp, products);
-          setData(searchFiltered);
-          setFilteredData(null);
-        }
-      } catch (error) {
-        if (isSubscribed) {
-          setData([]);
-          setFilteredData(null);
-        }
-      } finally {
-        if (isSubscribed) {
-          setLoader(false);
-        }
-      }
-    };
-
-    fetchData();
-
-    const timeoutId = setTimeout(fetchData, 300);
-
-    return () => {
-      isSubscribed = false;
-      clearTimeout(timeoutId);
-    };
-  }, [searchInp, options, getApiUrl, debouncedSearch]);
+    setFilteredData(null);
+  }, [data]);
 
 
   const getTotalPages = useMemo(() => {

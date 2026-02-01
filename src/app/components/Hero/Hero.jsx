@@ -1,24 +1,28 @@
-'use client';
-import React, { useContext, useEffect, useState } from 'react';
-import "./hero.css";
-import { FaStar } from 'react-icons/fa';
-import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { SearchContext } from '../../../../context/SearchContext';
-import { useRouter } from 'next/navigation';
-import { CartContext } from '../../../../context/CartContext';
+import { useQuery } from '@tanstack/react-query';
 import SkeletonR, { SkeletonArr } from '../Skeleton/Skeleton';
 import { Notyf } from 'notyf';
 import Qty from '../Quantity/quantity';
 
+// Fetcher function
+const fetchHeroProducts = async (limit = 10) => {
+    const res = await fetch(`/api/products?limit=${limit}`);
+    if (!res.ok) throw new Error('Failed to fetch hero products');
+    const jsonData = await res.json();
+    return jsonData.products || [];
+};
+
 export default function Hero() {
-    const [data, setData] = useState(null);
     const { handlePro } = useContext(SearchContext);
     const { handleAddToCart } = useContext(CartContext);
     const navigation = useRouter();
-    const [loader, setLoader] = useState(true);
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+    // Query for hero products
+    const { data, isLoading: loader, error } = useQuery({
+        queryKey: ['heroProducts'],
+        queryFn: () => fetchHeroProducts(10),
+        staleTime: 5 * 60 * 1000,
+    });
 
     useEffect(() => {
         AOS.init({
@@ -27,30 +31,14 @@ export default function Hero() {
             easing: 'ease-out-cubic'
         });
 
-        const notyf = new Notyf({
-            duration: 4000,
-            position: { x: 'right', y: 'top' }
-        });
-
-        const getData = async () => {
-            setLoader(true);
-            try {
-                const res = await fetch(`/api/products?limit=10`);
-                if (!res.ok) {
-                    notyf.error('Network error, please refresh your browser.');
-                    setLoader(false);
-                    return;
-                }
-                const jsonData = await res.json();
-                setData(jsonData.products || []);
-                setLoader(false);
-            } catch (error) {
-                console.error(error);
-                setLoader(false);
-            }
-        };
-        getData();
-    }, []);
+        if (error) {
+            const notyf = new Notyf({
+                duration: 4000,
+                position: { x: 'right', y: 'top' }
+            });
+            notyf.error('Network error, please refresh your browser.');
+        }
+    }, [error]);
 
     const handleProductClick = (item) => {
         handlePro(item);

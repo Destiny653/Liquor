@@ -5,68 +5,79 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchContext } from '../../../../context/SearchContext';
 import { CartContext } from '../../../../context/CartContext';
-import { useSession, signOut } from 'next-auth/react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Display from '../SearchDisplay/Display';
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiChevronDown, FiLogOut } from 'react-icons/fi';
+
+// Fetcher functions
+const fetchBrands = async () => {
+    const res = await fetch('/api/product-models');
+    if (!res.ok) throw new Error('Failed to fetch brands');
+    const data = await res.json();
+    return data.map(brand => ({
+        name: brand.label,
+        slug: brand.value,
+        description: brand.description || 'Premium selection',
+        image: brand.image || 'https://images.unsplash.com/photo-1569158062037-d86260ef3fa9?q=80&w=2000&auto=format&fit=crop'
+    }));
+};
+
+const fetchProducts = async (limit = 12) => {
+    const res = await fetch(`/api/products?limit=${limit}`);
+    if (!res.ok) throw new Error('Failed to fetch products');
+    const data = await res.json();
+    return data.products || [];
+};
+
+const fetchGifts = async (limit = 12) => {
+    const res = await fetch(`/api/products?occasion=Gift&limit=${limit}`);
+    if (!res.ok) throw new Error('Failed to fetch gifts');
+    const data = await res.json();
+    return data.products || [];
+};
 
 export default function Navbar() {
     const { setSearchVal } = useContext(SearchContext);
     const { cartItems } = useContext(CartContext);
+
+    const queryClient = useQueryClient();
 
     // Calculate total cart items
     const totalCartItems = cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0;
     const { data: session, status } = useSession();
     const navigation = useRouter();
 
-    // Brand and Mega Menu data
-    const [brands, setBrands] = useState([]);
-    const [megaGifts, setMegaGifts] = useState([]);
-    const [megaProducts, setMegaProducts] = useState([]);
-    const [loadingMega, setLoadingMega] = useState(false);
+    // TanStack Queries
+    const { data: brands = [] } = useQuery({
+        queryKey: ['brands'],
+        queryFn: fetchBrands,
+        staleTime: 5 * 60 * 1000,
+    });
 
+    const { data: megaProducts = [], isLoading: loadingProducts } = useQuery({
+        queryKey: ['megaProducts'],
+        queryFn: () => fetchProducts(12),
+        staleTime: 5 * 60 * 1000,
+    });
+
+    const { data: megaGifts = [], isLoading: loadingGifts } = useQuery({
+        queryKey: ['megaGifts'],
+        queryFn: () => fetchGifts(12),
+        staleTime: 5 * 60 * 1000,
+    });
+
+    const loadingMega = loadingProducts || loadingGifts;
 
     useEffect(() => {
-        const fetchNavbarData = async () => {
-            setLoadingMega(true);
-            try {
-                // Fetch Brands
-                const brandsRes = await fetch('/api/product-models');
-                if (brandsRes.ok) {
-                    const data = await brandsRes.json();
-                    setBrands(data.map(brand => ({
-                        name: brand.label,
-                        slug: brand.value,
-                        description: brand.description || 'Premium selection',
-                        image: brand.image || 'https://images.unsplash.com/photo-1569158062037-d86260ef3fa9?q=80&w=2000&auto=format&fit=crop'
-                    })));
-                }
-
-                // Fetch Mega Menu Products (Top 12)
-                const productsRes = await fetch('/api/products?limit=12');
-                if (productsRes.ok) {
-                    const data = await productsRes.json();
-                    setMegaProducts(data.products || []);
-                }
-
-                // Fetch Mega Menu Gifts (Top 12)
-                const giftsRes = await fetch('/api/products?occasion=Gift&limit=12');
-                if (giftsRes.ok) {
-                    const data = await giftsRes.json();
-                    setMegaGifts(data.products || []);
-                }
-            } catch (error) {
-                console.error('Error fetching navbar data:', error);
-            } finally {
-                setLoadingMega(false);
-            }
+        const handleBrandUpdate = () => {
+            queryClient.invalidateQueries({ queryKey: ['brands'] });
+            queryClient.invalidateQueries({ queryKey: ['megaProducts'] });
+            queryClient.invalidateQueries({ queryKey: ['megaGifts'] });
         };
 
-        fetchNavbarData();
-
-        const handleBrandUpdate = () => fetchNavbarData();
         window.addEventListener('brandDataUpdated', handleBrandUpdate);
         return () => window.removeEventListener('brandDataUpdated', handleBrandUpdate);
-    }, []);
+    }, [queryClient]);
 
 
     const truncateText = (text, maxLength = 100) => {
@@ -112,29 +123,30 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    // Search functionality
-    const fetchFromAPIs = async (title) => {
-        if (!title) return [];
-        try {
+    // Search with TanStack Query
+    const { data: searchResults } = useQuery({
+        queryKey: ['search', query],
+        queryFn: async () => {
+            if (!query.trim()) return [];
             const res = await fetch(`/api/products?limit=20`);
-            if (res.ok) {
-                const data = await res.json();
-                const products = data.products || [];
-                return products.filter(product =>
-                    product?.title?.toLowerCase().includes(title.toLowerCase())
-                );
-            }
-            return [];
-        } catch (error) {
-            console.error("Search error:", error);
-            return [];
-        }
-    };
+            if (!res.ok) return [];
+            const data = await res.json();
+            const products = data.products || [];
+            return products.filter(product =>
+                product?.title?.toLowerCase().includes(query.toLowerCase())
+            );
+        },
+        enabled: query.trim().length >= 2,
+        staleTime: 60 * 1000,
+    });
+
     useEffect(() => {
-        if (query) {
-            fetchFromAPIs(query).then(results => setSearchVal(results));
+        if (searchResults) {
+            setSearchVal(searchResults);
+        } else if (!query.trim()) {
+            setSearchVal([]);
         }
-    }, [query, setSearchVal]);
+    }, [searchResults, query, setSearchVal]);
 
     // Handle mega menu hover with delay
     const handleMegaMenuEnter = (type) => {

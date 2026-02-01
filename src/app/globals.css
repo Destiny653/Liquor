@@ -10,7 +10,8 @@ Velvet Casks - Premium Design System
 ==========================================
 */
 
-/* ROABLA Font - Add font files to /public/fonts/ */
+/* ROABLA Font - Files missing, using Playfair Display as primary premium font */
+/*
 @font-face {
     font-family: 'Roabla';
     src: url('/fonts/Roabla.woff2') format('woff2'),
@@ -20,6 +21,7 @@ Velvet Casks - Premium Design System
     font-style: normal;
     font-display: swap;
 }
+*/
 
 /* CSS Variables */
 :root {

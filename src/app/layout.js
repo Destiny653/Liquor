@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar/Navbar";
 import AuthProvider from "../../context/AuthContext";
 import SearchProvider from "../../context/SearchContext";
 import { CartProvider } from "../../context/CartContext";
+import QueryProvider from "../../context/QueryProvider";
 import LayoutWrapper from "./components/LayoutWrapper";
 
 export const metadata = {
@@ -107,15 +108,18 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning={true}>
         <AuthProvider>
-          <SearchProvider>
-            <CartProvider>
-              <LayoutWrapper>
-                {children}
-              </LayoutWrapper>
-            </CartProvider>
-          </SearchProvider>
+          <QueryProvider>
+            <SearchProvider>
+              <CartProvider>
+                <LayoutWrapper>
+                  {children}
+                </LayoutWrapper>
+              </CartProvider>
+            </SearchProvider>
+          </QueryProvider>
         </AuthProvider>
       </body>
     </html>
   );
 }
+

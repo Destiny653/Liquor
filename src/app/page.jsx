@@ -7,7 +7,22 @@ import { FaApple } from "react-icons/fa";
 import { SiZelle, SiCashapp } from "react-icons/si";
 import { BiTransfer } from "react-icons/bi";
 import { PiBank } from "react-icons/pi";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+
+// Fetcher function
+const fetchBrandsData = async () => {
+  const res = await fetch('/api/product-models');
+  if (!res.ok) throw new Error('Failed to fetch brands');
+  const data = await res.json();
+  return data
+    .filter((b) => b.image)
+    .map((b) => ({
+      name: b.label,
+      slug: b.value,
+      image: b.image,
+    }));
+};
 
 export default function Home() {
   const navigation = useRouter();
@@ -81,30 +96,11 @@ export default function Home() {
   ];
 
   // Brand showcase data
-  const [brands, setBrands] = useState([]);
-
-  useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const res = await fetch('/api/product-models');
-        if (res.ok) {
-          const data = await res.json();
-          setBrands(
-            data
-              .filter((b) => b.image)
-              .map((b) => ({
-                name: b.label,
-                slug: b.value,
-                image: b.image,
-              }))
-          );
-        }
-      } catch (error) {
-        console.error('Error fetching brands:', error);
-      }
-    };
-    fetchBrands();
-  }, []);
+  const { data: brands = [] } = useQuery({
+    queryKey: ['homeBrands'],
+    queryFn: fetchBrandsData,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
 
 
   return (

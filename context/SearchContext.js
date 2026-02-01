@@ -1,5 +1,13 @@
-'use client'
 import React, { createContext, useEffect, useReducer, useState } from 'react'
+import { useQuery } from '@tanstack/react-query';
+
+// Fetcher function
+const fetchAllProducts = async () => {
+  const res = await fetch('/api/products?limit=1000');
+  if (!res.ok) throw new Error('Failed to fetch products');
+  const result = await res.json();
+  return result.products || result;
+};
 
 export const SearchContext = createContext();
 
@@ -13,34 +21,12 @@ export default function SearchProvider({ children }) {
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0)
 
 
-  const [api, setApi] = useState(null);
-  const apis = ['/api/products?limit=1000']
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await Promise.all(apis.map(async api => {
-          try {
-            const response = await fetch(api);
-            if (!response.ok) return [];
-            const result = await response.json();
-            return result.products || result;
-          } catch (err) {
-            return [];
-          }
-        }))
-        setApi(data.flat());
-
-        // console.log('Fetched data:', api);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    fetchData();
-    return;
-  }, [])
-  console.log(api);
+  // TanStack Query for all products
+  const { data: api = [] } = useQuery({
+    queryKey: ['allProducts'],
+    queryFn: fetchAllProducts,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
 
 
 
