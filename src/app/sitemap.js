@@ -5,7 +5,7 @@ export default function sitemap() {
         '',
         '/shop',
         '/about',
-        '/profile',
+        '/gift',
         '/policies/privacy-policy',
         '/policies/terms-and-condition-policy',
         '/policies/shipping-policy',
