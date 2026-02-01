@@ -6,12 +6,12 @@ import { CartProvider } from "../../context/CartContext";
 import LayoutWrapper from "./components/LayoutWrapper";
 
 export const metadata = {
-  metadataBase: new URL('https://liquorluxx.com'),
+  metadataBase: new URL('https://velvetcasks.com'),
   title: {
-    default: "LiquorLuxx | Premium Spirits, Rare Bourbon & Global Whiskey Collection",
-    template: "%s | LiquorLuxx"
+    default: "Velvet Casks | Premium Spirits, Rare Bourbon & Global Whiskey Collection",
+    template: "%s | Velvet Casks"
   },
-  description: "Experience LiquorLuxx, the premier global destination for luxury spirits and rare bourbon. Discover expert-curated collections of the world's finest whiskeys, vintage scotches, and exclusive limited editions. Join a community of connoisseurs and collectors today.",
+  description: "Experience Velvet Casks, the premier global destination for luxury spirits and rare bourbon. Discover expert-curated collections of the world's finest whiskeys, vintage scotches, and exclusive limited editions. Join a community of connoisseurs and collectors today.",
   keywords: [
     "premium spirits",
     "rare bourbon",
@@ -40,9 +40,9 @@ export const metadata = {
     "global spirit shipping",
     "curated spirits",
     "rare drinks",
-    "LiquorLuxx",
-    "LiquorLuxx bourbon",
-    "LiquorLuxx premium whiskey",
+    "Velvet Casks",
+    "Velvet Casks bourbon",
+    "Velvet Casks premium whiskey",
     "distillery releases",
     "barrel proof bourbon",
     "single malt scotch",
@@ -50,29 +50,29 @@ export const metadata = {
     "top shelf liquor",
     "affordable luxury spirits"
   ],
-  authors: [{ name: "LiquorLuxx Team" }],
-  creator: "LiquorLuxx",
-  publisher: "LiquorLuxx",
+  authors: [{ name: "Velvet Casks Team" }],
+  creator: "Velvet Casks",
+  publisher: "Velvet Casks",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://liquorluxx.com",
-    siteName: "LiquorLuxx",
-    title: "LiquorLuxx – Transform Your Bar with World-Class Spirits",
-    description: "Access world-class whiskeys, rare collectibles, and spirits recognized by connoisseurs worldwide. Start your collection with LiquorLuxx today!",
+    url: "https://velvetcasks.com",
+    siteName: "Velvet Casks",
+    title: "Velvet Casks – Transform Your Bar with World-Class Spirits",
+    description: "Access world-class whiskeys, rare collectibles, and spirits recognized by connoisseurs worldwide. Start your collection with Velvet Casks today!",
     images: [{
       url: "/images/og-image.jpg",
       width: 1200,
       height: 630,
-      alt: "LiquorLuxx Premium Spirits Platform"
+      alt: "Velvet Casks Premium Spirits Platform"
     }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LiquorLuxx – Global Premium Spirits Platform",
+    title: "Velvet Casks – Global Premium Spirits Platform",
     description: "Elevate your collection with whiskeys and bourbons recognized by experts worldwide",
     images: ["/images/og-image.jpg"],
-    creator: "@liquorluxx",
+    creator: "@velvetcasks",
   },
   robots: {
     index: true,
@@ -91,7 +91,7 @@ export const metadata = {
     shortcut: '/favicon-16x16.png'
   },
   alternates: {
-    canonical: 'https://liquorluxx.com'
+    canonical: 'https://velvetcasks.com'
   },
   category: 'ecommerce'
 };

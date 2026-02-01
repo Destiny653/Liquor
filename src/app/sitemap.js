@@ -1,30 +1,22 @@
 export default function sitemap() {
-    const baseUrl = 'https://liquorluxx.com';
+    const baseUrl = 'https://velvetcasks.com';
 
-    return [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'daily',
-            priority: 1,
-        },
-        {
-            url: `${baseUrl}/shop`,
-            lastModified: new Date(),
-            changeFrequency: 'daily',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/about`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.5,
-        },
-        {
-            url: `${baseUrl}/profile`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5,
-        },
+    const routes = [
+        '',
+        '/shop',
+        '/about',
+        '/profile',
+        '/policies/privacy-policy',
+        '/policies/terms-and-condition-policy',
+        '/policies/shipping-policy',
+        '/policies/refund-policy',
     ];
+
+    return routes.map((route) => ({
+        url: `${baseUrl}${route}`,
+        lastModified: new Date(),
+        changeFrequency: route.includes('policies') ? 'monthly' : 'daily',
+        priority: route === '' ? 1 : route === '/shop' ? 0.8 : 0.5,
+    }));
 }
+

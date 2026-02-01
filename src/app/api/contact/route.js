@@ -42,7 +42,7 @@ export async function POST(req) {
             },
         });
 
-        // Professional HTML Email Template for LiquorLuxx
+        // Professional HTML Email Template for Velvet Casks
         const htmlContent = `
             <!DOCTYPE html>
             <html>
@@ -63,12 +63,12 @@ export async function POST(req) {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>LiquorLuxx</h1>
+                        <h1>Velvet Casks</h1>
                         <p style="margin: 5px 0 0; font-style: italic; opacity: 0.8;">Concierge Service</p>
                     </div>
                     <div class="content">
                         <h2 style="color: #121212; margin-top: 0;">New Concierge Inquiry</h2>
-                        <p>A new message has been received from the <span class="accent">LiquorLuxx</span> digital concierge.</p>
+                        <p>A new message has been received from the <span class="accent">Velvet Casks</span> digital concierge.</p>
                         
                         <div class="inquiry-box">
                             <span class="label">Client Name</span>
@@ -81,10 +81,10 @@ export async function POST(req) {
                             <div class="value" style="white-space: pre-wrap;">${message}</div>
                         </div>
                         
-                        <p style="margin-top: 30px;">Please respond to this luxury client at your earliest convenience to maintain the LiquorLuxx standard of excellence.</p>
+                        <p style="margin-top: 30px;">Please respond to this luxury client at your earliest convenience to maintain the Velvet Casks standard of excellence.</p>
                     </div>
                     <div class="footer">
-                        <p>&copy; ${new Date().getFullYear()} LiquorLuxx Premium Spirits. All rights reserved.</p>
+                        <p>&copy; ${new Date().getFullYear()} Velvet Casks Premium Spirits. All rights reserved.</p>
                         <p>This is an automated notification from your digital concierge platform.</p>
                     </div>
                 </div>
@@ -93,7 +93,7 @@ export async function POST(req) {
         `;
 
         const mailOptions = {
-            from: `"LiquorLuxx Concierge" <${process.env.EMAIL_USER}>`,
+            from: `"Velvet Casks Concierge" <${process.env.EMAIL_USER}>`,
             to: process.env.EMAIL_USER, // Sending to yourself (the site owner)
             subject: `New Concierge Inquiry from ${name}`,
             html: htmlContent,

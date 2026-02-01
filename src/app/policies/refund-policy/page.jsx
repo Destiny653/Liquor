@@ -30,7 +30,7 @@ export default function RefundPolicy() {
           <ul>
             <li>Take clear photos of the damaged package and bottles.</li>
             <li>Keep the original packaging until the claim is resolved.</li>
-            <li>Email us at <a href="mailto:support@liquorluxx.com">support@liquorluxx.com</a> with your order number and photos.</li>
+            <li>Email us at <a href="mailto:support@velvetcasks.com">support@velvetcasks.com</a> with your order number and photos.</li>
           </ul>
           <p>
             We will offer a replacement (subject to availability) or a full refund for the damaged or incorrect items.

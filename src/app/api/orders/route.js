@@ -126,8 +126,8 @@ export const POST = async (req, res) => {
                 });
 
                 const mailOptions = {
-                    from: `"LiquorLuxx Admin" <${process.env.EMAIL_USER}>`,
-                    to: process.env.OWNER_EMAIL || 'admin@liquorluxx.com',
+                    from: `"Velvet Casks Admin" <${process.env.EMAIL_USER}>`,
+                    to: process.env.OWNER_EMAIL || 'admin@velvetcasks.com',
                     subject: `New Order Received - ${paymentMethod.toUpperCase()} - $${totalPrice}`,
                     html: `
                         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
@@ -192,8 +192,8 @@ export const POST = async (req, res) => {
                             </div>
                             
                             <div style="text-align: center; padding-top: 20px; border-top: 1px solid #eee; margin-top: 20px; color: #888; font-size: 12px;">
-                                <p>This is an automated notification from your LiquorLuxx store.</p>
-                                <p>&copy; ${new Date().getFullYear()} LiquorLuxx Inc.</p>
+                                <p>This is an automated notification from your Velvet Casks store.</p>
+                                <p>&copy; ${new Date().getFullYear()} Velvet Casks Inc.</p>
                             </div>
                         </div>
                     `

@@ -120,7 +120,7 @@ const Page = () => {
                                 </svg>
                             </div>
                             <h1 className='auth-title'>Welcome Back</h1>
-                            <p className='auth-subtitle'>Sign in to continue to LiquorLuxx</p>
+                            <p className='auth-subtitle'>Sign in to continue to Velvet Casks</p>
                         </div>
 
                         {/* Form */}

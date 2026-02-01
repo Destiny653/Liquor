@@ -20,7 +20,7 @@ export default function Page() {
           <div className='story-content'>
             <h2>The Art of Selection</h2>
             <p>
-              LiquorLuxx was founded on a simple yet ambitious premise: to connect connoisseurs
+              Velvet Casks was founded on a simple yet ambitious premise: to connect connoisseurs
               with the world's most exceptional spirits. We believe that every bottle tells a story—of
               tradition, craft, and the land from which it came.
             </p>
@@ -32,7 +32,7 @@ export default function Page() {
             </p>
             <p>
               We are not just a retailer; we are custodians of taste, ensuring that when you
-              uncork a bottle from LiquorLuxx, you are experiencing history in a glass.
+              uncork a bottle from Velvet Casks, you are experiencing history in a glass.
             </p>
           </div>
           <div className='story-image'>

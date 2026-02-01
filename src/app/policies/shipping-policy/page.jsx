@@ -57,7 +57,7 @@ export default function ShippingPolicy() {
           <p>
             While we take extreme care in packaging your bottles, breakage can occur during transit.
             If your order arrives damaged, please document the damage with photos and contact us immediately at
-            <a href="mailto:support@liquorluxx.com"> support@liquorluxx.com</a> within 48 hours of delivery.
+            <a href="mailto:support@velvetcasks.com"> support@velvetcasks.com</a> within 48 hours of delivery.
             We will arrange for a replacement or refund.
           </p>
         </section>

@@ -22,7 +22,7 @@ export default function ChatBot({ onClose }) {
             setMessages([{
                 id: 1,
                 type: 'bot',
-                text: 'Welcome to LiquorLuxx Concierge. How may I assist you with your premium spirit selection today?',
+                text: 'Welcome to Velvet Casks Concierge. How may I assist you with your premium spirit selection today?',
                 timestamp: new Date()
             }]);
         }
@@ -57,7 +57,7 @@ export default function ChatBot({ onClose }) {
                 setMessages([{
                     id: 1,
                     type: 'bot',
-                    text: 'Welcome back to LiquorLuxx. How can we help you today?',
+                    text: 'Welcome back to Velvet Casks. How can we help you today?',
                     timestamp: new Date()
                 }]);
             }
@@ -211,7 +211,7 @@ export default function ChatBot({ onClose }) {
                         <PiRobot size={20} />
                     </div>
                     <div>
-                        <h3>LiquorLuxx Concierge</h3>
+                        <h3>Velvet Casks Concierge</h3>
                         <span className="online-status">Online</span>
                     </div>
                 </div>

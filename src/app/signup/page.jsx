@@ -110,7 +110,7 @@ export default function Page() {
                                         <path d="M12 18c2 0 4-1 4-3"></path>
                                     </svg>
                                 </div>
-                                <h2 className='signup-image-title'>LiquorLuxx</h2>
+                                <h2 className='signup-image-title'>Velvet Casks</h2>
                                 <p className='signup-image-subtitle'>
                                     Join our exclusive collection of premium spirits and fine wines
                                 </p>

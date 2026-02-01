@@ -15,7 +15,7 @@ export default function TermsConditions() {
           <h2>1. Agreement to Terms</h2>
           <p>
             These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you")
-            and LiquorLuxx ("we," "us" or "our"), concerning your access to and use of the LiquorLuxx.com website as well as any other media form,
+            and Velvet Casks ("we," "us" or "our"), concerning your access to and use of the Velvet Casks.com website as well as any other media form,
             media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site").
           </p>
         </section>
@@ -23,10 +23,10 @@ export default function TermsConditions() {
         <section>
           <h2>2. Sale of Alcohol</h2>
           <p>
-            LiquorLuxx does not sell alcohol to persons under the age of 21. By using this site you swear and affirm that you are over the age of 21.
-            LiquorLuxx makes every effort to ensure that alcoholic beverages are not delivered to anyone who is under the age of 21.
-            By using this site you are acknowledging that the person receiving a shipment of alcoholic beverages from LiquorLuxx is over the age of 21.
-            You also agree that any alcohol purchased from LiquorLuxx is intended for personal consumption and not for resale.
+            Velvet Casks does not sell alcohol to persons under the age of 21. By using this site you swear and affirm that you are over the age of 21.
+            Velvet Casks makes every effort to ensure that alcoholic beverages are not delivered to anyone who is under the age of 21.
+            By using this site you are acknowledging that the person receiving a shipment of alcoholic beverages from Velvet Casks is over the age of 21.
+            You also agree that any alcohol purchased from Velvet Casks is intended for personal consumption and not for resale.
           </p>
         </section>
 
@@ -58,7 +58,7 @@ export default function TermsConditions() {
         <section>
           <h2>6. Governing Law</h2>
           <p>
-            These Terms shall be governed by and defined following the laws of the State of New York. LiquorLuxx and yourself irrevocably consent that the courts of New York
+            These Terms shall be governed by and defined following the laws of the State of New York. Velvet Casks and yourself irrevocably consent that the courts of New York
             shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.
           </p>
         </section>

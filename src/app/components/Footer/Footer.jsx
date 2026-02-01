@@ -81,8 +81,8 @@ export default function Footer() {
                     {/* Brand Column */}
                     <div className='footer-column footer-brand'>
                         <Link href="/" className='footer-logo'>
-                            <span className='logo-text'>LIQUOR</span>
-                            <span className='logo-accent'>LUXX</span>
+                            <span className='logo-text'>VELVET</span>
+                            <span className='logo-accent'>CASKS</span>
                         </Link>
                         <p className='footer-tagline'>
                             Premium spirits delivered to your door. Experience the finest
@@ -149,7 +149,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <PiEnvelope className='contact-icon' />
-                                <span>support@liquorluxx.com</span>
+                                <span>support@velvetcasks.com</span>
                             </li>
                             <li>
                                 <PiMapPin className='contact-icon' />
@@ -164,7 +164,7 @@ export default function Footer() {
             <div className='footer-bottom'>
                 <div className='footer-bottom-container'>
                     <p className='copyright'>
-                        © {currentYear} LiquorLuxx. All rights reserved.
+                        © {currentYear} Velvet Casks. All rights reserved.
                     </p>
                     <div className='footer-legal'>
                         <Link href='/policies/privacy-policy'>Privacy Policy</Link>

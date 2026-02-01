@@ -14,9 +14,9 @@ export default function PrivacyPolicy() {
         <section>
           <h2>1. Introduction</h2>
           <p>
-            LiquorLuxx ("we," "our," or "us") respects your privacy and is committed to protecting it through our compliance with this policy.
+            Velvet Casks ("we," "our," or "us") respects your privacy and is committed to protecting it through our compliance with this policy.
             This policy describes the types of information we may collect from you or that you may provide when you visit the website
-            LiquorLuxx.com (our "Website") and our practices for collecting, using, maintaining, protecting, and disclosing that information.
+            Velvet Casks.com (our "Website") and our practices for collecting, using, maintaining, protecting, and disclosing that information.
           </p>
         </section>
 
@@ -54,7 +54,7 @@ export default function PrivacyPolicy() {
           <h2>5. Contact Information</h2>
           <p>
             To ask questions or comment about this privacy policy and our privacy practices, contact us at:
-            <a href="mailto:support@liquorluxx.com"> support@liquorluxx.com</a>.
+            <a href="mailto:support@velvetcasks.com"> support@velvetcasks.com</a>.
           </p>
         </section>
       </div>

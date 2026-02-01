@@ -18,7 +18,7 @@ export async function POST(req) {
         const newMessage = await Message.create({
             conversationId,
             sender: 'manager',
-            senderName: 'LiquorLuxx Concierge',
+            senderName: 'Velvet Casks Concierge',
             text: text
         });
 
@@ -51,7 +51,7 @@ export async function POST(req) {
             </head>
             <body>
                 <div class="container">
-                    <div class="header"><h1>LiquorLuxx</h1></div>
+                    <div class="header"><h1>Velvet Casks</h1></div>
                     <div class="content">
                         <h3>New reply from Concierge</h3>
                         <p>Hello ${conversation.customerName},</p>
@@ -61,7 +61,7 @@ export async function POST(req) {
                         <a href="${process.env.NEXTAUTH_URL}" class="btn">GO TO LIQUORLUXX</a>
                     </div>
                     <div class="footer">
-                        <p>&copy; ${new Date().getFullYear()} LiquorLuxx. Premium Spirits, Exceptional Service.</p>
+                        <p>&copy; ${new Date().getFullYear()} Velvet Casks. Premium Spirits, Exceptional Service.</p>
                     </div>
                 </div>
             </body>
@@ -69,9 +69,9 @@ export async function POST(req) {
         `;
 
         await transporter.sendMail({
-            from: `"LiquorLuxx Concierge" <${process.env.EMAIL_USER}>`,
+            from: `"Velvet Casks Concierge" <${process.env.EMAIL_USER}>`,
             to: conversation.customerEmail,
-            subject: "New Message from LiquorLuxx Concierge",
+            subject: "New Message from Velvet Casks Concierge",
             html: htmlContent
         });
 

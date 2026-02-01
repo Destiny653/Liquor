@@ -1,6 +1,6 @@
 export const metadata = {
     title: "My Profile",
-    description: "Manage your LiquorLuxx account, view your order history, and update your personal collection settings.",
+    description: "Manage your Velvet Casks account, view your order history, and update your personal collection settings.",
     robots: {
         index: false,
         follow: false

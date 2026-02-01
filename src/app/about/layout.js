@@ -1,9 +1,9 @@
 export const metadata = {
-    title: "About LiquorLuxx | Our Story & Expertise",
-    description: "Learn about LiquorLuxx's commitment to sourcing the world's most exclusive spirits. Our team of experts ensures authenticity and excellence in every bottle.",
-    keywords: ["about liquorluxx", "whiskey experts", "premium spirit sourcing"],
+    title: "About Velvet Casks | Our Story & Expertise",
+    description: "Learn about Velvet Casks's commitment to sourcing the world's most exclusive spirits. Our team of experts ensures authenticity and excellence in every bottle.",
+    keywords: ["about velvetcasks", "whiskey experts", "premium spirit sourcing"],
     alternates: {
-        canonical: 'https://liquorluxx.com/about'
+        canonical: 'https://velvetcasks.com/about'
     }
 };
 

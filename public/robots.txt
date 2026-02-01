@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://liquorluxx.com/sitemap.xml
+Sitemap: https://velvetcasks.com/sitemap.xml
+

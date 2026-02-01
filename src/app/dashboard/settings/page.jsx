@@ -150,7 +150,7 @@ function SettingsContent() {
                             <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 8 }}>Bio</label>
                             <textarea
                                 rows={4}
-                                defaultValue='Senior administrator for LiquorLuxx platform.'
+                                defaultValue='Senior administrator for Velvet Casks platform.'
                                 style={{
                                     width: '100%',
                                     padding: '12px 16px',
