@@ -213,8 +213,7 @@ export default function Navbar() {
                     <div className="nav-container">
                         {/* Logo */}
                         <Link href="/" className="nav-logo">
-                            <span className="logo-text">LIQUOR</span>
-                            <span className="logo-accent">LUXX</span>
+                            <img src="/images/logo.png" alt="Velvet Casks Logo" className="logo-img" />
                         </Link>
 
                         {/* Desktop Navigation Links */}
