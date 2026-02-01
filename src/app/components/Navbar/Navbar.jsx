@@ -18,68 +18,62 @@ export default function Navbar() {
     const { data: session, status } = useSession();
     const navigation = useRouter();
 
-    // Brand data for mega menu
+    // Brand and Mega Menu data
     const [brands, setBrands] = useState([]);
+    const [megaGifts, setMegaGifts] = useState([]);
+    const [megaProducts, setMegaProducts] = useState([]);
+    const [loadingMega, setLoadingMega] = useState(false);
+
 
     useEffect(() => {
-        const fetchBrands = async () => {
+        const fetchNavbarData = async () => {
+            setLoadingMega(true);
             try {
-                const res = await fetch('/api/product-models');
-                if (res.ok) {
-                    const data = await res.json();
-                    const mappedBrands = data.map(brand => ({
+                // Fetch Brands
+                const brandsRes = await fetch('/api/product-models');
+                if (brandsRes.ok) {
+                    const data = await brandsRes.json();
+                    setBrands(data.map(brand => ({
                         name: brand.label,
                         slug: brand.value,
                         description: brand.description || 'Premium selection',
                         image: brand.image || 'https://images.unsplash.com/photo-1569158062037-d86260ef3fa9?q=80&w=2000&auto=format&fit=crop'
-                    }));
-                    setBrands(mappedBrands);
+                    })));
+                }
+
+                // Fetch Mega Menu Products (Top 12)
+                const productsRes = await fetch('/api/products?limit=12');
+                if (productsRes.ok) {
+                    const data = await productsRes.json();
+                    setMegaProducts(data.products || []);
+                }
+
+                // Fetch Mega Menu Gifts (Top 12)
+                const giftsRes = await fetch('/api/products?occasion=Gift&limit=12');
+                if (giftsRes.ok) {
+                    const data = await giftsRes.json();
+                    setMegaGifts(data.products || []);
                 }
             } catch (error) {
-                console.error('Error fetching brands:', error);
+                console.error('Error fetching navbar data:', error);
+            } finally {
+                setLoadingMega(false);
             }
         };
 
-        fetchBrands();
+        fetchNavbarData();
 
-        // Listen for brand updates from dashboard
-        const handleBrandUpdate = () => {
-            fetchBrands();
-        };
-
+        const handleBrandUpdate = () => fetchNavbarData();
         window.addEventListener('brandDataUpdated', handleBrandUpdate);
-
-        return () => {
-            window.removeEventListener('brandDataUpdated', handleBrandUpdate);
-        };
+        return () => window.removeEventListener('brandDataUpdated', handleBrandUpdate);
     }, []);
 
-    const occasions = [
-        {
-            name: 'Birthday',
-            slug: 'birthday',
-            description: 'Celebrate another year with a premium selection',
-            image: 'https://images.unsplash.com/photo-1530103862676-fa8c91abe178?q=80&w=2070&auto=format&fit=crop'
-        },
-        {
-            name: 'Anniversary',
-            slug: 'anniversary',
-            description: 'Toast to everlasting love and memories',
-            image: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=2070&auto=format&fit=crop'
-        },
-        {
-            name: 'Corporate',
-            slug: 'corporate',
-            description: 'Make a lasting impression on partners',
-            image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=2074&auto=format&fit=crop'
-        },
-        {
-            name: 'Special Edition',
-            slug: 'special',
-            description: 'Rare finds for the ultimate collector',
-            image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop'
-        }
-    ];
+
+    const truncateText = (text, maxLength = 100) => {
+        if (!text) return '';
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    };
+
 
     const navLinks = [
         { title: 'Home', path: '/' },
@@ -158,21 +152,14 @@ export default function Navbar() {
         }, 150);
     };
 
-    // Navigate to shop with brand filter
-    const handleBrandClick = (brandSlug) => {
+    // Navigate to product details
+    const handleProductClick = (productId) => {
         setMegaMenuOpen(false);
         setActiveMegaMenu(null);
         setMobileMenuOpen(false);
-        navigation.push(`/shop?brand=${brandSlug}`);
+        navigation.push(`/details?id=${productId}`);
     };
 
-    // Navigate to gift with occasion filter
-    const handleOccasionClick = (occasionSlug) => {
-        setMegaMenuOpen(false);
-        setActiveMegaMenu(null);
-        setMobileMenuOpen(false);
-        navigation.push(`/gift?occasion=${occasionSlug}`);
-    };
 
     // Close mobile menu on route change
     useEffect(() => {
@@ -320,44 +307,47 @@ export default function Navbar() {
                             <p>{activeMegaMenu === 'shop' ? 'Discover our curated collection of world-class spirits' : 'Find the perfect gift for every milestone'}</p>
                         </div>
                         <div className="mega-menu-grid">
-                            {activeMegaMenu === 'shop' ? (
-                                brands.map((brand, index) => (
+                            {loadingMega ? (
+                                <div className="mega-menu-loader">Loading...</div>
+                            ) : activeMegaMenu === 'shop' ? (
+                                megaProducts.map((product, index) => (
                                     <div
                                         key={index}
                                         className="mega-menu-item"
-                                        onClick={() => handleBrandClick(brand.slug)}
+                                        onClick={() => handleProductClick(product._id)}
                                         style={{ animationDelay: `${index * 0.05}s` }}
                                     >
                                         <div className="mega-item-image">
-                                            <img src={brand.image} alt={brand.name} />
+                                            <img src={product.img} alt={product.title} />
                                             <div className="mega-item-overlay"></div>
                                         </div>
                                         <div className="mega-item-content">
-                                            <h4>{brand.name}</h4>
-                                            <p>{brand.description}</p>
+                                            <h4>{product.title}</h4>
+                                            <p>{truncateText(product.content)}</p>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                occasions.map((occ, index) => (
+                                megaGifts.map((gift, index) => (
                                     <div
                                         key={index}
                                         className="mega-menu-item"
-                                        onClick={() => handleOccasionClick(occ.slug)}
+                                        onClick={() => handleProductClick(gift._id)}
                                         style={{ animationDelay: `${index * 0.05}s` }}
                                     >
                                         <div className="mega-item-image">
-                                            <img src={occ.image} alt={occ.name} />
+                                            <img src={gift.img} alt={gift.title} />
                                             <div className="mega-item-overlay"></div>
                                         </div>
                                         <div className="mega-item-content">
-                                            <h4>{occ.name}</h4>
-                                            <p>{occ.description}</p>
+                                            <h4>{gift.title}</h4>
+                                            <p>{truncateText(gift.content)}</p>
                                         </div>
                                     </div>
                                 ))
                             )}
                         </div>
+
                         <div className="mega-menu-footer">
                             <Link href={activeMegaMenu === 'shop' ? "/shop" : "/gift"} className="view-all-btn" onClick={() => setMegaMenuOpen(false)}>
                                 {activeMegaMenu === 'shop' ? "View All Products" : "Explore All Gifts"}
@@ -407,33 +397,34 @@ export default function Navbar() {
                         )}
                     </ul>
 
-                    {/* Mobile Brands */}
+                    {/* Mobile Products */}
                     <div className="mobile-brands">
-                        <h3>Shop by Brand</h3>
+                        <h3>Our Products</h3>
                         <div className="mobile-brands-grid">
-                            {brands.map((brand, index) => (
+                            {megaProducts.slice(0, 8).map((product, index) => (
                                 <button
                                     key={index}
                                     className="mobile-brand-btn"
-                                    onClick={() => handleBrandClick(brand.slug)}
+                                    onClick={() => handleProductClick(product._id)}
                                 >
-                                    {brand.name}
+                                    {product.title}
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    {/* Mobile Occasions */}
+
+                    {/* Mobile Gifts */}
                     <div className="mobile-brands" style={{ marginTop: '20px' }}>
-                        <h3>Gifts by Occasion</h3>
+                        <h3>Featured Gifts</h3>
                         <div className="mobile-brands-grid">
-                            {occasions.map((occ, index) => (
+                            {megaGifts.slice(0, 8).map((gift, index) => (
                                 <button
                                     key={index}
                                     className="mobile-brand-btn"
-                                    onClick={() => handleOccasionClick(occ.slug)}
+                                    onClick={() => handleProductClick(gift._id)}
                                 >
-                                    {occ.name}
+                                    {gift.title}
                                 </button>
                             ))}
                         </div>
