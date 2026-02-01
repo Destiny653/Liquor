@@ -1,5 +1,11 @@
+'use client';
+import React, { useState, useEffect, useContext, useMemo, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { CartContext } from '../../../context/CartContext';
+import { FiSearch, FiFilter, FiGift, FiStar, FiPackage } from 'react-icons/fi';
+import { SkeletonArr2 } from '../components/Skeleton/Skeleton';
+import './gift.css';
 
 // Fetcher function
 const fetchGiftsData = async () => {

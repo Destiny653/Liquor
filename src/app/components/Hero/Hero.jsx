@@ -1,3 +1,12 @@
+import React, { useContext, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { SearchContext } from '../../../../context/SearchContext';
+import { CartContext } from '../../../../context/CartContext';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import './hero.css';
+import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
+import { FaStar } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import SkeletonR, { SkeletonArr } from '../Skeleton/Skeleton';
 import { Notyf } from 'notyf';

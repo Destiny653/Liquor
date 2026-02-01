@@ -1,5 +1,14 @@
+'use client';
+import React, { useState, useEffect, useContext, useMemo, useCallback, Suspense } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Qty from '../components/Quantity/quantity';
+import { SearchContext } from '../../../context/SearchContext';
+import { CartContext } from '../../../context/CartContext';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { FiFilter, FiX } from 'react-icons/fi';
+import { FaStar } from 'react-icons/fa';
+import { SkeletonArr2 } from '../components/Skeleton/Skeleton';
+import './shop.css';
 
 // Fetcher functions
 const fetchChoices = async () => {

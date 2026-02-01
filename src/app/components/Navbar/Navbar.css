@@ -185,11 +185,19 @@ Velvet Casks - Premium Navigation Styles
     transform: scale(1.05);
 }
 
-.logo-img {
-    height: 120px;
-    /* Increased size to better showcase the premium logo */
-    width: auto;
-    object-fit: contain;
+.logo-text {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--nav-text);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: color var(--transition-fast);
+}
+
+.nav-logo:hover .logo-text {
+    color: var(--nav-gold);
 }
 
 /* Desktop Navigation Links */

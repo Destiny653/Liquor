@@ -1,3 +1,4 @@
+'use client';
 import React, { createContext, useEffect, useReducer, useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 
@@ -66,8 +67,25 @@ export default function SearchProvider({ children }) {
     console.log(detailArr);
   }, [searchInp])
 
+  const contextValue = React.useMemo(() => ({
+    searchVal,
+    detailPro,
+    searchInp,
+    signIn,
+    detailArr,
+    api,
+    msgBtn,
+    setMsgBtn,
+    handleSearch,
+    handleArr,
+    setSignIn,
+    handlePro,
+    setSearchVal,
+    setSearchInp
+  }), [searchVal, detailPro, searchInp, signIn, detailArr, api, msgBtn]);
+
   return (
-    <SearchContext.Provider value={{ searchVal, detailPro, searchInp, signIn, detailArr, api, msgBtn, setMsgBtn, handleSearch, handleArr, setSignIn, handlePro, setSearchVal, setSearchInp }}>
+    <SearchContext.Provider value={contextValue}>
       {children}
     </SearchContext.Provider>
   )

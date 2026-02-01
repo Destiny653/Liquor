@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import './Navbar.css';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 import { SearchContext } from '../../../../context/SearchContext';
 import { CartContext } from '../../../../context/CartContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -144,7 +145,7 @@ export default function Navbar() {
         if (searchResults) {
             setSearchVal(searchResults);
         } else if (!query.trim()) {
-            setSearchVal([]);
+            setSearchVal(prev => prev.length > 0 ? [] : prev);
         }
     }, [searchResults, query, setSearchVal]);
 
@@ -213,7 +214,7 @@ export default function Navbar() {
                     <div className="nav-container">
                         {/* Logo */}
                         <Link href="/" className="nav-logo">
-                            <img src="/images/logo.png" alt="Velvet Casks Logo" className="logo-img" />
+                            <span className="logo-text">Velvet Casks</span>
                         </Link>
 
                         {/* Desktop Navigation Links */}
