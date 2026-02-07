@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import connectDB from '@/utils/db';
 import { Message, Conversation } from '@/models/Chat';
+import { Notification } from '@/models/Notification';
 
 export async function POST(req) {
     try {
@@ -30,6 +31,16 @@ export async function POST(req) {
             senderName: name,
             senderEmail: email,
             text: message
+        });
+
+        // 3. Create Notification for Dashboard
+        await Notification.create({
+            type: 'new_message',
+            title: `New Message from ${name}`,
+            message: message.substring(0, 50) + (message.length > 50 ? '...' : ''),
+            data: { conversationId, email },
+            link: '/dashboard/messages',
+            recipientRole: 'manager'
         });
 
         // Create a transporter using SMTP or other transport

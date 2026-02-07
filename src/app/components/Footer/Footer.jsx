@@ -144,12 +144,8 @@ export default function Footer() {
                         <h3 className='footer-heading'>Contact Us</h3>
                         <ul className='footer-contact'>
                             <li>
-                                <PiPhone className='contact-icon' />
-                                <span>+1 (688) 388-937</span>
-                            </li>
-                            <li>
                                 <PiEnvelope className='contact-icon' />
-                                <span>support@velvetcasks.com</span>
+                                <span>dejanetpalm@gmail.com</span>
                             </li>
                             <li>
                                 <PiMapPin className='contact-icon' />

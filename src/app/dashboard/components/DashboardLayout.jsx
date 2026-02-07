@@ -21,6 +21,64 @@ export default function DashboardLayout({ children }) {
     const searchParams = useSearchParams();
     const { data: session } = useSession();
 
+    // Notification State
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
+    const [showNotifications, setShowNotifications] = useState(false);
+
+    const fetchNotifications = async () => {
+        try {
+            const res = await fetch('/api/notifications?limit=10');
+            const data = await res.json();
+            if (data.success) {
+                setNotifications(data.data);
+                setUnreadCount(data.unreadCount);
+            }
+        } catch (error) {
+            console.error('Failed to fetch notifications:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (session) {
+            fetchNotifications();
+            const interval = setInterval(fetchNotifications, 5000); // Poll every 5 seconds
+            return () => clearInterval(interval);
+        }
+    }, [session]);
+
+    const handleMarkAsRead = async (id, link) => {
+        try {
+            await fetch('/api/notifications', {
+                method: 'PATCH',
+                body: JSON.stringify({ notificationId: id })
+            });
+            // Optimistic update
+            setNotifications(prev => prev.map(n => n._id === id ? { ...n, isRead: true } : n));
+            setUnreadCount(prev => Math.max(0, prev - 1));
+
+            if (link) {
+                setShowNotifications(false);
+                router.push(link);
+            }
+        } catch (error) {
+            console.error('Error marking read:', error);
+        }
+    };
+
+    const handleMarkAllRead = async () => {
+        try {
+            await fetch('/api/notifications', {
+                method: 'PATCH',
+                body: JSON.stringify({ markAllRead: true })
+            });
+            setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+            setUnreadCount(0);
+        } catch (error) {
+            console.error('Error marking all read:', error);
+        }
+    };
+
     useEffect(() => {
         setMounted(true);
         const stored = localStorage.getItem('dashboard_sidebar_collapsed');
@@ -61,7 +119,7 @@ export default function DashboardLayout({ children }) {
             items: [
                 { name: 'Orders', path: '/dashboard/orders', icon: FiShoppingCart },
                 { name: 'Customers', path: '/dashboard/customers', icon: FiUsers },
-                { name: 'Concierge Chat', path: '/dashboard/messages', icon: FiMessageSquare },
+                { name: 'Concierge Chat', path: '/dashboard/messages', icon: FiMessageSquare, badge: unreadCount ? unreadCount : null },
                 { name: 'Analytics', path: '/dashboard/analytics', icon: FiBarChart2 },
             ]
         },
@@ -203,10 +261,101 @@ export default function DashboardLayout({ children }) {
                     </div>
 
                     <div className='dashboard-top-header-right'>
-                        <button className='dashboard-header-icon-btn' title='Notifications'>
-                            <FiBell />
-                            <span className='dashboard-header-badge'>3</span>
-                        </button>
+                        <div className="notification-wrapper" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                            <button
+                                className={`dashboard-header-icon-btn ${showNotifications ? 'active' : ''}`}
+                                title='Notifications'
+                                onClick={() => setShowNotifications(!showNotifications)}
+                                style={{ color: showNotifications ? '#d4af37' : 'inherit' }}
+                            >
+                                <FiBell />
+                                {unreadCount > 0 && <span className='dashboard-header-badge'>{unreadCount}</span>}
+                            </button>
+
+                            {showNotifications && (
+                                <>
+                                    <div
+                                        style={{ position: 'fixed', inset: 0, zIndex: 999 }}
+                                        onClick={() => setShowNotifications(false)}
+                                    />
+                                    <div className="notification-dropdown" style={{
+                                        position: 'absolute',
+                                        top: '120%',
+                                        right: '0',
+                                        width: '320px',
+                                        background: '#1e1e1e',
+                                        border: '1px solid #333',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                                        zIndex: 1000,
+                                        overflow: 'hidden'
+                                    }}>
+                                        <div style={{
+                                            padding: '12px 16px',
+                                            borderBottom: '1px solid #333',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            background: '#252525'
+                                        }}>
+                                            <h4 style={{ margin: 0, fontSize: '14px', color: '#fff', fontWeight: '600' }}>Notifications</h4>
+                                            {unreadCount > 0 && (
+                                                <button
+                                                    onClick={handleMarkAllRead}
+                                                    style={{ background: 'none', border: 'none', color: '#d4af37', fontSize: '11px', cursor: 'pointer', fontWeight: 'bold' }}
+                                                >
+                                                    Mark all read
+                                                </button>
+                                            )}
+                                        </div>
+                                        <div style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                                            {notifications.length === 0 ? (
+                                                <div style={{ padding: '30px 20px', textAlign: 'center', color: '#666', fontSize: '13px' }}>
+                                                    No notifications yet
+                                                </div>
+                                            ) : (
+                                                notifications.map(notif => (
+                                                    <div
+                                                        key={notif._id}
+                                                        onClick={() => handleMarkAsRead(notif._id, notif.link)}
+                                                        style={{
+                                                            padding: '12px 16px',
+                                                            borderBottom: '1px solid #2a2a2a',
+                                                            background: notif.isRead ? 'transparent' : 'rgba(212, 175, 55, 0.08)',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            gap: '12px'
+                                                        }}
+                                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = notif.isRead ? 'transparent' : 'rgba(212, 175, 55, 0.08)'}
+                                                    >
+                                                        <div style={{
+                                                            width: '8px',
+                                                            height: '8px',
+                                                            borderRadius: '50%',
+                                                            background: notif.isRead ? 'transparent' : '#d4af37',
+                                                            marginTop: '6px',
+                                                            flexShrink: 0
+                                                        }} />
+                                                        <div>
+                                                            <div style={{ fontSize: '13px', fontWeight: notif.isRead ? '500' : '700', color: notif.isRead ? '#ddd' : '#fff', marginBottom: '4px' }}>
+                                                                {notif.title}
+                                                            </div>
+                                                            <div style={{ fontSize: '12px', color: '#aaa', marginBottom: '6px', lineHeight: '1.4' }}>
+                                                                {notif.message}
+                                                            </div>
+                                                            <div style={{ fontSize: '10px', color: '#666' }}>
+                                                                {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
 
                         {session?.user && (
                             <div className='dashboard-header-user'>
