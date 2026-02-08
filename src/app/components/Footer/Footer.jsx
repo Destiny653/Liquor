@@ -149,7 +149,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <PiMapPin className='contact-icon' />
-                                <span>123 Premium Ave, NY 10001</span>
+                                <span>Mills WY Garbutt Road 82644</span>
                             </li>
                         </ul>
                     </div>
