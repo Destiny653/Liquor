@@ -145,7 +145,7 @@ export default function Footer() {
                         <ul className='footer-contact'>
                             <li>
                                 <PiEnvelope className='contact-icon' />
-                                <span>dejanetpalm@gmail.com</span>
+                                <span>velvetcasks@gmail.com</span>
                             </li>
                             <li>
                                 <PiMapPin className='contact-icon' />
